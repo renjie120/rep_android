@@ -19,7 +19,7 @@ public class WheelMain {
 	private WheelView wv_hours;
 	private WheelView wv_mins;
 	public int screenheight;
-
+	// 是否是公历
 	private boolean isLinter;
 	private static int START_YEAR = 1942, END_YEAR = 2049;
 
@@ -89,8 +89,8 @@ public class WheelMain {
 
 		int textSize = 0;
 		textSize = (screenheight / 100) * 4;
-//		wv_hours.TEXT_SIZE = textSize;
-//		wv_mins.TEXT_SIZE = textSize;
+		// wv_hours.TEXT_SIZE = textSize;
+		// wv_mins.TEXT_SIZE = textSize;
 	}
 
 	/***
@@ -105,8 +105,8 @@ public class WheelMain {
 		wv_day.setVisibility(View.VISIBLE);
 		wv_hours.setVisibility(View.GONE);
 		wv_mins.setVisibility(View.GONE);
-//		String year[] = otherUtil.getYera();
-		String year[] = new String[]{"2010","2011"};
+		// String year[] = otherUtil.getYera();
+		String year[] = new String[] { "2010", "2011" };
 		final String monthOfAlmanac[] = { "正月", "二月", "三月", "四月", "五月", "六月",
 				"七月", "八月", "九月", "十月", "冬月", "腊月" };
 		final String daysOfAlmanac[] = { "初一", "初二", "初三", "初四", "初五", "初六",
@@ -139,42 +139,50 @@ public class WheelMain {
 
 		int textSize = 0;
 		textSize = (screenheight / 100) * 3;
-//		wv_day.TEXT_SIZE = textSize;
-//		wv_month.TEXT_SIZE = textSize;
-//		wv_year.TEXT_SIZE = textSize;
+		wv_day.TEXT_SIZE = textSize;
+		wv_month.TEXT_SIZE = textSize;
+		wv_year.TEXT_SIZE = textSize;
 
-		showlunarTimePicker();
+		isLinter = true;
+		initDateTimePicker(year, month, day);
 
-		// showlunarTimePicker();
-		final Button btn_solar = (Button) view.findViewById(R.id.ig_solar);
-		final Button btn_lunar = (Button) view.findViewById(R.id.ig_lunar);
+	}
 
-		// 公历按钮监听
-		btn_solar.setOnClickListener(new OnClickListener() {
+	public void initNumberPicker(int number) {
 
-			public void onClick(View v) {
-				isLinter = true;
-				btn_solar.setBackgroundResource(R.drawable.orgbtn);
-//				btn_solar.setTextColor(R.color.white);
-				btn_lunar.setBackgroundResource(R.drawable.whtbtn);
-//				btn_lunar.setTextColor(R.color.orange);
-				initDateTimePicker(year, month, day);
+		wv_year.setVisibility(View.GONE);
+		wv_month.setVisibility(View.GONE);
+		wv_day.setVisibility(View.GONE);
+		wv_hours.setVisibility(View.VISIBLE);
+		wv_mins.setVisibility(View.VISIBLE);
+		wv_hours.setAdapter(new MyNumberWheelAdapter());// 设置"年"的显示数据
+		wv_hours.setCyclic(false);// 可循环滚动
+		wv_hours.setCurrentItem(0);// 初始化时显示的数据
+		wv_hours.setVisibleItems(5);
+
+		int s = number / 100;
+		int start = s * 100 + 1;
+		int end = (s + 1) * 100 - 1;
+		wv_mins.setAdapter(new NumericWheelAdapter(start, end));
+		wv_mins.setCyclic(false);
+		wv_mins.setCurrentItem(number-1);
+		wv_mins.setVisibleItems(5);
+
+		// 添加按照人数区间的监听
+		OnWheelChangedListener wheelListener_people = new OnWheelChangedListener() {
+			public void onChanged(WheelView wheel, int oldValue, int newValue) {
+				int start = newValue * 100 + 1;
+				int end = (newValue + 1) * 100 - 1;
+				wv_mins.setAdapter(new NumericWheelAdapter(start, end));
+				wv_mins.setCurrentItem(0);
 			}
-
-		});
-		// 农历按钮监听
-		btn_lunar.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				isLinter = false;
-				btn_lunar.setBackgroundResource(R.drawable.orgbtn);
-//				btn_lunar.setTextColor(R.color.white);
-				btn_solar.setBackgroundResource(R.drawable.whtbtn);
-//				btn_solar.setTextColor(R.color.orange);
-				showlunarTimePicker();
-			}
-
-		});
+		};
+		wv_hours.addChangingListener(wheelListener_people);
+		// 根据屏幕密度来指定选择器字体的大小(不同屏幕可能不同)
+		int textSize = 0;
+		textSize = (screenheight / 100) * 4;
+		wv_hours.TEXT_SIZE = textSize;
+		wv_mins.TEXT_SIZE = textSize;
 
 	}
 
@@ -188,9 +196,6 @@ public class WheelMain {
 		wv_day.setVisibility(View.VISIBLE);
 		wv_hours.setVisibility(View.GONE);
 		wv_mins.setVisibility(View.GONE);
-		// int year = calendar.get(Calendar.YEAR);
-		// int month = calendar.get(Calendar.MONTH);
-		// int day = calendar.get(Calendar.DATE);
 
 		// 添加大小月月份并将其转换为list,方便之后的判断
 		String[] months_big = { "1", "3", "5", "7", "8", "10", "12" };
@@ -200,37 +205,35 @@ public class WheelMain {
 		final List<String> list_little = Arrays.asList(months_little);
 
 		// 年
-		// wv_year = (WheelView) view.findViewById(R.id.year);
 		wv_year.setLabel("年");// 添加文字
 		wv_year.setAdapter(new NumericWheelAdapter(START_YEAR, END_YEAR));// 设置"年"的显示数据
-		wv_year.setCyclic(true);// 可循环滚动
+		wv_year.setCyclic(false);// 可循环滚动
 		wv_year.setCurrentItem(year - START_YEAR);// 初始化时显示的数据
 		wv_year.setVisibleItems(5);
 		// 月
-		// wv_month = (WheelView) view.findViewById(R.id.month);
 		wv_month.setLabel("月");
 		wv_month.setAdapter(new NumericWheelAdapter(1, 12));
-		wv_month.setCyclic(true);
+		wv_month.setCyclic(false);
 		wv_month.setCurrentItem(month);
 		wv_month.setVisibleItems(5);
 
 		// 日
-		// wv_day = (WheelView) view.findViewById(R.id.day);
-		wv_day.setCyclic(true);
+		wv_day.setCyclic(false);
 		wv_day.setLabel("日");
 		// 判断大小月及是否闰年,用来确定"日"的数据
 		if (isLinter) {
-			System.out.println("kkkkkkkkkkkkkkkkkk");
 			if (list_big.contains(String.valueOf(month + 1))) {
 				wv_day.setAdapter(new NumericWheelAdapter(1, 31));
+
 			} else if (list_little.contains(String.valueOf(month + 1))) {
 				wv_day.setAdapter(new NumericWheelAdapter(1, 30));
 			} else {
 				// 闰年
-				if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+				if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 					wv_day.setAdapter(new NumericWheelAdapter(1, 29));
-				else
+				} else {
 					wv_day.setAdapter(new NumericWheelAdapter(1, 28));
+				}
 			}
 		}
 		wv_day.setCurrentItem(day - 1);
@@ -280,15 +283,14 @@ public class WheelMain {
 			}
 		};
 
-		Log.e("", "FFFFFFFFFFFFFFF");
 		wv_year.addChangingListener(wheelListener_year);
 		wv_month.addChangingListener(wheelListener_month);
 		// 根据屏幕密度来指定选择器字体的大小(不同屏幕可能不同)
-		// int textSize = 0;
-		// textSize = (screenheight / 100) * 4;
-		// wv_day.TEXT_SIZE = textSize;
-		// wv_month.TEXT_SIZE = textSize;
-		// wv_year.TEXT_SIZE = textSize;
+		int textSize = 0;
+		textSize = (screenheight / 100) * 4;
+		wv_day.TEXT_SIZE = textSize;
+		wv_month.TEXT_SIZE = textSize;
+		wv_year.TEXT_SIZE = textSize;
 
 	}
 

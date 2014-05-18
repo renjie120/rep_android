@@ -23,8 +23,8 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" 
-                android:gravity="center"  >
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical" >
 
                 <TextView
                     android:id="@+id/indate"
@@ -32,21 +32,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/indate_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="left"
                     android:layout_marginLeft="30dp"
-                    android:layout_gravity="left" 
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r2"
+        <LinearLayout 
+            android:id="@+id/curentTime"
             style="@style/line_style"
             android:layout_marginTop="@dimen/line_margin_top" >
 
@@ -61,8 +61,8 @@
                 android:text="@string/zero" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r3"
+        <LinearLayout 
+            android:id="@+id/comeinBtn"
             style="@style/line_style"
             android:layout_marginTop="@dimen/line_margin_top" >
 
@@ -77,8 +77,8 @@
                 android:text="@string/zero" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r4"
+        <LinearLayout 
+            android:id="@+id/intrestBtn"
             style="@style/line_style"
             android:layout_marginTop="4dp" >
 
@@ -93,8 +93,8 @@
                 android:text="@string/zero" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r5"
+        <LinearLayout 
+            android:id="@+id/tryBtn"
             style="@style/line_style"
             android:layout_marginTop="@dimen/line_margin_top" >
 
@@ -109,8 +109,8 @@
                 android:text="@string/zero" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r6"
+        <LinearLayout 
+            android:id="@+id/buyBtn"
             style="@style/line_style"
             android:layout_marginTop="@dimen/line_margin_top" >
 
@@ -125,8 +125,8 @@
                 android:text="@string/zero" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/r7"
+        <LinearLayout 
+            android:id="@+id/oldBtn"
             style="@style/line_style"
             android:layout_marginTop="@dimen/line_margin_top" >
 

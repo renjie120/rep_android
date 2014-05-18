@@ -1,5 +1,6 @@
 package com.rep.app;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +11,9 @@ import kankan.wheel.widget.WheelMain;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +33,8 @@ import com.rep.util.ActionBar.Action;
  */
 public class SaveDataActivity extends BaseActivity {
 	private ActionBar head;
-	private LinearLayout indateBtn;
+	private LinearLayout indateBtn, curentTime, comeinBtn, intrestBtn, tryBtn,
+			buyBtn, oldBtn;
 	private TextView comeInNum, intreNum, tryNum, buyNum, oldNum, timeSpan,
 			indate, indate_day;
 	private static final String[] weeks = new String[] { "星期日", "星期一", "星期二",
@@ -44,7 +49,7 @@ public class SaveDataActivity extends BaseActivity {
 	 */
 	public void showDateTimePicker() {
 		LayoutInflater inflater = LayoutInflater.from(SaveDataActivity.this);
-		View timepickerview = inflater.inflate(R.layout.selectbirthday, null);
+		View timepickerview = inflater.inflate(R.layout.selectday, null);
 		timepickerview.setMinimumWidth(getWindowManager().getDefaultDisplay()
 				.getWidth());
 		ScreenInfo screenInfo = new ScreenInfo(SaveDataActivity.this);
@@ -55,20 +60,85 @@ public class SaveDataActivity extends BaseActivity {
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH);
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		// 使用时间选择器.
 		wheelMain.setTime(year, month, day);
 		dialog = new AlertDialog.Builder(this).setView(timepickerview).show();
 
-//		Window window = dialog.getWindow();
-//		window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
-//		window.setWindowAnimations(R.style.mystyle); // 添加动画
+		// 此处可以设置dialog显示的位置
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.mystyle); // 添加动画
 
 		Button btn = (Button) timepickerview
 				.findViewById(R.id.btn_datetime_sure);
 		btn.setOnClickListener(new OnClickListener() {
-
 			public void onClick(View v) {
-				 
 				dialog.dismiss();
+				Date d = getDate(
+						wheelMain.getYear() + "-" + wheelMain.getMonth() + "-"
+								+ wheelMain.getDay(), "yyyy-MM-dd");
+				indate.setText(toDString(d));
+				indate_day.setText(getDayOfWeek(d));
+
+			}
+		});
+
+	}
+
+	public Handler myHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			case 4:
+
+				break;
+			default:
+				super.hasMessages(msg.what);
+				break;
+			}
+		}
+	};
+
+	public void showNumberPicker(final int type) {
+		LayoutInflater inflater = LayoutInflater.from(SaveDataActivity.this);
+		View timepickerview = inflater.inflate(R.layout.selectday, null);
+		timepickerview.setMinimumWidth(getWindowManager().getDefaultDisplay()
+				.getWidth());
+		ScreenInfo screenInfo = new ScreenInfo(SaveDataActivity.this);
+		wheelMain = new WheelMain(timepickerview);
+		wheelMain.screenheight = screenInfo.getHeight();
+		dialog = new AlertDialog.Builder(this).setView(timepickerview).show();
+
+		wheelMain.initNumberPicker(23);
+		// 此处可以设置dialog显示的位置
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.mystyle); // 添加动画
+
+		Button btn = (Button) timepickerview
+				.findViewById(R.id.btn_datetime_sure);
+		btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				int b = wheelMain.getHours() * 100;
+				if (type == 1)
+					comeInNum.setText("" + (b + 1 + wheelMain.getMin()));
+				else if (type == 2)
+					intreNum.setText("" + (b + 1 + wheelMain.getMin()));
+				else if (type == 3)
+					tryNum.setText("" + (b + 1 + wheelMain.getMin()));
+				else if (type == 4)
+					buyNum.setText("" + (b + 1 + wheelMain.getMin()));
+				else if (type == 5)
+					oldNum.setText("" + (b + 1 + wheelMain.getMin()));
 			}
 		});
 
@@ -88,9 +158,20 @@ public class SaveDataActivity extends BaseActivity {
 
 	private float screenHeight, screenWidth;
 
-	public static String toString(Date date) {
+	public static String toDString(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
 		return sdf.format(date);
+	}
+
+	public static Date getDate(String dateStr, String formateStr) {
+		SimpleDateFormat formatter2 = new SimpleDateFormat(formateStr);
+		Date date = new Date();
+		try {
+			date = formatter2.parse(dateStr);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
 	}
 
 	public static String getDayOfWeek(Date date) {
@@ -131,7 +212,13 @@ public class SaveDataActivity extends BaseActivity {
 				startActivity(intent2);
 			}
 		});
-		indateBtn =  (LinearLayout) findViewById(R.id.indateBtn);
+		indateBtn = (LinearLayout) findViewById(R.id.indateBtn);
+		curentTime = (LinearLayout) findViewById(R.id.curentTime);
+		comeinBtn = (LinearLayout) findViewById(R.id.comeinBtn);
+		intrestBtn = (LinearLayout) findViewById(R.id.intrestBtn);
+		tryBtn = (LinearLayout) findViewById(R.id.tryBtn);
+		buyBtn = (LinearLayout) findViewById(R.id.buyBtn);
+		oldBtn = (LinearLayout) findViewById(R.id.oldBtn);
 		comeInNum = (TextView) findViewById(R.id.comein_v);
 		intreNum = (TextView) findViewById(R.id.intre_v);
 		tryNum = (TextView) findViewById(R.id.try_v);
@@ -141,14 +228,49 @@ public class SaveDataActivity extends BaseActivity {
 		indate = (TextView) findViewById(R.id.indate);
 		indate_day = (TextView) findViewById(R.id.indate_day);
 		Date t = new Date();
-		indate.setText(toString(t));
+		indate.setText(toDString(t));
 		indate_day.setText(getDayOfWeek(t));
-		
+
 		indateBtn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				showDateTimePicker();
+			}
+		});
+		comeinBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showNumberPicker(1);
+			}
+		});
+		intrestBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showNumberPicker(2);
+			}
+		});
+		tryBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showNumberPicker(3);
+			}
+		});
+		buyBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showNumberPicker(4);
+			}
+		});
+		oldBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showNumberPicker(5);
 			}
 		});
 	}

@@ -309,8 +309,8 @@ public class LoginActivity extends BaseActivity {
 	 * @param arg0
 	 */
 	public void login(View arg0) {
-		new MyListLoader(false).execute("");
-		Intent intent2 = new Intent(LoginActivity.this, SaveDataActivity.class);
+		new MyListLoader(false).execute(""); 
+		Intent intent2 = new Intent(LoginActivity.this, HomepageMenuActivity.class);
 		startActivity(intent2);
 	}
 

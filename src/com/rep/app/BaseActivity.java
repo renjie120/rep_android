@@ -21,7 +21,7 @@ import android.widget.TextView;
  */
 public class BaseActivity extends Activity {
 	// 上下标题栏的高度比例
-	public static float barH = 0.1f;
+	public static float barH = 0.07f;
 	// 标题文字的宽度
 	public static float barW = 0.6f;
 	// 底部文字的宽度
@@ -110,6 +110,7 @@ public class BaseActivity extends Activity {
 		ll.width = (int) (width * dm.widthPixels);
 		l.setLayoutParams(ll);
 	}
+
 	public void setWidthHeight2(ImageView l, final float width,
 			final float height, final float top, final float left) {
 		DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -136,8 +137,6 @@ public class BaseActivity extends Activity {
 		l.layout((int) (left * dm.widthPixels), (int) (top * dm.heightPixels),
 				0, 0);
 	}
-
-	
 
 	/**
 	 * 判断网络状况.
@@ -187,7 +186,7 @@ public class BaseActivity extends Activity {
 	 * @return
 	 */
 	public float[] getScreen2() {
-		DisplayMetrics dm = new DisplayMetrics(); 
+		DisplayMetrics dm = new DisplayMetrics();
 		dm = getResources().getDisplayMetrics();
 		return new float[] { dm.widthPixels, dm.heightPixels };
 	}

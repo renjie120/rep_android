@@ -13,37 +13,6 @@
         android:background="@drawable/datepicker_bg"
         android:orientation="vertical" >
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5.0dip"
-            android:layout_marginTop="10.0dip" >
-
-            <Button
-                android:id="@+id/ig_solar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20.0dip"
-                android:background="@drawable/whtbtn"
-                android:text="公历"
-                android:textColor="@color/white"
-                android:textSize="16.0sp" />
-
-            <Button
-                android:id="@+id/ig_lunar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20.0dip"
-                android:background="@drawable/orgbtn"
-                android:text="农历"
-                android:textColor="@color/orange"
-                android:textSize="16.0sp" />
-        </RelativeLayout>
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
