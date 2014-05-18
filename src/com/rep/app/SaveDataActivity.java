@@ -1,10 +1,18 @@
 package com.rep.app;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActionBar.Action;
 
 /**
  * 保存基础数据.
@@ -16,6 +24,8 @@ public class SaveDataActivity extends BaseActivity {
 	private ActionBar head;
 	private TextView comeInNum, intreNum, tryNum, buyNum, oldNum, timeSpan,
 			indate, indate_day;
+	private static final String[] weeks = new String[] { "星期日", "星期一", "星期二",
+			"星期三", "星期四", "星期五", "星期六" };
 
 	/**
 	 * 界面初始化函数.
@@ -30,6 +40,18 @@ public class SaveDataActivity extends BaseActivity {
 	}
 
 	private float screenHeight, screenWidth;
+
+	public static String toString(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+		return sdf.format(date);
+	}
+
+	public static String getDayOfWeek(Date date) {
+		GregorianCalendar ca = new GregorianCalendar();
+		ca.setTime(date);
+		int i = ca.get(Calendar.DAY_OF_WEEK);
+		return weeks[i-1];
+	}
 
 	/**
 	 * 初始化控件.
@@ -48,6 +70,20 @@ public class SaveDataActivity extends BaseActivity {
 				(int) (screenHeight * rgtBtnH));
 		head.setRightText(R.string.finish);
 		head.setLeftAction(new ActionBar.BackAction(this));
+		head.setRightActionWithText(new Action() {
+
+			@Override
+			public int getDrawable() {
+				return R.string.finish;
+			}
+
+			@Override
+			public void performAction(View view) {
+				Intent intent2 = new Intent(SaveDataActivity.this,
+						AddMoreDataActivity.class);
+				startActivity(intent2);
+			}
+		});
 		comeInNum = (TextView) findViewById(R.id.comein_v);
 		intreNum = (TextView) findViewById(R.id.intre_v);
 		tryNum = (TextView) findViewById(R.id.try_v);
@@ -56,7 +92,8 @@ public class SaveDataActivity extends BaseActivity {
 		timeSpan = (TextView) findViewById(R.id.timespan_v);
 		indate = (TextView) findViewById(R.id.indate);
 		indate_day = (TextView) findViewById(R.id.indate_day);
-
+		Date t = new Date();
+		indate.setText(toString(t));
+		indate_day.setText(getDayOfWeek(t));
 	}
-
 }

@@ -49,6 +49,8 @@
         </activity>
         <activity android:name=".LoginActivity" >
         </activity>
+        <activity android:name=".AddMoreDataActivity" >
+        </activity>
         <activity android:name=".ForgetPassActivity" >
         </activity>
         <activity android:name=".SaveDataActivity" >

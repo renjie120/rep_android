@@ -35,6 +35,7 @@
     <color name="homepage_bottom">#c8c8c8</color>
     <color name="black">#000000</color>
     <color name="orange">#FD9E36</color>
+    <color name="homepagebk">#F0EFF4</color>
 
     <dimen name="line_margin_top">6dp</dimen>
 

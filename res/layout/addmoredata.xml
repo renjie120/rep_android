@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <com.rep.util.ActionBar
+        android:id="@+id/addmore_head"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/center_table"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/r1"
+            style="@style/line_style" >
+
+            <TextView
+                android:id="@+id/brandname"
+                style="@style/textstyle2"
+                android:text="@string/brandname" />
+
+            <EditText
+                android:id="@+id/brandname_v"
+                style="@style/editstyle"
+                android:hint="@string/brandname2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r2"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/brandtype"
+                style="@style/textstyle2"
+                android:text="@string/brandtype" />
+
+            <EditText
+                android:id="@+id/brandtype_v"
+                style="@style/editstyle"
+                android:hint="@string/brandtype2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r3"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/worknum"
+                style="@style/textstyle2"
+                android:text="@string/worknum"
+                android:textColor="@color/orange" />
+
+            <EditText
+                android:id="@+id/worknum_v"
+                style="@style/editstyle"
+                android:hint="@string/worknum2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r4"
+            style="@style/line_style"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:id="@+id/weekend"
+                style="@style/textstyle2"
+                android:text="@string/weekend"
+                android:textColor="@color/orange" />
+
+            <EditText
+                android:id="@+id/weekend_v"
+                style="@style/editstyle"
+                android:hint="@string/weekend2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r5"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/worktime"
+                style="@style/textstyle2"
+                android:text="@string/worktime" />
+
+            <EditText
+                android:id="@+id/worktime_v"
+                style="@style/editstyle"
+                android:hint="@string/worktime2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r6"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/price"
+                style="@style/textstyle2"
+                android:text="@string/price" />
+
+            <EditText
+                android:id="@+id/price_v"
+                style="@style/editstyle"
+                android:hint="@string/price2" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="@string/message1"
+            android:textColor="@color/orange" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="@string/message2" />
+    </LinearLayout>
+
+</LinearLayout>

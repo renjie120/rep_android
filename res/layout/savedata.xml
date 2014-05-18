@@ -21,18 +21,27 @@
             android:id="@+id/r1"
             style="@style/line_style" >
 
-            <TextView
-                android:id="@+id/indate"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:gravity="center"  >
 
-            <TextView
-                android:id="@+id/indate_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20px" />
+                <TextView
+                    android:id="@+id/indate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/indate_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left" 
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -47,7 +56,8 @@
 
             <TextView
                 android:id="@+id/timespan_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,7 +72,8 @@
 
             <TextView
                 android:id="@+id/comein_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,7 +88,8 @@
 
             <TextView
                 android:id="@+id/intre_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,7 +104,8 @@
 
             <TextView
                 android:id="@+id/try_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,7 +120,8 @@
 
             <TextView
                 android:id="@+id/buy_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,7 +136,8 @@
 
             <TextView
                 android:id="@+id/old_v"
-                style="@style/zerostyle" />
+                style="@style/zerostyle"
+                android:text="@string/zero" />
         </LinearLayout>
     </LinearLayout>
 
