@@ -18,12 +18,12 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/r1"
+            android:id="@+id/indateBtn"
             style="@style/line_style" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="wrap_content" 
                 android:gravity="center"  >
 
                 <TextView
@@ -38,6 +38,7 @@
                     android:id="@+id/indate_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
                     android:layout_gravity="left" 
                     android:textColor="@color/black"
                     android:textSize="18sp" />
