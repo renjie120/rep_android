@@ -4,6 +4,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.rep.util.ActionBar;
+import com.rep.util.ActionBar.Action;
 import com.rep.util.Constant;
 import com.rep.util.HttpRequire;
 import com.rep.util.ServerResult;
@@ -29,7 +32,7 @@ import com.rep.util.ServerResult;
  * @author 130126
  * 
  */
-public class LoginActivity extends BaseActivity implements OnClickListener {
+public class LoginActivity extends BaseActivity {
 	private String name;
 	private String pass;
 	private Button buttonLogin;
@@ -39,23 +42,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private EditText passwordText;
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog dialog;
-	private TextView  remember_mess;
+	private TextView remember_mess;
 	private float screenHeight = 0;
 	private float screenWidth = 0;
-	// private LinearLayout titile_gre_ym; 
+	// private LinearLayout titile_gre_ym;
 	// 登陆框的高度
 	private float tabH = 0.38f;
 	// 登陆框的宽度
 	private float tabW = 0.86f;
 	// 图标的上下空白
 	private float imgMrg = 0.05f;
-	private TextView name_title,mess_title;
+	private TextView name_title, mess_title;
 	private TextView pass_title;
 	private LinearLayout buttonWrap;
-	private LinearLayout row1;
-	private LinearLayout row2;
-	private LinearLayout row3;
-	private LinearLayout table; 
 	// 登陆框提示文本的宽度.
 	private float textViewW = 57 / 265f;
 	private float textEditW = 150 / 265f;
@@ -82,13 +81,27 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		int checkboxLMar = (int) (checkboxLM * screenWidth);
 		int checkboxTMar = (int) (checkboxTM * screenWidth);
 		int textWidth = (int) (textViewW * screenWidth);
-		int editWidth = (int) (textEditW * screenWidth);
-		int editHeight = (int) (textViewH * 1.1 * screenHeight);
-		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-				(int) (screenWidth * tabW), (int) (screenHeight * tabH));
-		// 设置table的高度和宽度.
-		table.setLayoutParams(p);
-		 
+		head.init(R.string.titile_login, false, true, false, true,
+				(int) (screenHeight * barH));
+		head.setTitleSize((int) (screenWidth * titleW4),
+				(int) (screenHeight * titleH));
+		head.setRightSize((int) (screenWidth * rgtBtnW),
+				(int) (screenHeight * rgtBtnH));
+		head.setRightText(R.string.regiest);
+		head.setRightActionWithText(new Action() {
+
+			@Override
+			public int getDrawable() {
+				return R.string.regiest;
+			}
+
+			@Override
+			public void performAction(View view) {
+				Intent intent2 = new Intent(LoginActivity.this,
+						RegiestActivity.class);
+				startActivity(intent2);
+			}
+		});
 		name_title.setWidth(textWidth);
 		name_title.setHeight(textHeight);
 		pass_title.setWidth(textWidth);
@@ -105,20 +118,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp_bottom.width = (int) (screenWidth * tabW);
-		lp_bottom.height = (int) (screenHeight * (24 / 1136)); 
+		lp_bottom.height = (int) (screenHeight * (24 / 1136));
 
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp.setMargins(0, (int) (screenHeight * imgMrg), 0,
-				(int) (screenHeight * imgMrg)); 
+				(int) (screenHeight * imgMrg));
 
-		LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.WRAP_CONTENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		lp2.width = (int) (btnW * screenWidth);
-		lp2.height = (int) (wrapH * screenHeight);
-		buttonWrap.setLayoutParams(lp2);
+		// LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
+		// LinearLayout.LayoutParams.WRAP_CONTENT,
+		// LinearLayout.LayoutParams.WRAP_CONTENT);
+		// lp2.width = (int) (btnW * screenWidth);
+		// lp2.height = (int) (wrapH * screenHeight);
+		// buttonWrap.setLayoutParams(lp2);
 
 		LinearLayout.LayoutParams lp22 = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -134,35 +147,31 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		lp23.width = (int) (textEditW * screenWidth);
 		lp23.height = (int) (checkboxHeight * 2.2);
 		lp23.topMargin = (int) (checkboxMesTM * screenHeight);
-		mess_title.setLayoutParams(lp23); 
-		setWidthHeight(row1, tabW, rowH);
-		setWidthHeight(row2, tabW, rowH);
-		setWidthHeight(row3, tabW, rowH * 1.2f); 
-		passwordText.setText("123"); 
+		mess_title.setLayoutParams(lp23);
+		passwordText.setText("123");
 		// nameText.setText("taobaotmall");
 		// passwordText.setText("123123");
 	}
+
+	private ActionBar head;
 
 	/**
 	 * 初始化控件.
 	 */
 	private void init() {
+		head = (ActionBar) findViewById(R.id.login_head);
 		buttonWrap = (LinearLayout) findViewById(R.id.row4);
-		row1 = (LinearLayout) findViewById(R.id.row1);
-		row2 = (LinearLayout) findViewById(R.id.row2);
-		row3 = (LinearLayout) findViewById(R.id.row3);
 		name_title = (TextView) findViewById(R.id.name_title);
-		pass_title = (TextView) findViewById(R.id.pass_title); 
-		buttonLogin = (Button) findViewById(R.id.buttonLogin); 
-		table = (LinearLayout) findViewById(R.id.login_table);
+		pass_title = (TextView) findViewById(R.id.pass_title);
+		buttonLogin = (Button) findViewById(R.id.buttonLogin);
 		mess_title = (TextView) findViewById(R.id.mess_title);
 		remeberPassword = (ImageView) findViewById(R.id.remember_check);
 		nameText = (EditText) findViewById(R.id.inputName);
 		passwordText = (EditText) findViewById(R.id.inputPass);
 		mSharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this); 
+				.getDefaultSharedPreferences(this);
 		remember_mess = (TextView) findViewById(R.id.remember_mess);
-		mess_title = (TextView) findViewById(R.id.mess_title); 
+		mess_title = (TextView) findViewById(R.id.mess_title);
 		adjustScreen();
 	}
 
@@ -187,7 +196,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			}
 
 		});
-		buttonLogin.setOnClickListener(this);
 	}
 
 	/**
@@ -295,11 +303,37 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.buttonLogin) {
-			new MyListLoader(false).execute("");
-		}
+	/**
+	 * 登录.
+	 * 
+	 * @param arg0
+	 */
+	public void login(View arg0) {
+		new MyListLoader(false).execute("");
+		Intent intent2 = new Intent(LoginActivity.this, SaveDataActivity.class);
+		startActivity(intent2);
+	}
+
+	/**
+	 * 忘记密码.
+	 * 
+	 * @param arg0
+	 */
+	public void forgetPass(View arg0) {
+		Intent intent2 = new Intent(LoginActivity.this,
+				ForgetPassActivity.class);
+		startActivity(intent2);
+	}
+
+	/**
+	 * 忘记密码.
+	 * 
+	 * @param arg0
+	 */
+	public void regiest(View arg0) {
+		Intent intent2 = new Intent(LoginActivity.this,
+				ForgetPassActivity.class);
+		startActivity(intent2);
 	}
 
 	@Override
@@ -329,20 +363,20 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				break;
 			// 跳转到活动列表页面.
 			case 3:
-				 
+
 				break;
 			case 6:
 				mess_title.setVisibility(View.VISIBLE);
 				mess_title.setText("您输入的账号或密码有误,请重新输入!");
 				break;
 			case 9:
-//				mess_title.setVisibility(View.GONE);
-//				Intent intent2 = new Intent(LoginActivity.this,
-//						ActivitesList.class);
-//				intent2.putExtra("name", "debug");
-//				intent2.putExtra("uid", "debug");
-//				intent2.putExtra("token", "debug");
-//				startActivity(intent2);
+				// mess_title.setVisibility(View.GONE);
+				// Intent intent2 = new Intent(LoginActivity.this,
+				// ActivitesList.class);
+				// intent2.putExtra("name", "debug");
+				// intent2.putExtra("uid", "debug");
+				// intent2.putExtra("token", "debug");
+				// startActivity(intent2);
 				break;
 			default:
 				super.hasMessages(msg.what);

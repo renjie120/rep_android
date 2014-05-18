@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <com.rep.util.ActionBar
+        android:id="@+id/savedata_head"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/center_table"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/r1"
+            style="@style/line_style" >
+
+            <TextView
+                android:id="@+id/indate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/indate_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20px" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r2"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/timespan"
+                style="@style/textstyle1"
+                android:text="@string/current_time" />
+
+            <TextView
+                android:id="@+id/timespan_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r3"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/comein"
+                style="@style/textstyle1"
+                android:text="@string/comein_num" />
+
+            <TextView
+                android:id="@+id/comein_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r4"
+            style="@style/line_style"
+            android:layout_marginTop="4dp" >
+
+            <TextView
+                android:id="@+id/intre"
+                style="@style/textstyle1"
+                android:text="@string/intrest_num" />
+
+            <TextView
+                android:id="@+id/intre_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r5"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/tryn"
+                style="@style/textstyle1"
+                android:text="@string/try_num" />
+
+            <TextView
+                android:id="@+id/try_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r6"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/buy"
+                style="@style/textstyle1"
+                android:text="@string/buy_num" />
+
+            <TextView
+                android:id="@+id/buy_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r7"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/old"
+                style="@style/textstyle1"
+                android:text="@string/old_num" />
+
+            <TextView
+                android:id="@+id/old_v"
+                style="@style/zerostyle" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

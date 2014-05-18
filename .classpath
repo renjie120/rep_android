@@ -5,5 +5,8 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="src/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="src/libs/fastjson-1.1.38.jar"/>
+	<classpathentry kind="lib" path="src/libs/jpush-sdk-release1.6.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

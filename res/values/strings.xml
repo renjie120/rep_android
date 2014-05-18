@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources> 
+<resources>
+
     <string name="app_name">REP管理系统</string>
+    <string name="titile_login">登陆</string>
+    <string name="titile_savadata">数据收集</string>
+    <string name="titile_forgetpass">忘记密码</string>
+    <string name="titile_adddata">完善信息</string>
+    <string name="titile_regiest">免费注册</string>
     <string name="tag_hint">Tag为大小写字母，数字，下划线,中文， 多个用以逗号分隔</string>
     <string name="alias_hint">Alias为大小写字母，数字，下划线</string>
     <string name="style_hint">style为数字</string>
@@ -11,4 +17,21 @@
     <string name="error_network">网络连接异常,初始化失败 请检查网络！</string>
     <string name="logining">程序在后台执行, 请查看日志！</string>
     <string name="setting_su">设置成功</string>
+    <string name="regiest">注册</string>
+    <string name="current_time">当前时间段：</string>
+    <string name="comein_num">进出顾客数：</string>
+    <string name="intrest_num">询问过或摸过商品3秒以上的顾客数：</string>
+    <string name="try_num">试穿、试戴的顾客数：</string>
+    <string name="buy_num">购买人数(小票数量)：</string>
+    <string name="old_num">老顾客购买人数：</string>
+    <string name="zero">0</string>
+    <string name="pass">密码：</string>
+    <string name="user">用户名：</string>
+    <string name="pass_confirm">确认密码：</string>
+    <string name="get_code">获取验证码</string>
+    <string name="code">验证码：</string>
+    <string name="finish">完成</string>
+    <string name="phone">手机号码：</string>
+    <string name="makesure">确定</string>
+
 </resources>

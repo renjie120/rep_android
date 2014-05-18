@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <com.rep.util.ActionBar
+        android:id="@+id/forgetpass_head"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/center_table"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/r2"
+            style="@style/line_style" >
+
+            <TextView
+                android:id="@+id/newpass"
+                style="@style/textstyle2"
+                android:text="@string/pass" />
+
+            <EditText
+                android:id="@+id/pass"
+                style="@style/editstyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r3"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/confirm_pass"
+                style="@style/textstyle2"
+                android:text="@string/pass_confirm" />
+
+            <EditText
+                android:id="@+id/confirm_pass_v"
+                style="@style/editstyle" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/getcode"
+            style="@style/getCodeBtn"
+            android:onClick="getCode" />
+
+        <LinearLayout
+            android:id="@+id/r4"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
+
+            <TextView
+                android:id="@+id/valicode"
+                style="@style/textstyle2"
+                android:text="@string/code" />
+
+            <EditText
+                android:id="@+id/code"
+                style="@style/editstyle" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -73,6 +73,7 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 
 	private ImageView mLeftButton;
 	private LinearLayout left;
+	private TextView leftTv, rightTv;
 	private LinearLayout right;
 
 	private ImageView mRightButton;// 右边的动作图标
@@ -109,7 +110,6 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 		}
 
 	}
-	 
 
 	/**
 	 * 刷新按钮的操作.
@@ -125,7 +125,7 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 		@Override
 		public void performAction(final View view) {
 			this.ab.onRefreshClick();
-		} 
+		}
 	}
 
 	private void onRefreshClick() {
@@ -155,13 +155,20 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 	 * @param left
 	 *            是否显示左边图片
 	 * @param right
-	 *            是否显示右边图片 
+	 *            是否显示右边图片
+	 * @param leftText
+	 *            是否显示左边的文本
+	 * @param rightText
+	 *            是否显示右边的文本
 	 * @param height
-	 *            高度 
+	 *            高度
 	 */
-	public void init(int title, boolean left, boolean right,int height) {
+	public void init(int title, boolean left, boolean right, boolean leftText,
+			boolean rightText, int height) {
 		setTitle(title);
 		setLeftVisible(left);
+		setLeftTextVisible(leftText);
+		setRightTextVisible(rightText);
 		setRightVisible(right);
 		setWidthHeight(LayoutParams.FILL_PARENT, height);
 		// if (titleSize > 0)
@@ -175,6 +182,8 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 				null);
 
 		addView(this.mActionBar);
+		leftTv = (TextView) this.mActionBar.findViewById(R.id.left_text);
+		rightTv = (TextView) this.mActionBar.findViewById(R.id.right_text);
 		this.left = (LinearLayout) this.mActionBar.findViewById(R.id.left_line);
 		this.right = (LinearLayout) this.mActionBar
 				.findViewById(R.id.right_line);
@@ -184,9 +193,22 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 				.findViewById(R.id.right_btn1);
 		this.mTitle = (TextView) this.mActionBar
 				.findViewById(R.id.titile_gre_ym);
+		if (this.leftTv != null)
+			this.leftTv.setOnClickListener(this);
+		if (this.rightTv != null)
+			this.rightTv.setOnClickListener(this);
+		if (this.mLeftButton != null)
+			this.mLeftButton.setOnClickListener(this);
+		if (this.mRightButton != null)
+			this.mRightButton.setOnClickListener(this);
+	}
 
-		this.mLeftButton.setOnClickListener(this);
-		this.mRightButton.setOnClickListener(this);
+	public void setLeftText(final int textId) {
+		this.leftTv.setText(textId);
+	}
+
+	public void setRightText(final int textId) {
+		this.rightTv.setText(textId);
 	}
 
 	@Override
@@ -229,6 +251,27 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 			this.left.setVisibility(View.GONE);
 	}
 
+	public void setLeftTextVisible(final boolean visible) {
+		// 如果要显示左边的文本，就不显示左边的图片.
+		if (visible) {
+			this.leftTv.setVisibility(View.VISIBLE);
+			this.mLeftButton.setVisibility(View.GONE);
+		} else {
+			this.leftTv.setVisibility(View.GONE);
+			this.mLeftButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void setRightTextVisible(final boolean visible) {
+		if (visible) {
+			this.rightTv.setVisibility(View.VISIBLE);
+			this.mRightButton.setVisibility(View.GONE);
+		} else {
+			this.rightTv.setVisibility(View.GONE);
+			this.mRightButton.setVisibility(View.VISIBLE);
+		}
+	}
+
 	public void setRightVisible(final boolean visible) {
 		if (visible)
 			this.right.setVisibility(View.VISIBLE);
@@ -241,11 +284,12 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 		this.mLeftButton.setImageResource(resId);
 	}
 
-	public void setLeftSize(final int width, final int height,final int marginTop) {
+	public void setLeftSize(final int width, final int height,
+			final int marginTop) {
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width,
 				height);
 		lp.gravity = Gravity.CENTER_VERTICAL;
-		lp.leftMargin = 10; 
+		lp.leftMargin = 10;
 		lp.topMargin = marginTop;
 		mLeftButton.setLayoutParams(lp);
 	}
@@ -262,6 +306,12 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 		this.mRightButton.setTag(action);
 	}
 
+	public void setRightActionWithText(final Action action) {
+		this.rightTv.setText(action.getDrawable());
+		// 下面设置了tag，会在onclick里面得到这里的tag里面的对象，然后调用相关事件。。
+		this.rightTv.setTag(action);
+	}
+
 	public void setRightActionEnabled(final boolean enabled) {
 		this.mRightButton.setEnabled(enabled);
 	}
@@ -269,7 +319,6 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 	public void setRightIcon(final int resId) {
 		this.mRightButton.setImageResource(resId);
 	}
- 
 
 	public void setTitle(final int resId) {
 		this.mTitle.setText(resId);
