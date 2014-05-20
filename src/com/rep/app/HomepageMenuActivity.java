@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.rep.chart.CombinedTemperatureChart;
 import com.rep.util.ActionBar;
 import com.rep.util.HomeMenuAdapter;
 
@@ -92,7 +93,9 @@ public class HomepageMenuActivity extends BaseActivity {
 							SaveDataActivity.class);
 					startActivity(intent2);
 				} else if (arg2 == 1) {
-
+					Intent intent2 = new CombinedTemperatureChart()
+							.execute(HomepageMenuActivity.this);
+					startActivity(intent2);
 				} else if (arg2 == 2 || arg2 == 3) {
 
 				} else {

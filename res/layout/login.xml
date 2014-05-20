@@ -28,12 +28,8 @@
 
             <TextView
                 android:id="@+id/name_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/user"
-                android:textColor="@color/black"
-                android:textSize="13sp" />
+                style="@style/textstyle2"
+                android:text="@string/user" />
 
             <EditText
                 android:id="@+id/inputName"
@@ -61,12 +57,8 @@
 
             <TextView
                 android:id="@+id/pass_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/pass"
-                android:textColor="@color/black"
-                android:textSize="13sp" />
+                style="@style/textstyle2"
+                android:text="@string/pass" />
 
             <EditText
                 android:id="@+id/inputPass"

@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import kankan.wheel.widget.ScreenInfo;
 import kankan.wheel.widget.WheelMain;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -107,6 +106,11 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	};
 
+	/**
+	 * 显示数值的下拉菜单.
+	 * 
+	 * @param type
+	 */
 	public void showNumberPicker(final int type) {
 		LayoutInflater inflater = LayoutInflater.from(SaveDataActivity.this);
 		View timepickerview = inflater.inflate(R.layout.selectday, null);
@@ -117,7 +121,7 @@ public class SaveDataActivity extends BaseActivity {
 		wheelMain.screenheight = screenInfo.getHeight();
 		dialog = new AlertDialog.Builder(this).setView(timepickerview).show();
 
-		wheelMain.initNumberPicker(23);
+		wheelMain.initNumberPicker(0);
 		// 此处可以设置dialog显示的位置
 		Window window = dialog.getWindow();
 		window.setGravity(Gravity.BOTTOM);
@@ -139,6 +143,42 @@ public class SaveDataActivity extends BaseActivity {
 					buyNum.setText("" + (b + 1 + wheelMain.getMin()));
 				else if (type == 5)
 					oldNum.setText("" + (b + 1 + wheelMain.getMin()));
+			}
+		});
+
+	}
+
+	public static final String[] TIMESPANS = { "08:00-09:00", "09:00-10:00",
+			"10:00-11:00", "11:00-12:00", "12:00-13:00", "13:00-14:00",
+			"14:00-15:00", "15:00-16:00", "16:00-17:00", "17:00-18:00",
+			"18:00-19:00", "19:00-20:00", "20:00-21:00", "21:00-22:00",
+			"22:00-23:00" };
+
+	/**
+	 * 显示当前时间段.
+	 */
+	public void showTimeSpan() {
+		LayoutInflater inflater = LayoutInflater.from(SaveDataActivity.this);
+		View timepickerview = inflater.inflate(R.layout.selectday, null);
+		timepickerview.setMinimumWidth(getWindowManager().getDefaultDisplay()
+				.getWidth());
+		ScreenInfo screenInfo = new ScreenInfo(SaveDataActivity.this);
+		wheelMain = new WheelMain(timepickerview);
+		wheelMain.screenheight = screenInfo.getHeight();
+		dialog = new AlertDialog.Builder(this).setView(timepickerview).show();
+
+		wheelMain.initTimeSpan();
+		// 此处可以设置dialog显示的位置
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.mystyle); // 添加动画
+
+		Button btn = (Button) timepickerview
+				.findViewById(R.id.btn_datetime_sure);
+		btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				timeSpan.setText(TIMESPANS[wheelMain.getMin()]);
 			}
 		});
 
@@ -207,9 +247,9 @@ public class SaveDataActivity extends BaseActivity {
 
 			@Override
 			public void performAction(View view) {
-				Intent intent2 = new Intent(SaveDataActivity.this,
-						AddMoreDataActivity.class);
-				startActivity(intent2);
+				// Intent intent2 = new Intent(SaveDataActivity.this,
+				// AddMoreDataActivity.class);
+				// startActivity(intent2);
 			}
 		});
 		indateBtn = (LinearLayout) findViewById(R.id.indateBtn);
@@ -236,6 +276,13 @@ public class SaveDataActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				showDateTimePicker();
+			}
+		});
+		curentTime.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				showTimeSpan();
 			}
 		});
 		comeinBtn.setOnClickListener(new OnClickListener() {

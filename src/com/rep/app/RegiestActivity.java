@@ -1,11 +1,13 @@
 package com.rep.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActionBar.Action;
 
 /**
  * 忘记密码.
@@ -50,6 +52,20 @@ public class RegiestActivity extends BaseActivity {
 		head.setRightSize((int) (screenWidth * rgtBtnW),
 				(int) (screenHeight * rgtBtnH));
 		head.setRightText(R.string.makesure); 
+		head.setRightActionWithText(new Action() {
+
+			@Override
+			public int getDrawable() {
+				return R.string.makesure;
+			}
+
+			@Override
+			public void performAction(View view) {
+				Intent intent2 = new Intent(RegiestActivity.this,
+						AddMoreDataActivity.class);
+				startActivity(intent2);
+			}
+		});
 		head.setLeftAction(new ActionBar.BackAction(this));
 	}
 

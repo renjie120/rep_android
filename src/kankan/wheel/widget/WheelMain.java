@@ -1,12 +1,11 @@
 package kankan.wheel.widget;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.rep.app.R;
 
@@ -148,6 +147,37 @@ public class WheelMain {
 
 	}
 
+	/**
+	 * 得到小时数.
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String toHour(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH");
+		return sdf.format(date);
+	}
+
+	public void initTimeSpan() {
+		wv_year.setVisibility(View.GONE);
+		wv_month.setVisibility(View.GONE);
+		wv_day.setVisibility(View.GONE);
+		wv_hours.setVisibility(View.GONE);
+		wv_mins.setVisibility(View.VISIBLE);
+		String nowHour = toHour(new Date());
+		Integer nh = Integer.parseInt(nowHour);
+		wv_mins.setAdapter(new TimeSpanAdapter(0, 14));
+		wv_mins.setCyclic(false);
+		System.out.println("nh---"+nh+",,,nowHour"+nowHour);
+		wv_mins.setCurrentItem((nh - 8) < 0 ? 0 : (nh - 8));
+		wv_mins.setVisibleItems(5);
+
+		// 根据屏幕密度来指定选择器字体的大小(不同屏幕可能不同)
+		int textSize = 0;
+		textSize = (screenheight / 100) * 4; 
+		wv_mins.TEXT_SIZE = textSize;
+	}
+
 	public void initNumberPicker(int number) {
 
 		wv_year.setVisibility(View.GONE);
@@ -185,6 +215,7 @@ public class WheelMain {
 		wv_mins.TEXT_SIZE = textSize;
 
 	}
+
 
 	/**
 	 * @Description: TODO 弹出阳历日期时间选择器
