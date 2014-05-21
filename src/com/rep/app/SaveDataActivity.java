@@ -84,6 +84,70 @@ public class SaveDataActivity extends BaseActivity {
 
 	}
 
+	/**
+	 * 得到一周里面的指定星期几的日期.
+	 * 
+	 * @param year
+	 * @param week
+	 * @param day
+	 * @return
+	 */
+	public static Date getDayInThisWeek(int year, int week, int day) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.WEEK_OF_YEAR, week);
+		cal.set(Calendar.DAY_OF_WEEK, day);
+		return cal.getTime();
+	}
+
+	/**
+	 * 得到日期是在一年的第几个星期.
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static int[] getYearAndWeekOfYear(Date date) {
+		GregorianCalendar ca = new GregorianCalendar();
+		ca.setTime(date);
+		return new int[] { ca.get(Calendar.YEAR), ca.get(Calendar.WEEK_OF_YEAR) };
+	}
+
+	/**
+	 * 显示星期的选择器.
+	 */
+	public void showDayPicker() {
+		LayoutInflater inflater = LayoutInflater.from(SaveDataActivity.this);
+		View timepickerview = inflater.inflate(R.layout.selectday, null);
+		timepickerview.setMinimumWidth(getWindowManager().getDefaultDisplay()
+				.getWidth());
+		ScreenInfo screenInfo = new ScreenInfo(SaveDataActivity.this);
+		wheelMain = new WheelMain(timepickerview);
+		wheelMain.screenheight = screenInfo.getHeight();
+
+		final int[] yearAndWeek = getYearAndWeekOfYear(new Date());
+		// 使用星期选择器.
+		wheelMain.setDay();
+		dialog = new AlertDialog.Builder(this).setView(timepickerview).show();
+
+		// 此处可以设置dialog显示的位置
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.mystyle); // 添加动画
+
+		Button btn = (Button) timepickerview
+				.findViewById(R.id.btn_datetime_sure);
+		btn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				Date nDate = getDayInThisWeek(yearAndWeek[0], yearAndWeek[1],
+						wheelMain.getDay());
+				indate.setText(toDString(nDate));
+				indate_day.setText(getDayOfWeek(nDate));
+			}
+		});
+
+	}
+
 	public Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -153,6 +217,9 @@ public class SaveDataActivity extends BaseActivity {
 			"14:00-15:00", "15:00-16:00", "16:00-17:00", "17:00-18:00",
 			"18:00-19:00", "19:00-20:00", "20:00-21:00", "21:00-22:00",
 			"22:00-23:00" };
+
+	public static final String[] DAYS = { "星期天", "星期一", "星期二", "星期三", "星期四",
+			"星期五", "星期六" };
 
 	/**
 	 * 显示当前时间段.
@@ -271,11 +338,16 @@ public class SaveDataActivity extends BaseActivity {
 		indate.setText(toDString(t));
 		indate_day.setText(getDayOfWeek(t));
 
+		String nowHour = WheelMain.toHour(new Date());
+		Integer nh = Integer.parseInt(nowHour);
+
+		timeSpan.setText(SaveDataActivity.TIMESPANS[(nh - 8) < 0 ? 0 : (nh - 8)]);
 		indateBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				showDateTimePicker();
+				// showDateTimePicker();
+				showDayPicker();
 			}
 		});
 		curentTime.setOnClickListener(new OnClickListener() {

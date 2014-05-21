@@ -40,6 +40,7 @@
             android:id="@+id/left_btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:layout_marginLeft="10dp"
             android:src="@drawable/back" />
     </LinearLayout>
