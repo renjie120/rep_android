@@ -81,16 +81,11 @@ public class TimeSpanAdapter implements WheelAdapter {
 
 	@Override
 	public int getItemsCount() {
-		return maxValue - minValue + 1;
+		return SaveDataActivity.TIMESPANS.length;
 	}
 
 	@Override
-	public int getMaximumLength() {
-		int max = Math.max(Math.abs(maxValue), Math.abs(minValue));
-		int maxLen = Integer.toString(max).length();
-		if (minValue < 0) {
-			maxLen++;
-		}
-		return maxLen;
+	public int getMaximumLength() { 
+		return SaveDataActivity.TIMESPANS.length;
 	}
 }

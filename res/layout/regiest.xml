@@ -29,7 +29,8 @@
 
             <EditText
                 android:id="@+id/phone_v"
-                style="@style/editstyle" />
+                style="@style/editstyle"
+                android:numeric="integer" />
         </LinearLayout>
 
         <LinearLayout
@@ -44,7 +45,8 @@
 
             <EditText
                 android:id="@+id/pass"
-                style="@style/editstyle" />
+                style="@style/editstyle"
+                android:password="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +61,8 @@
 
             <EditText
                 android:id="@+id/confirm_pass_v"
-                style="@style/editstyle" />
+                style="@style/editstyle"
+                android:password="true" />
         </LinearLayout>
 
         <Button
@@ -79,7 +82,8 @@
 
             <EditText
                 android:id="@+id/code"
-                style="@style/editstyle" />
+                style="@style/editstyle"
+                android:numeric="integer" />
         </LinearLayout>
     </LinearLayout>
 

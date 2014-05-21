@@ -62,7 +62,8 @@
             <EditText
                 android:id="@+id/worknum_v"
                 style="@style/editstyle"
-                android:hint="@string/worknum2" />
+                android:hint="@string/worknum2"
+                android:numeric="integer" />
         </LinearLayout>
 
         <LinearLayout
@@ -79,7 +80,8 @@
             <EditText
                 android:id="@+id/weekend_v"
                 style="@style/editstyle"
-                android:hint="@string/weekend2" />
+                android:hint="@string/weekend2"
+                android:numeric="integer" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,7 +97,8 @@
             <EditText
                 android:id="@+id/worktime_v"
                 style="@style/editstyle"
-                android:hint="@string/worktime2" />
+                android:hint="@string/worktime2"
+                android:numeric="decimal" />
         </LinearLayout>
 
         <LinearLayout
@@ -111,7 +114,8 @@
             <EditText
                 android:id="@+id/price_v"
                 style="@style/editstyle"
-                android:hint="@string/price2" />
+                android:hint="@string/price2"
+                android:numeric="decimal" />
         </LinearLayout>
     </LinearLayout>
 
