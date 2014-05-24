@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.rep.chart.CombinedTemperatureChart;
+import com.rep.chart.SalesStackedBarChart;
 import com.rep.util.ActionBar;
 import com.rep.util.HomeMenuAdapter;
 
@@ -93,11 +93,21 @@ public class HomepageMenuActivity extends BaseActivity {
 							SaveDataActivity.class);
 					startActivity(intent2);
 				} else if (arg2 == 1) {
-					Intent intent2 = new CombinedTemperatureChart()
+					Intent intent2 = new SalesStackedBarChart()
 							.execute(HomepageMenuActivity.this);
 					startActivity(intent2);
-				} else if (arg2 == 2 || arg2 == 3) {
-
+				} else if (arg2 == 2) {
+					Intent intent2 = new Intent(HomepageMenuActivity.this,
+							ItimeActivity.class);
+					startActivity(intent2);
+				} else if (arg2 == 3) {
+					Intent intent2 = new Intent(HomepageMenuActivity.this,
+							IchartActivity.class);
+					startActivity(intent2);
+				}  else if (arg2 ==4) {
+					Intent intent2 = new Intent(HomepageMenuActivity.this,
+							HistoryActivity.class);
+					startActivity(intent2);
 				} else {
 					alert("未开发");
 				}

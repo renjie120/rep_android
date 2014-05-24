@@ -1,0 +1,81 @@
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>ichartjs-Hello World</title>
+		<meta name="Description" content="" />
+		<meta name="Keywords" content="" />
+		<script src="file:///android_asset/ichart.latest.min.js" type="text/javascript" charset="utf-8" > </script> 
+		<script type="text/javascript">
+			/*function showchart(str){
+			   document.getElementById('sssss').innerHTML = str;
+			}*/
+		$(function() { 
+			showChart(window.jsjs.getString());
+		});
+			//在js里面调用java.
+		//window.demo.clickOnAndroid(2);
+		function showChart(json){
+			alert(json);
+			eval("var inputData="+json);
+			var data = [
+				{name : 'G1',value :inputData.G1,color : '#4572a7'},
+				{name : 'G2',value : inputData.G2,color : '#aa4643'},
+				{name : 'G3',value : inputData.G3,color : '#89a54e'},
+				{name : 'G4',value : inputData.G4,color : '#80699b'},
+				{name : 'G5',value : inputData.G5,color : '#ee00ff'},
+				{name : 'G6',value : inputData.G6,color : '#3d96ae'}
+			];
+		
+			var chart = new iChart.Column2D({
+				render : 'canvasDiv',
+				data : data,
+				title : {
+					text : '本次RPI指数是:'+inputData.rpi,
+					color : '#000000'
+				},
+				subtitle : {
+					text : '击败了'+inputData.percent+'的店铺',
+					color : '#000000'
+				}, 
+				width : 320,
+				height :400,
+				label : {
+					fontsize:11,
+					color : '#666666'
+				},
+				animation : true,//开启过渡动画
+				animation_duration:300,//800ms完成动画
+				shadow : true,
+				shadow_blur : 2,
+				shadow_color : '#aaaaaa', 
+				column_width : 30, 
+				coordinate : { 
+					axis : {
+						enable :false
+					},
+					gridlinesVisible:false,
+					ignoreOverlap:false,
+					scale : [{  
+						scale_enable:false, 
+						scale_space : 10,
+						scale_share:0,
+						scale_enable : false,
+						label : {
+							fontsize:11,
+							color : '#ffffff'
+						}
+					}]
+				}
+			}); 
+			
+			chart.draw();
+			document.getElementById('sssss').innerHTML += inputData.option;
+		} 
+		</script>
+		</head>
+		<body>
+			<div id='canvasDiv'></div>
+			<div id='sssss' style="margin:5px">我们的建议:</div>
+		</body>
+</html>

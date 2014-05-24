@@ -309,7 +309,7 @@ public class LoginActivity extends BaseActivity {
 	 * @param arg0
 	 */
 	public void login(View arg0) {
-		new MyListLoader(false).execute(""); 
+//		new MyListLoader(false).execute(""); 
 		Intent intent2 = new Intent(LoginActivity.this, HomepageMenuActivity.class);
 		startActivity(intent2);
 	}
@@ -394,6 +394,7 @@ public class LoginActivity extends BaseActivity {
 	public void login(final String userName, final String password) {
 		// 得到url请求.
 		DefaultHttpClient httpclient = new DefaultHttpClient();
+		System.out.println("是否调试："+Constant.debug);
 		if (Constant.debug) {
 			Message mes = new Message();
 			mes.what = 9;

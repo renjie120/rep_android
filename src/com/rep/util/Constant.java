@@ -7,6 +7,6 @@ public class Constant {
 	/**
 	 * 服务器请求主机.
 	 */
-	public static final String HOST = "http://api.jubanw.com/Api.ashx"; 
+	public static final String HOST = "http://www.thinksafari.com"; 
 	public static final boolean debug = false;
 }

@@ -64,7 +64,7 @@ public class CombinedTemperatureChart extends AbstractDemoChart {
    * @return the built intent
    */
   public Intent execute(Context context) {
-    String[] titles = new String[] { "Crete Air Temperature" };
+    String[] titles = new String[] { "Crete Air Temperature", "Skiathos Air Temperature" };
     List<double[]> x = new ArrayList<double[]>();
     for (int i = 0; i < titles.length; i++) {
       x.add(new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
@@ -72,44 +72,44 @@ public class CombinedTemperatureChart extends AbstractDemoChart {
     List<double[]> values = new ArrayList<double[]>();
     values.add(new double[] { 12.3, 12.5, 13.8, 16.8, 20.4, 24.4, 26.4, 26.1, 23.6, 20.3, 17.2,
         13.9 });
-//    values.add(new double[] { 9, 10, 11, 15, 19, 23, 26, 25, 22, 18, 13, 10 });
+    values.add(new double[] { 9, 10, 11, 15, 19, 23, 26, 25, 22, 18, 13, 10 });
     int[] colors = new int[] { Color.GREEN, Color.rgb(200, 150, 0) };
     PointStyle[] styles = new PointStyle[] { PointStyle.CIRCLE, PointStyle.DIAMOND };
     XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
-//    renderer.setPointSize(5.5f);
+    renderer.setPointSize(5.5f);
     int length = renderer.getSeriesRendererCount();
     for (int i = 0; i < length; i++) {
       XYSeriesRenderer r = (XYSeriesRenderer) renderer.getSeriesRendererAt(i);
       r.setLineWidth(5);
       r.setFillPoints(true);
     }
-//    setChartSettings(renderer, "Weather data", "Month", "Temperature", 0.5, 12.5, 0, 40,
-//        Color.LTGRAY, Color.LTGRAY);
-//
-//    renderer.setXLabels(12);
-//    renderer.setYLabels(10);
-//    renderer.setShowGrid(true);
-//    renderer.setXLabelsAlign(Align.RIGHT);
-//    renderer.setYLabelsAlign(Align.RIGHT);
-//    renderer.setZoomButtonsVisible(true);
-//    renderer.setPanLimits(new double[] { -10, 20, -10, 40 });
-//    renderer.setZoomLimits(new double[] { -10, 20, -10, 40 });
+    setChartSettings(renderer, "Weather data", "Month", "Temperature", 0.5, 12.5, 0, 40,
+        Color.LTGRAY, Color.LTGRAY);
 
-//    XYValueSeries sunSeries = new XYValueSeries("Sunshine hours");
-//    sunSeries.add(1f, 35, 4.3);
-//    sunSeries.add(2f, 35, 4.9);
-//    sunSeries.add(3f, 35, 5.9);
-//    sunSeries.add(4f, 35, 8.8);
-//    sunSeries.add(5f, 35, 10.8);
-//    sunSeries.add(6f, 35, 11.9);
-//    sunSeries.add(7f, 35, 13.6);
-//    sunSeries.add(8f, 35, 12.8);
-//    sunSeries.add(9f, 35, 11.4);
-//    sunSeries.add(10f, 35, 9.5);
-//    sunSeries.add(11f, 35, 7.5);
-//    sunSeries.add(12f, 35, 5.5);
-//    XYSeriesRenderer lightRenderer = new XYSeriesRenderer();
-//    lightRenderer.setColor(Color.YELLOW);
+    renderer.setXLabels(12);
+    renderer.setYLabels(10);
+    renderer.setShowGrid(true);
+    renderer.setXLabelsAlign(Align.RIGHT);
+    renderer.setYLabelsAlign(Align.RIGHT);
+    renderer.setZoomButtonsVisible(true);
+    renderer.setPanLimits(new double[] { -10, 20, -10, 40 });
+    renderer.setZoomLimits(new double[] { -10, 20, -10, 40 });
+
+    XYValueSeries sunSeries = new XYValueSeries("Sunshine hours");
+    sunSeries.add(1f, 35, 4.3);
+    sunSeries.add(2f, 35, 4.9);
+    sunSeries.add(3f, 35, 5.9);
+    sunSeries.add(4f, 35, 8.8);
+    sunSeries.add(5f, 35, 10.8);
+    sunSeries.add(6f, 35, 11.9);
+    sunSeries.add(7f, 35, 13.6);
+    sunSeries.add(8f, 35, 12.8);
+    sunSeries.add(9f, 35, 11.4);
+    sunSeries.add(10f, 35, 9.5);
+    sunSeries.add(11f, 35, 7.5);
+    sunSeries.add(12f, 35, 5.5);
+    XYSeriesRenderer lightRenderer = new XYSeriesRenderer();
+    lightRenderer.setColor(Color.YELLOW);
 
     XYSeries waterSeries = new XYSeries("Water Temperature");
     waterSeries.add(1, 16);
@@ -129,14 +129,15 @@ public class CombinedTemperatureChart extends AbstractDemoChart {
     waterRenderer.setColor(Color.argb(250, 0, 210, 250));
 
     XYMultipleSeriesDataset dataset = buildDataset(titles, x, values);
-//    dataset.addSeries(0, sunSeries);
+    dataset.addSeries(0, sunSeries);
     dataset.addSeries(0, waterSeries);
-//    renderer.addSeriesRenderer(0, lightRenderer);
+    renderer.addSeriesRenderer(0, lightRenderer);
     renderer.addSeriesRenderer(0, waterRenderer);
     waterRenderer.setDisplayChartValues(true);
     waterRenderer.setChartValuesTextSize(10);
 
-    String[] types = new String[] { BarChart.TYPE  };
+    String[] types = new String[] { BarChart.TYPE, BubbleChart.TYPE, LineChart.TYPE,
+        CubicLineChart.TYPE };
     Intent intent = ChartFactory.getCombinedXYChartIntent(context, dataset, renderer, types,
         "Weather parameters");
     return intent;

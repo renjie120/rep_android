@@ -106,23 +106,25 @@ public class WheelView extends View {
 	private int itemHeight = 0;
 
 	// Text paints
-	//TextPaint:Paint类的一个扩展，主要是用于文本在绘制的过程中为附件的数据留出空间。
+	// TextPaint:Paint类的一个扩展，主要是用于文本在绘制的过程中为附件的数据留出空间。
 	private TextPaint itemsPaint;
 	private TextPaint valuePaint;
+	private TextPaint checkedPaint;
 
 	// Layouts
-	//staticLayout被创建以后就不能被修改了，通常被用于控制文本组件布局。
+	// staticLayout被创建以后就不能被修改了，通常被用于控制文本组件布局。
 	private StaticLayout itemsLayout;
-	//设置的是2013年5月里面的标签部分，年，月。。
+	// 设置的是2013年5月里面的标签部分，年，月。。
 	private StaticLayout labelLayout;
 	private StaticLayout valueLayout;
+	private StaticLayout checkedLayout;
 
 	// Label & background
 	private String label;
 	private Drawable centerDrawable;
 
 	// Shadows drawables
-	//GradientDrawable:可以为按钮或者背景等提供渐变颜色的绘制。
+	// GradientDrawable:可以为按钮或者背景等提供渐变颜色的绘制。
 	private GradientDrawable topShadow;
 	private GradientDrawable bottomShadow;
 
@@ -131,7 +133,7 @@ public class WheelView extends View {
 	private int scrollingOffset;
 
 	// Scrolling animation
-	//GestureDetector:手势动画支持类.
+	// GestureDetector:手势动画支持类.
 	private GestureDetector gestureDetector;
 	private Scroller scroller;
 	private int lastScrollY;
@@ -211,6 +213,7 @@ public class WheelView extends View {
 	 * Set the the specified scrolling interpolator
 	 * Interpolator接口:定义了一种基于变率的一个动画。这使得基本的动画效果(alpha, scale, translate, rotate)
 	 * 是加速,减慢,重复等。这个方法在随机数这个例子中被使用
+	 * 
 	 * @param interpolator
 	 *            the interpolator
 	 */
@@ -420,12 +423,12 @@ public class WheelView extends View {
 	private void invalidateLayouts() {
 		itemsLayout = null;
 		valueLayout = null;
+		checkedLayout = null;
 		scrollingOffset = 0;
 	}
 
 	/**
-	 * Initializes resources
-	 * 初始化画笔资源.就是各种不同的颜色那些东西.
+	 * Initializes resources 初始化画笔资源.就是各种不同的颜色那些东西.
 	 */
 	private void initResourcesIfNecessary() {
 		if (itemsPaint == null) {
@@ -443,6 +446,14 @@ public class WheelView extends View {
 			valuePaint.setShadowLayer(0.1f, 0, 0.1f, 0xFFC0C0C0);
 		}
 
+		//
+		if (checkedPaint == null) {
+			checkedPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG
+					| Paint.FAKE_BOLD_TEXT_FLAG  );
+			// valuePaint.density = getResources().getDisplayMetrics().density;
+			checkedPaint.setTextSize(TEXT_SIZE); 
+		}
+		
 		if (centerDrawable == null) {
 			centerDrawable = getContext().getResources().getDrawable(
 					R.drawable.wheel_val);
@@ -458,7 +469,7 @@ public class WheelView extends View {
 					SHADOWS_COLORS);
 		}
 
-		//背景是一个图片.
+		// 背景是一个图片.
 		setBackgroundResource(R.drawable.wheel_bg);
 	}
 
@@ -484,8 +495,8 @@ public class WheelView extends View {
 	}
 
 	/**
-	 * Returns text item by index
-	 * 返回对应索引的文字信息.
+	 * Returns text item by index 返回对应索引的文字信息.
+	 * 
 	 * @param index
 	 *            the item index
 	 * @return the item or null
@@ -533,8 +544,8 @@ public class WheelView extends View {
 	}
 
 	/**
-	 * Returns the max item length that can be present
-	 * 返回可以表现出来的最大item的长度。
+	 * Returns the max item length that can be present 返回可以表现出来的最大item的长度。
+	 * 
 	 * @return the max length
 	 */
 	private int getMaxTextLength() {
@@ -579,8 +590,8 @@ public class WheelView extends View {
 	}
 
 	/**
-	 * Calculates control width and creates text layouts
-	 * 计算宽度和创建文本的层。
+	 * Calculates control width and creates text layouts 计算宽度和创建文本的层。
+	 * 
 	 * @param widthSize
 	 *            the input layout width
 	 * @param mode
@@ -589,15 +600,15 @@ public class WheelView extends View {
 	 */
 	private int calculateLayoutWidth(int widthSize, int mode) {
 		System.out.println("585calculateLayoutWidth");
-		//初始化画笔各种资源。。		
+		// 初始化画笔各种资源。。
 		initResourcesIfNecessary();
 
 		int width = widthSize;
 
-		//计算得到可以显示的item的数量.
+		// 计算得到可以显示的item的数量.
 		int maxLength = getMaxTextLength();
 		if (maxLength > 0) {
-			//计算一个数字0的宽度。。
+			// 计算一个数字0的宽度。。
 			float textWidth = FloatMath.ceil(Layout.getDesiredWidth("0",
 					itemsPaint));
 			itemsWidth = (int) (maxLength * textWidth);
@@ -608,15 +619,16 @@ public class WheelView extends View {
 
 		labelWidth = 0;
 		if (label != null && label.length() > 0) {
-			//计算一个字符串的宽度.
+			// 计算一个字符串的宽度.
 			labelWidth = (int) FloatMath.ceil(Layout.getDesiredWidth(label,
 					valuePaint));
-			System.out.println("计算字符串的宽度:"+label+",,,labelWidth="+labelWidth);
-			
+			System.out.println("计算字符串的宽度:" + label + ",,,labelWidth="
+					+ labelWidth);
+
 		}
 
 		boolean recalculate = false;
-		//如果是精确模式
+		// 如果是精确模式
 		if (mode == MeasureSpec.EXACTLY) {
 			width = widthSize;
 			recalculate = true;
@@ -652,7 +664,7 @@ public class WheelView extends View {
 		}
 
 		if (itemsWidth > 0) {
-			//创建各个层。。
+			// 创建各个层。。
 			createLayouts(itemsWidth, labelWidth);
 		}
 
@@ -669,25 +681,28 @@ public class WheelView extends View {
 	 */
 	private void createLayouts(int widthItems, int widthLabel) {
 		System.out.println("664createLayouts");
-		//staticLayout被创建以后就不能被修改了，通常被用于控制文本组件布局。
+		// staticLayout被创建以后就不能被修改了，通常被用于控制文本组件布局。
 		if (itemsLayout == null || itemsLayout.getWidth() > widthItems) {
 			/**
-			 *  1.字符串子资源
-				2.画笔对象
-				3.layout的宽度，字符串超出宽度时自动换行。
-				4.layout的样式，有ALIGN_CENTER， ALIGN_NORMAL， ALIGN_OPPOSITE 三种。
-				5.相对行间距，相对字体大小，1.5f表示行间距为1.5倍的字体高度。
-				6.相对行间距，0表示0个像素。
-				实际行间距等于这两者的和。
-				7.还不知道是什么意思，参数名是boolean includepad。
-				需要指出的是这个layout是默认画在Canvas的(0,0)点的，如果需要调整位置只能在draw之前移Canvas的起始坐标
-				canvas.translate(x,y);
+			 * 1.字符串子资源 2.画笔对象 3.layout的宽度，字符串超出宽度时自动换行。
+			 * 4.layout的样式，有ALIGN_CENTER， ALIGN_NORMAL， ALIGN_OPPOSITE 三种。
+			 * 5.相对行间距，相对字体大小，1.5f表示行间距为1.5倍的字体高度。 6.相对行间距，0表示0个像素。
+			 * 实际行间距等于这两者的和。 7.还不知道是什么意思，参数名是boolean includepad。
+			 * 需要指出的是这个layout是默认画在Canvas的(0,0)点的，如果需要调整位置只能在draw之前移Canvas的起始坐标
+			 * canvas.translate(x,y);
 			 */
-			itemsLayout = new StaticLayout(buildText(isScrollingPerformed),
-					itemsPaint, widthItems,
-					widthLabel > 0 ? Layout.Alignment.ALIGN_OPPOSITE
-							: Layout.Alignment.ALIGN_CENTER, 1,
-					ADDITIONAL_ITEM_HEIGHT, false);
+//			if (!"星期天".equals(text))
+//				checkedLayout = new StaticLayout(text != null ? text : "",
+//						valuePaint, widthItems,
+//						widthLabel > 0 ? Layout.Alignment.ALIGN_OPPOSITE
+//								: Layout.Alignment.ALIGN_CENTER, 1,
+//						ADDITIONAL_ITEM_HEIGHT, false);
+//			else
+		 	itemsLayout = new StaticLayout(buildText(isScrollingPerformed),
+						itemsPaint, widthItems,
+						widthLabel > 0 ? Layout.Alignment.ALIGN_OPPOSITE
+								: Layout.Alignment.ALIGN_CENTER, 1,
+						ADDITIONAL_ITEM_HEIGHT, false);
 		} else {
 			itemsLayout.increaseWidthTo(widthItems);
 		}
@@ -701,6 +716,7 @@ public class WheelView extends View {
 					widthLabel > 0 ? Layout.Alignment.ALIGN_OPPOSITE
 							: Layout.Alignment.ALIGN_CENTER, 1,
 					ADDITIONAL_ITEM_HEIGHT, false);
+
 		} else if (isScrollingPerformed) {
 			valueLayout = null;
 		} else {
@@ -718,7 +734,7 @@ public class WheelView extends View {
 		}
 	}
 
-	//用于测量各个控件距离，父子控件空间大小等
+	// 用于测量各个控件距离，父子控件空间大小等
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -726,7 +742,7 @@ public class WheelView extends View {
 		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-		//计算Layout的宽度
+		// 计算Layout的宽度
 		int width = calculateLayoutWidth(widthSize, widthMode);
 
 		int height;
@@ -743,7 +759,7 @@ public class WheelView extends View {
 		setMeasuredDimension(width, height);
 	}
 
-	//最为关键的画控件的类。。。
+	// 最为关键的画控件的类。。。
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
@@ -756,7 +772,7 @@ public class WheelView extends View {
 			}
 		}
 
-		System.out.println("748onDraw....itemsWidth===="+itemsWidth);
+		System.out.println("748onDraw....itemsWidth====" + itemsWidth);
 		if (itemsWidth > 0) {
 			canvas.save();
 			// // Skip padding space and hide a part of top and bottom items
@@ -803,14 +819,14 @@ public class WheelView extends View {
 
 		// draw label
 		if (labelLayout != null) {
-//			if (checkedItems!=null&&labelLayout.getText() != null) {
-//				String _v = labelLayout.getText().toString(); 
-//				if (checkedItems.contains(_v)) {
-//					valuePaint.setColor(CHECKED_TEXT_COLOR);
-//				} else {
-//					valuePaint.setColor(VALUE_TEXT_COLOR);
-//				}
-//			}
+			// if (checkedItems!=null&&labelLayout.getText() != null) {
+			// String _v = labelLayout.getText().toString();
+			// if (checkedItems.contains(_v)) {
+			// valuePaint.setColor(CHECKED_TEXT_COLOR);
+			// } else {
+			// valuePaint.setColor(VALUE_TEXT_COLOR);
+			// }
+			// }
 			canvas.save();
 			canvas.translate(itemsLayout.getWidth() + LABEL_OFFSET, bounds.top);
 			labelLayout.draw(canvas);
@@ -819,8 +835,8 @@ public class WheelView extends View {
 
 		// draw current value
 		if (valueLayout != null) {
-			if (checkedItems!=null&&valueLayout.getText() != null) {
-				String _v = valueLayout.getText().toString(); 
+			if (checkedItems != null && valueLayout.getText() != null) {
+				String _v = valueLayout.getText().toString();
 				if (checkedItems.contains(_v)) {
 					valuePaint.setColor(CHECKED_TEXT_COLOR);
 				} else {
@@ -842,22 +858,22 @@ public class WheelView extends View {
 	 */
 	private void drawItems(Canvas canvas) {
 		System.out.println("drawItems...");
-		if(itemsLayout!=null){
-			System.out.println("item的值："+itemsLayout.getText()+"---end");
-			
-			if (checkedItems!=null&&itemsLayout.getText() != null) {
-				String _v = itemsLayout.getText().toString(); 
+		if (itemsLayout != null) {
+			System.out.println("item的值：" + itemsLayout.getText() + "---end");
+
+			if (checkedItems != null && itemsLayout.getText() != null) {
+				String _v = itemsLayout.getText().toString();
 				if (checkedItems.contains(_v)) {
 					valuePaint.setColor(CHECKED_TEXT_COLOR);
 				} else {
 					valuePaint.setColor(ITEMS_TEXT_COLOR);
 				}
 			}
-		}	
+		}
 		canvas.save();
 
 		int top = itemsLayout.getLineTop(1);
-		System.out.println("top...==="+top);
+		System.out.println("top...===" + top);
 		canvas.translate(0, -top + scrollingOffset);
 
 		itemsPaint.setColor(ITEMS_TEXT_COLOR);
@@ -891,7 +907,7 @@ public class WheelView extends View {
 
 		if (!gestureDetector.onTouchEvent(event)
 				&& event.getAction() == MotionEvent.ACTION_UP) {
-			//用于调整画面
+			// 用于调整画面
 			justify();
 		}
 		return true;

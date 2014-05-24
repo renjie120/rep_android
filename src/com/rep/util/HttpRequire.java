@@ -67,11 +67,10 @@ public class HttpRequire {
 	}
 
 	public static ServerResult login(String userName, String password)
-			throws Exception {
-		System.out.println("登陆地址：" + Constant.HOST + ",,11password="
-				+ getMD5(password));
-		String url = Constant.HOST + "?do=login&username=" + userName
-				+ "&password=" + getMD5(password);// md5.toString(16);
+			throws Exception { 
+		String url = Constant.HOST + "/services/userService!login.do?userId="
+				+ userName + "&password=" + password + "&token="
+				+ getMD5(userName);
 		return request(url, null);
 	}
 
@@ -104,6 +103,10 @@ public class HttpRequire {
 	}
 
 	public static String getMD5(String val) throws NoSuchAlgorithmException {
+		return md5(val);
+	}
+	
+	public static String getBase64(String val) throws NoSuchAlgorithmException {
 		return md5(val);
 	}
 

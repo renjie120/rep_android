@@ -1,0 +1,95 @@
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<html>
+ <head> 
+ <style>
+ table{ 
+ border: 1px solid green;
+ border-collapse:collapse ;
+ scrollbar-arrow-color:yellow;
+ scrollbar-base-color:lightsalmon;
+ width:500;
+ }
+ td{
+	border: 1px solid #000000;
+	text-align:center; 
+ }
+ .gray{
+	background-color:#c4c4c4;
+ }
+.fst{
+	width:160;
+}
+ 
+</style>
+ </head>
+<script type="text/javascript">
+<!--
+window.onload=function(){
+	var arr = "[[[1,0],[1,1],[1,0],[1,0],[1,0],[1,1],[1,1]], "
+	+"[[0,0],[1,1],[1,0],[1,0],[1,0],[1,0],[0,1]], "
+	+"[[1,0],[0,1],[1,0],[1,0],[1,0],[1,0],[0,1]],"
+	+" [[1,0],[0,1],[1,0],[1,0],[1,1],[1,1],[0,1]], "
+	+"[[1,0],[0,1],[1,0],[1,0],[0,1],[1,0],[0,0]],"
+	+" [[1,0],[0,1],[0,0],[1,0],[1,1],[1,0],[1,0]],"
+	+" [[1,0],[1,1],[0,0],[1,0],[1,0],[0,0],[0,0]], "
+	+"[[0,0],[1,0],[1,0],[0,0],[0,0],[1,0],[0,0]], "
+	+"[[0,0],[1,0],[1,0],[1,0],[1,0],[0,0],[0,0]], "
+	+"[[0,0],[1,0],[1,0],[0,0],[0,0],[0,0],[0,0]],"
+	+" [[0,0],[0,1],[0,0],[1,0],[1,0],[1,0],[1,0]],"
+	+" [[0,0],[1,1],[1,0],[0,0],[1,0],[1,0],[1,0]]]";
+
+	setData(arr);
+};
+
+function setData(str){
+	eval("var arr1="+str);
+	var a= []; 
+	a.push('<table><tr> <td>&nbsp;</td> <td colSpan="5">工作日</td> <td colSpan="2">周末</td> </tr> <tr > <td>时间分布</td> <td >星期一 </td> <td>星期二</td> <td>星期三</td> <td>星期四</td> <td>星期五</td> <td>星期六</td> <td>星期天</td> </tr> ');
+	a.push(getTr("10:00-11:00",arr1[0]));
+	a.push(getTr("11:00-12:00",arr1[1]));
+	a.push(getTr("12:00-13:00",arr1[2]));
+	a.push(getTr("13:00-14:00",arr1[3]));
+	a.push(getTr("14:00-15:00",arr1[4]));
+	a.push(getTr("15:00-16:00",arr1[5]));
+	a.push(getTr("16:00-17:00",arr1[6]));
+	a.push(getTr("17:00-18:00",arr1[7]));
+	a.push(getTr("18:00-19:00",arr1[8]));
+	a.push(getTr("19:00-20:00",arr1[9]));
+	a.push(getTr("20:00-21:00",arr1[10]));
+	a.push(getTr("21:00-22:00",arr1[11]));  
+	a.push("</table>");
+	document.getElementById('tableId').innerHTML=a.join('');
+}
+function getTr(time,arr){ 
+	var a= [];
+	a.push("<tr><td class='fst'>");
+	a.push(time);
+	a.push("</td>"); 
+	for(var i=0,j=arr.length;i<j;i++){
+		var ii=arr[i];
+		a.push("<td ");
+		//如果是灰色背景
+		if(ii[1]=='1'){
+			a.push(" class = 'gray'>");
+		}else{
+			a.push(">");
+		}
+		//如果要显示图片
+		if(ii[0]=='1'){
+			a.push("<img src='wujiaoxing.jpg'/>");
+		}else{
+			a.push("&nbsp;");
+		}
+		a.push("</td>");
+	}
+	a.push("</tr>");
+	return a.join(''); 
+}
+//-->
+</script>
+ <body>
+  <div id="tableId">
+  
+  </div>
+ </body>
+</html>
