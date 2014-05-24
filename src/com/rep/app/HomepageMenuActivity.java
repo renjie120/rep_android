@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.rep.chart.SalesStackedBarChart;
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 import com.rep.util.HomeMenuAdapter;
 
 /**
@@ -37,7 +38,7 @@ public class HomepageMenuActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.homepage_menu);
 		init();
-
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	@Override

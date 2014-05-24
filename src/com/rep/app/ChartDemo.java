@@ -14,6 +14,7 @@ import android.widget.SimpleAdapter;
 
 import com.rep.chart.CombinedTemperatureChart;
 import com.rep.chart.IDemoChart;
+import com.rep.util.ActivityMeg;
 
 /**
  * 图表插件.
@@ -48,6 +49,7 @@ public class ChartDemo extends ListActivity {
 				android.R.layout.simple_list_item_2, new String[] {
 						IDemoChart.NAME, IDemoChart.DESC }, new int[] {
 						android.R.id.text1, android.R.id.text2 }));
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	private List<Map<String, String>> getListValues() {

@@ -14,6 +14,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 
 public class ItimeActivity extends BaseActivity {
 	private WebView webView;
@@ -30,7 +31,7 @@ public class ItimeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.itime);
-
+		ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.ichart_head);
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();

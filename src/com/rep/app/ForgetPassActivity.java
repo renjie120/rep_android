@@ -6,6 +6,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 
 /**
  * 忘记密码.
@@ -26,6 +27,7 @@ public class ForgetPassActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.forgetpass);
 		init();
+		ActivityMeg.getInstance().addActivity(this);
 
 	}
 	private float screenHeight, screenWidth;

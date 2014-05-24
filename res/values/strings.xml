@@ -53,5 +53,9 @@
     <string name="tijian">体检报告</string>
     <string name="lishi">历史记录</string>
     <string name="config_time">设置提醒时间</string>
+    <string name="item1">数据收集</string>
+    <string name="item2">基本体检</string>
+    <string name="item3">知识分享</string>
+    <string name="item4">更多</string>
 
 </resources>

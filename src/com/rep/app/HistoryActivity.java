@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 import com.rep.util.HistoryAdapter;
 
 /**
@@ -33,7 +34,7 @@ public class HistoryActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.history);
 		init();
-
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	/**

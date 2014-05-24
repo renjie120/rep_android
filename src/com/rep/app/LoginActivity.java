@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
+import com.rep.util.ActivityMeg;
 import com.rep.util.Constant;
 import com.rep.util.HttpRequire;
 import com.rep.util.ServerResult;
@@ -159,6 +160,7 @@ public class LoginActivity extends BaseActivity {
 	 * 初始化控件.
 	 */
 	private void init() {
+		ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.login_head);
 		buttonWrap = (LinearLayout) findViewById(R.id.row4);
 		name_title = (TextView) findViewById(R.id.name_title);
@@ -310,7 +312,7 @@ public class LoginActivity extends BaseActivity {
 	 */
 	public void login(View arg0) {
 //		new MyListLoader(false).execute(""); 
-		Intent intent2 = new Intent(LoginActivity.this, HomepageMenuActivity.class);
+		Intent intent2 = new Intent(LoginActivity.this, NewHomePage.class);
 		startActivity(intent2);
 	}
 

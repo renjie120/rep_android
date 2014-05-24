@@ -54,6 +54,8 @@
         </activity>
         <activity android:name=".ChartDemo" >
         </activity>
+        <activity android:name=".NewHomePage" >
+        </activity>
         <activity android:name=".ItimeActivity" >
         </activity>
         <activity android:name=".LoginActivity" >

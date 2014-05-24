@@ -7,6 +7,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 import com.rep.util.ActionBar.Action;
 
 /**
@@ -36,6 +37,7 @@ public class RegiestActivity extends BaseActivity {
 	 * 初始化控件.
 	 */
 	private void init() {
+		ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.regiest_head);
 		pass = (EditText) findViewById(R.id.pass);
 		pass_confirm = (EditText) findViewById(R.id.confirm_pass_v);

@@ -2,7 +2,6 @@ package com.rep.app;
 
 import java.util.Vector;
 
-import junit.framework.Test;
 import android.content.ClipData.Item;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,9 +12,9 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 
 public class IchartActivity extends BaseActivity {
 	private WebView webView;
@@ -32,7 +31,7 @@ public class IchartActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.ichart);
-
+		ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.ichart_head);
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();

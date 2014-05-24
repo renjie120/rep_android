@@ -66,8 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:password="true"
                 android:hint="@string/pass2"
+                android:password="true"
                 android:text="qqqqqq" />
         </LinearLayout>
     </LinearLayout>
@@ -113,9 +113,12 @@
 
         <Button
             android:id="@+id/buttonLogin"
-            android:layout_width="150px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape"
             android:onClick="login"
             android:text="登陆"
             android:textColor="@color/black" >
@@ -123,9 +126,13 @@
 
         <Button
             android:id="@+id/forgetPassLogin"
-            android:layout_width="150px"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape"
             android:onClick="forgetPass"
             android:text="忘记密码"
             android:textColor="@color/black" >

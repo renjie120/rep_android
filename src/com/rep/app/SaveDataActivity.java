@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 import com.rep.util.ActionBar.Action;
 
 /**
@@ -260,7 +261,7 @@ public class SaveDataActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.savedata);
 		init();
-
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	private float screenHeight, screenWidth;

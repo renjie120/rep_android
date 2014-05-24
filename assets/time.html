@@ -1,4 +1,4 @@
-<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <html>
  <head> 
  <style>
@@ -25,57 +25,51 @@
 <script type="text/javascript">
 <!--
 window.onload=function(){
-	var arr = "[[[1,0],[1,1],[1,0],[1,0],[1,0],[1,1],[1,1]], "
-	+"[[0,0],[1,1],[1,0],[1,0],[1,0],[1,0],[0,1]], "
-	+"[[1,0],[0,1],[1,0],[1,0],[1,0],[1,0],[0,1]],"
-	+" [[1,0],[0,1],[1,0],[1,0],[1,1],[1,1],[0,1]], "
-	+"[[1,0],[0,1],[1,0],[1,0],[0,1],[1,0],[0,0]],"
-	+" [[1,0],[0,1],[0,0],[1,0],[1,1],[1,0],[1,0]],"
-	+" [[1,0],[1,1],[0,0],[1,0],[1,0],[0,0],[0,0]], "
-	+"[[0,0],[1,0],[1,0],[0,0],[0,0],[1,0],[0,0]], "
-	+"[[0,0],[1,0],[1,0],[1,0],[1,0],[0,0],[0,0]], "
-	+"[[0,0],[1,0],[1,0],[0,0],[0,0],[0,0],[0,0]],"
-	+" [[0,0],[0,1],[0,0],[1,0],[1,0],[1,0],[1,0]],"
-	+" [[0,0],[1,1],[1,0],[0,0],[1,0],[1,0],[1,0]]]";
+	var arr = "[[1,1,1,0,0,0,0],[0,1,1,0,1,1,1],[0,1,1,1,1,1,1],[1,1,1,1,1,1,1],"
+	+"[1,1,1,1,1,1,1],[0,0,1,1,0,1,1],[0,0,0,0,0,0,1],[0,0,0,0,0,0,1],[1,1,0,0,0,0,1],"
+	+"[1,1,0,0,0,0,1],[1,1,0,0,0,0,1],[1,1,0,0,0,0,1]]";
+	var arr2 = "[[1,1,1,0,0,0,0],[0,1,1,0,0,0,1],[0,1,1,0,0,1,1],[1,1,1,1,1,1,1],"
+	+"[1,1,0,0,0,0,0],[0,0,1,1,0,1,1],[0,1,0,0,0,0,1],[1,1,0,0,0,0,1],[1,1,0,0,0,0,1],"
+	+"[0,0,0,0,0,0,1],[0,1,0,0,0,0,1],[0,1,0,0,0,0,1]]";
 
-	setData(arr);
+	setData(arr,arr2);
 };
 
-function setData(str){
+function setData(str,str2){
 	eval("var arr1="+str);
+	eval("var arr2="+str2);
 	var a= []; 
-	a.push('<table><tr> <td>&nbsp;</td> <td colSpan="5">¹¤×÷ÈÕ</td> <td colSpan="2">ÖÜÄ©</td> </tr> <tr > <td>Ê±¼ä·Ö²¼</td> <td >ĞÇÆÚÒ» </td> <td>ĞÇÆÚ¶ş</td> <td>ĞÇÆÚÈı</td> <td>ĞÇÆÚËÄ</td> <td>ĞÇÆÚÎå</td> <td>ĞÇÆÚÁù</td> <td>ĞÇÆÚÌì</td> </tr> ');
-	a.push(getTr("10:00-11:00",arr1[0]));
-	a.push(getTr("11:00-12:00",arr1[1]));
-	a.push(getTr("12:00-13:00",arr1[2]));
-	a.push(getTr("13:00-14:00",arr1[3]));
-	a.push(getTr("14:00-15:00",arr1[4]));
-	a.push(getTr("15:00-16:00",arr1[5]));
-	a.push(getTr("16:00-17:00",arr1[6]));
-	a.push(getTr("17:00-18:00",arr1[7]));
-	a.push(getTr("18:00-19:00",arr1[8]));
-	a.push(getTr("19:00-20:00",arr1[9]));
-	a.push(getTr("20:00-21:00",arr1[10]));
-	a.push(getTr("21:00-22:00",arr1[11]));  
+	a.push('<table><tr> <td>&nbsp;</td> <td colSpan="5">å·¥ä½œæ—¥</td> <td colSpan="2">å‘¨æœ«</td> </tr> <tr > <td>æ—¶é—´åˆ†å¸ƒ</td> <td >æ˜ŸæœŸä¸€ </td> <td>æ˜ŸæœŸäºŒ</td> <td>æ˜ŸæœŸä¸‰</td> <td>æ˜ŸæœŸå››</td> <td>æ˜ŸæœŸäº”</td> <td>æ˜ŸæœŸå…­</td> <td>æ˜ŸæœŸå¤©</td> </tr> ');
+	a.push(getTr("10:00-11:00",arr1[0],arr2[0]));
+	a.push(getTr("11:00-12:00",arr1[1],arr2[1]));
+	a.push(getTr("12:00-13:00",arr1[2],arr2[2]));
+	a.push(getTr("13:00-14:00",arr1[3],arr2[3]));
+	a.push(getTr("14:00-15:00",arr1[4],arr2[4]));
+	a.push(getTr("15:00-16:00",arr1[5],arr2[5]));
+	a.push(getTr("16:00-17:00",arr1[6],arr2[6]));
+	a.push(getTr("17:00-18:00",arr1[7],arr2[7]));
+	a.push(getTr("18:00-19:00",arr1[8],arr2[8]));
+	a.push(getTr("19:00-20:00",arr1[9],arr2[9]));
+	a.push(getTr("20:00-21:00",arr1[10],arr2[10]));
+	a.push(getTr("21:00-22:00",arr1[11],arr2[11]));
 	a.push("</table>");
 	document.getElementById('tableId').innerHTML=a.join('');
 }
-function getTr(time,arr){ 
+function getTr(time,arr,arr2){ 
 	var a= [];
-	a.push("<tr><td class='fst'>");
+	a.push("<tr><td>");
 	a.push(time);
 	a.push("</td>"); 
 	for(var i=0,j=arr.length;i<j;i++){
 		var ii=arr[i];
+		var jj=arr2[i];
 		a.push("<td ");
-		//Èç¹ûÊÇ»ÒÉ«±³¾°
-		if(ii[1]=='1'){
+		//å¦‚æœæ˜¯ç°è‰²èƒŒæ™¯
+		if(ii=='1'){
 			a.push(" class = 'gray'>");
-		}else{
-			a.push(">");
 		}
-		//Èç¹ûÒªÏÔÊ¾Í¼Æ¬
-		if(ii[0]=='1'){
+		//å¦‚æœè¦æ˜¾ç¤ºå›¾ç‰‡
+		if(jj=='1'){
 			a.push("<img src='wujiaoxing.jpg'/>");
 		}else{
 			a.push("&nbsp;");

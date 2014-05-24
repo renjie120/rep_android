@@ -5,6 +5,7 @@ import android.view.Window;
 import android.widget.EditText;
 
 import com.rep.util.ActionBar;
+import com.rep.util.ActivityMeg;
 
 /**
  * 完善信息.
@@ -26,7 +27,7 @@ public class AddMoreDataActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.addmoredata);
 		init();
-
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	private float screenHeight, screenWidth;
