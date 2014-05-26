@@ -38,6 +38,11 @@
         android:name="com.example.jpushdemo.ExampleApplication"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="VHhLSxfU3solXGb7XGWcqq0g" >
+        </meta-data>
+
         <activity
             android:name=".ScrollLayoutActivity"
             android:label="@string/app_name" >
@@ -59,6 +64,8 @@
         <activity android:name=".ItimeActivity" >
         </activity>
         <activity android:name=".LoginActivity" >
+        </activity>
+        <activity android:name=".BaseMapDemo" >
         </activity>
         <activity android:name=".IchartActivity" >
         </activity>
