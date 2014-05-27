@@ -342,7 +342,12 @@ public class SaveDataActivity extends BaseActivity {
 		String nowHour = WheelMain.toHour(new Date());
 		Integer nh = Integer.parseInt(nowHour);
 
-		timeSpan.setText(SaveDataActivity.TIMESPANS[(nh - 8) < 0 ? 0 : (nh - 8)]);
+		int _index = nh - 8;
+		if (_index < 0)
+			_index = 0;
+		if (_index >= SaveDataActivity.TIMESPANS.length)
+			_index = SaveDataActivity.TIMESPANS.length - 1;
+		timeSpan.setText(SaveDataActivity.TIMESPANS[_index]);
 		indateBtn.setOnClickListener(new OnClickListener() {
 
 			@Override

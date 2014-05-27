@@ -46,7 +46,7 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		TabSpec tab3 = tabHost.newTabSpec(TAB_ITEM_3);
 		TabSpec tab4 = tabHost.newTabSpec(TAB_ITEM_4);
 		tab1.setIndicator(TAB_ITEM_1).setContent(
-				new Intent(NewHomePage.this, BaseMapDemo.class).putExtra(
+				new Intent(NewHomePage.this, SaveDataActivity.class).putExtra(
 						Tool.SUPERPASS, isSuper));
 		tab2.setIndicator(TAB_ITEM_3).setContent(
 				new Intent(NewHomePage.this, ItimeActivity.class).putExtra(

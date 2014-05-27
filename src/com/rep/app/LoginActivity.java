@@ -4,8 +4,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +22,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.baidu.mapapi.BMapManager;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.search.MKAddrInfo;
+import com.baidu.mapapi.search.MKBusLineResult;
+import com.baidu.mapapi.search.MKDrivingRouteResult;
+import com.baidu.mapapi.search.MKPoiResult;
+import com.baidu.mapapi.search.MKSearch;
+import com.baidu.mapapi.search.MKSearchListener;
+import com.baidu.mapapi.search.MKShareUrlResult;
+import com.baidu.mapapi.search.MKSuggestionResult;
+import com.baidu.mapapi.search.MKTransitRouteResult;
+import com.baidu.mapapi.search.MKWalkingRouteResult;
+import com.baidu.platform.comapi.basestruct.GeoPoint;
+import com.example.jpushdemo.ExampleApplication;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
@@ -156,10 +175,123 @@ public class LoginActivity extends BaseActivity {
 
 	private ActionBar head;
 
+	private void initMap() {
+		mMapView = (MapView) findViewById(R.id.bmapView);
+		mSearch = new MKSearch();
+		mSearch.init(app.mBMapManager, new MKSearchListener() {
+			@Override
+			public void onGetPoiDetailSearchResult(int type, int error) {
+			}
+
+			public void onGetAddrResult(MKAddrInfo res, int error) {
+				// if (error != 0) {
+				// String str = String.format("错误号：%d", error);
+				// Toast.makeText(LoginActivity.this, str, Toast.LENGTH_LONG)
+				// .show();
+				// return;
+				// }
+				// StringBuffer sb = new StringBuffer();
+				// // 经纬度所对应的位置
+				// sb.append(res.strAddr).append("/n");
+				//
+				// // 判断该地址附近是否有POI（Point of Interest,即兴趣点）
+				// if (null != res.poiList) {
+				// // 遍历所有的兴趣点信息
+				// for (MKPoiInfo poiInfo : res.poiList) {
+				// sb.append("----------------------------------------")
+				// .append("/n");
+				// sb.append("城市：").append(poiInfo.city).append("/n");
+				// sb.append("名称：").append(poiInfo.name).append("/n");
+				// sb.append("地址：").append(poiInfo.address).append("/n");
+				// sb.append("经度：")
+				// .append(poiInfo.pt.getLongitudeE6() / 1000000.0f)
+				// .append("/n");
+				// sb.append("纬度：")
+				// .append(poiInfo.pt.getLatitudeE6() / 1000000.0f)
+				// .append("/n");
+				// sb.append("电话：").append(poiInfo.phoneNum).append("/n");
+				// sb.append("邮编：").append(poiInfo.postCode).append("/n");
+				// // poi类型，0：普通点，1：公交站，2：公交线路，3：地铁站，4：地铁线路
+				// sb.append("类型：").append(poiInfo.ePoiType).append("/n");
+				// }
+				// }
+				// alert("搜索到的结果:"+sb.toString());
+				if (res == null) {
+					return;
+				}
+				if (res.type == MKAddrInfo.MK_REVERSEGEOCODE) {
+					// 反地理编码：通过坐标点检索详细地址及周边poi
+					String strInfo = res.strAddr; 
+					System.out.println(strInfo + "---查询结果"+",,"+JSON.toJSONString(res));
+					Toast.makeText(LoginActivity.this, strInfo,
+							Toast.LENGTH_LONG).show();
+				}
+
+				// StringBuffer sb = new StringBuffer();
+				// // 经纬度所对应的位置
+				// sb.append(result.strAddr).append("/n");
+				//
+				// // 判断该地址附近是否有POI（Point of Interest,即兴趣点）
+				// if (null != result.poiList) {
+				// // 遍历所有的兴趣点信息
+				// for (MKPoiInfo poiInfo : result.poiList) {
+				// sb.append("----------------------------------------")
+				// .append("/n");
+				// sb.append("名称：").append(poiInfo.name).append("/n");
+				// sb.append("地址：").append(poiInfo.address).append("/n");
+				// sb.append("经度：")
+				// .append(poiInfo.pt.getLongitudeE6() / 1000000.0f)
+				// .append("/n");
+				// sb.append("纬度：")
+				// .append(poiInfo.pt.getLatitudeE6() / 1000000.0f)
+				// .append("/n");
+				// sb.append("电话：").append(poiInfo.phoneNum).append("/n");
+				// sb.append("邮编：").append(poiInfo.postCode).append("/n");
+				// // poi类型，0：普通点，1：公交站，2：公交线路，3：地铁站，4：地铁线路
+				// sb.append("类型：").append(poiInfo.ePoiType).append("/n");
+				// }
+				// }
+				// System.out.println("搜索到的结果:" + sb.toString());
+			}
+
+			public void onGetPoiResult(MKPoiResult res, int type, int error) {
+
+			}
+
+			public void onGetDrivingRouteResult(MKDrivingRouteResult res,
+					int error) {
+			}
+
+			public void onGetTransitRouteResult(MKTransitRouteResult res,
+					int error) {
+			}
+
+			public void onGetWalkingRouteResult(MKWalkingRouteResult res,
+					int error) {
+			}
+
+			public void onGetBusDetailResult(MKBusLineResult result, int iError) {
+			}
+
+			@Override
+			public void onGetSuggestionResult(MKSuggestionResult res, int arg1) {
+			}
+
+			@Override
+			public void onGetShareUrlResult(MKShareUrlResult result, int type,
+					int error) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+	}
+
 	/**
 	 * 初始化控件.
 	 */
 	private void init() {
+		initMap();
 		ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.login_head);
 		buttonWrap = (LinearLayout) findViewById(R.id.row4);
@@ -222,12 +354,27 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 
+	private ExampleApplication app;
+
 	/**
 	 * 界面初始化函数.
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		/**
+		 * 使用地图sdk前需先初始化BMapManager. BMapManager是全局的，可为多个MapView共用，它需要地图模块创建前创建，
+		 * 并在地图地图模块销毁后销毁，只要还有地图模块在使用，BMapManager就不应该销毁
+		 */
+		app = (ExampleApplication) this.getApplication();
+		if (app.mBMapManager == null) {
+			app.mBMapManager = new BMapManager(getApplicationContext());
+			/**
+			 * 如果BMapManager没有初始化则初始化BMapManager
+			 */
+			app.mBMapManager.init(new ExampleApplication.MyGeneralListener());
+		}
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login);
 		init();
@@ -311,9 +458,44 @@ public class LoginActivity extends BaseActivity {
 	 * @param arg0
 	 */
 	public void login(View arg0) {
-//		new MyListLoader(false).execute(""); 
+		// new MyListLoader(false).execute("");
+		String serviceString = Context.LOCATION_SERVICE;
+		LocationManager locationManager = (LocationManager) getSystemService(serviceString);
+		String provider = locationManager.GPS_PROVIDER;
+		Location location = locationManager.getLastKnownLocation(provider);
+		if (location != null) {
+			getLocationInfo(location);
+		} else {
+		}
+
 		Intent intent2 = new Intent(LoginActivity.this, NewHomePage.class);
 		startActivity(intent2);
+	}
+
+	// 地图相关
+	MapView mMapView = null; // 地图View
+	// 搜索相关
+	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
+
+ 
+
+	public void getLocationInfo(Location location) {
+		// TODO Auto-generated method stub
+		String latLongInfo;
+
+		if (location == null) {
+
+			latLongInfo = "No Location Found";
+		} else {
+			double lat = location.getLatitude(); // 维度
+			double lng = location.getLongitude(); // 精度
+			int longitude = (int) (1000000 * lat);
+			int latitude = (int) (1000000 * lng);
+			System.out.println("经度" + longitude + ",," + latitude);
+			System.out.println("经度" + (int)(39.915 * 1E6) + ",," + (int)(116.404 * 1E6));
+			mSearch.reverseGeocode(new GeoPoint(longitude, latitude));
+		}
+		// HandlerThread thread = new HandlerThread(location);
 	}
 
 	/**
@@ -396,7 +578,7 @@ public class LoginActivity extends BaseActivity {
 	public void login(final String userName, final String password) {
 		// 得到url请求.
 		DefaultHttpClient httpclient = new DefaultHttpClient();
-		System.out.println("是否调试："+Constant.debug);
+		System.out.println("是否调试：" + Constant.debug);
 		if (Constant.debug) {
 			Message mes = new Message();
 			mes.what = 9;
