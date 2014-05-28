@@ -63,6 +63,8 @@
         </activity>
         <activity android:name=".ItimeActivity" >
         </activity>
+        <activity android:name=".ConfigActivity" >
+        </activity>
         <activity android:name=".LoginActivity" >
         </activity>
         <activity android:name=".BaseMapDemo" >
@@ -158,6 +160,7 @@
 
         <!-- Required SDK核心功能 -->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
+        <receiver android:name="com.rep.util.MyAlarmReceiver" />
 
         <!-- User defined.  For test only  用户自定义的广播接收器 -->
         <receiver

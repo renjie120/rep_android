@@ -9,5 +9,8 @@
 	<classpathentry kind="lib" path="src/libs/fastjson-1.1.38.jar"/>
 	<classpathentry kind="lib" path="src/libs/jpush-sdk-release1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/achartengine-1.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/baidumapapi_v2_4_2.jar"/>
+	<classpathentry kind="lib" path="libs/locSDK_3.1.jar"/>
+	<classpathentry kind="lib" path="libs/xUtils-2.6.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

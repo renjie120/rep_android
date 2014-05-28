@@ -34,6 +34,10 @@ public class ExampleApplication extends Application {
 		JPushInterface.init(this); // 初始化 JPush
 	}
 
+	/**
+	 * 初始化百度地图引擎.
+	 * @param context
+	 */
 	public void initEngineManager(Context context) {
 		if (mBMapManager == null) {
 			mBMapManager = new BMapManager(context);

@@ -74,7 +74,7 @@ public class HomepageMenuActivity extends BaseActivity {
 		head.setLeftAction(new ActionBar.BackAction(this));
 
 		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
-		String[] names = { "数据收集", "基本体检", "在线诊断", "专家会诊", "知识分享", "我的资料",
+		String[] names = { "百度地图", "原生chart", "提醒配置", "新首页", "知识分享", "我的资料",
 				"设备简介" };
 		for (String s : names) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
@@ -91,7 +91,7 @@ public class HomepageMenuActivity extends BaseActivity {
 					long arg3) {
 				if (arg2 == 0) {
 					Intent intent2 = new Intent(HomepageMenuActivity.this,
-							SaveDataActivity.class);
+							BaseMapDemo.class);
 					startActivity(intent2);
 				} else if (arg2 == 1) {
 					Intent intent2 = new SalesStackedBarChart()
@@ -99,11 +99,11 @@ public class HomepageMenuActivity extends BaseActivity {
 					startActivity(intent2);
 				} else if (arg2 == 2) {
 					Intent intent2 = new Intent(HomepageMenuActivity.this,
-							ItimeActivity.class);
+							ConfigActivity.class);
 					startActivity(intent2);
 				} else if (arg2 == 3) {
 					Intent intent2 = new Intent(HomepageMenuActivity.this,
-							IchartActivity.class);
+							NewHomePage.class);
 					startActivity(intent2);
 				}  else if (arg2 ==4) {
 					Intent intent2 = new Intent(HomepageMenuActivity.this,

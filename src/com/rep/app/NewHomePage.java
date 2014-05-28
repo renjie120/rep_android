@@ -36,7 +36,9 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.homepage_tab);
-
+		Bundle b = getIntent().getExtras();
+		if (b != null)
+			System.out.println("结果:" + b.getString("content"));
 		group = (RadioGroup) findViewById(R.id.main_radio);
 		group.setOnCheckedChangeListener(this);
 		isSuper = getIntent().getBooleanExtra(Tool.SUPERPASS, false);

@@ -184,74 +184,18 @@ public class LoginActivity extends BaseActivity {
 			}
 
 			public void onGetAddrResult(MKAddrInfo res, int error) {
-				// if (error != 0) {
-				// String str = String.format("错误号：%d", error);
-				// Toast.makeText(LoginActivity.this, str, Toast.LENGTH_LONG)
-				// .show();
-				// return;
-				// }
-				// StringBuffer sb = new StringBuffer();
-				// // 经纬度所对应的位置
-				// sb.append(res.strAddr).append("/n");
-				//
-				// // 判断该地址附近是否有POI（Point of Interest,即兴趣点）
-				// if (null != res.poiList) {
-				// // 遍历所有的兴趣点信息
-				// for (MKPoiInfo poiInfo : res.poiList) {
-				// sb.append("----------------------------------------")
-				// .append("/n");
-				// sb.append("城市：").append(poiInfo.city).append("/n");
-				// sb.append("名称：").append(poiInfo.name).append("/n");
-				// sb.append("地址：").append(poiInfo.address).append("/n");
-				// sb.append("经度：")
-				// .append(poiInfo.pt.getLongitudeE6() / 1000000.0f)
-				// .append("/n");
-				// sb.append("纬度：")
-				// .append(poiInfo.pt.getLatitudeE6() / 1000000.0f)
-				// .append("/n");
-				// sb.append("电话：").append(poiInfo.phoneNum).append("/n");
-				// sb.append("邮编：").append(poiInfo.postCode).append("/n");
-				// // poi类型，0：普通点，1：公交站，2：公交线路，3：地铁站，4：地铁线路
-				// sb.append("类型：").append(poiInfo.ePoiType).append("/n");
-				// }
-				// }
-				// alert("搜索到的结果:"+sb.toString());
 				if (res == null) {
 					return;
 				}
 				if (res.type == MKAddrInfo.MK_REVERSEGEOCODE) {
 					// 反地理编码：通过坐标点检索详细地址及周边poi
-					String strInfo = res.strAddr; 
-					System.out.println(strInfo + "---查询结果"+",,"+JSON.toJSONString(res));
+					String strInfo = res.strAddr;
+					System.out.println("当前城市是:"+res.addressComponents.city);
+					System.out.println(strInfo + "---查询结果" + ",,"
+							+ JSON.toJSONString(res));
 					Toast.makeText(LoginActivity.this, strInfo,
 							Toast.LENGTH_LONG).show();
 				}
-
-				// StringBuffer sb = new StringBuffer();
-				// // 经纬度所对应的位置
-				// sb.append(result.strAddr).append("/n");
-				//
-				// // 判断该地址附近是否有POI（Point of Interest,即兴趣点）
-				// if (null != result.poiList) {
-				// // 遍历所有的兴趣点信息
-				// for (MKPoiInfo poiInfo : result.poiList) {
-				// sb.append("----------------------------------------")
-				// .append("/n");
-				// sb.append("名称：").append(poiInfo.name).append("/n");
-				// sb.append("地址：").append(poiInfo.address).append("/n");
-				// sb.append("经度：")
-				// .append(poiInfo.pt.getLongitudeE6() / 1000000.0f)
-				// .append("/n");
-				// sb.append("纬度：")
-				// .append(poiInfo.pt.getLatitudeE6() / 1000000.0f)
-				// .append("/n");
-				// sb.append("电话：").append(poiInfo.phoneNum).append("/n");
-				// sb.append("邮编：").append(poiInfo.postCode).append("/n");
-				// // poi类型，0：普通点，1：公交站，2：公交线路，3：地铁站，4：地铁线路
-				// sb.append("类型：").append(poiInfo.ePoiType).append("/n");
-				// }
-				// }
-				// System.out.println("搜索到的结果:" + sb.toString());
 			}
 
 			public void onGetPoiResult(MKPoiResult res, int type, int error) {
@@ -468,7 +412,7 @@ public class LoginActivity extends BaseActivity {
 		} else {
 		}
 
-		Intent intent2 = new Intent(LoginActivity.this, NewHomePage.class);
+		Intent intent2 = new Intent(LoginActivity.this, HomepageMenuActivity.class);
 		startActivity(intent2);
 	}
 
@@ -476,8 +420,6 @@ public class LoginActivity extends BaseActivity {
 	MapView mMapView = null; // 地图View
 	// 搜索相关
 	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
-
- 
 
 	public void getLocationInfo(Location location) {
 		// TODO Auto-generated method stub
@@ -492,7 +434,8 @@ public class LoginActivity extends BaseActivity {
 			int longitude = (int) (1000000 * lat);
 			int latitude = (int) (1000000 * lng);
 			System.out.println("经度" + longitude + ",," + latitude);
-			System.out.println("经度" + (int)(39.915 * 1E6) + ",," + (int)(116.404 * 1E6));
+			System.out.println("经度" + (int) (39.915 * 1E6) + ",,"
+					+ (int) (116.404 * 1E6));
 			mSearch.reverseGeocode(new GeoPoint(longitude, latitude));
 		}
 		// HandlerThread thread = new HandlerThread(location);
