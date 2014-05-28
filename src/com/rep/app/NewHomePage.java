@@ -30,6 +30,7 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 	private boolean isSuper;
 	private RadioGroup group;
 	private TabHost tabHost;
+	private String userId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,10 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.homepage_tab);
 		Bundle b = getIntent().getExtras();
-		if (b != null)
-			System.out.println("结果:" + b.getString("content"));
+		if (b != null) {
+			System.out.println("结果:" + b.getString("content") + ",brandName="
+					+ b.getString("brandName"));
+		}
 		group = (RadioGroup) findViewById(R.id.main_radio);
 		group.setOnCheckedChangeListener(this);
 		isSuper = getIntent().getBooleanExtra(Tool.SUPERPASS, false);
@@ -48,21 +51,22 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		TabSpec tab3 = tabHost.newTabSpec(TAB_ITEM_3);
 		TabSpec tab4 = tabHost.newTabSpec(TAB_ITEM_4);
 		tab1.setIndicator(TAB_ITEM_1).setContent(
-				new Intent(NewHomePage.this, SaveDataActivity.class).putExtra(
-						Tool.SUPERPASS, isSuper));
+				new Intent(NewHomePage.this, SaveDataActivity.class)
+						.putExtras(b));
 		tab2.setIndicator(TAB_ITEM_3).setContent(
-				new Intent(NewHomePage.this, ItimeActivity.class).putExtra(
-						Tool.SUPERPASS, isSuper));
-		tab3.setIndicator(TAB_ITEM_2).setContent(
-				new Intent(NewHomePage.this, IchartActivity.class).putExtra(
-						Tool.SUPERPASS, isSuper));
+				new Intent(NewHomePage.this, ItimeActivity.class).putExtras(b));
+		tab3.setIndicator(TAB_ITEM_2)
+				.setContent(
+						new Intent(NewHomePage.this, IchartActivity.class)
+								.putExtras(b));
 		tab4.setIndicator(TAB_ITEM_2).setContent(
-				new Intent(NewHomePage.this, HistoryActivity.class).putExtra(
-						Tool.SUPERPASS, isSuper));
+				new Intent(NewHomePage.this, HistoryActivity.class)
+						.putExtras(b));
 		tabHost.addTab(tab1);
 		tabHost.addTab(tab2);
 		tabHost.addTab(tab3);
 		tabHost.addTab(tab4);
+		tabHost.setCurrentTab(0);
 	}
 
 	public String getToday() {

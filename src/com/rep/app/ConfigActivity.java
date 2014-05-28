@@ -24,8 +24,8 @@ import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.rep.bean.Reminder;
 import com.rep.util.MyAlarmReceiver;
-import com.rep.util.Reminder;
 
 /**
  * 提醒配置界面.
@@ -149,7 +149,6 @@ public class ConfigActivity extends BaseActivity {
 	private void setNotification() {
 		DbUtils db = DbUtils.create(ConfigActivity.this);
 		db.configAllowTransaction(true);
-		db.configDebug(true);
 		Reminder r = new Reminder();
 		r.setFlg("1");
 		r.setHour(1);
@@ -158,9 +157,9 @@ public class ConfigActivity extends BaseActivity {
 		r.setLastRemindedTime("130126");
 		try {
 			db.save(r);
-			
+
 			List<Reminder> list = db.findAll(Selector.from(Reminder.class)
-					.orderBy("id").limit(10)); 
+					.orderBy("id").limit(10));
 			if (list.size() > 0) {
 				System.out.println(list);
 			}
@@ -169,7 +168,6 @@ public class ConfigActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 
-		
 		// setNotifyAtTime(this, 20, 43);
 		// System.out.println("准备设置通知了。。。。。。。。。。");
 		// // 下面是一个定时器，每一分钟进行一次调用通知对象：AlarmReceiver

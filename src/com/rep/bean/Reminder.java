@@ -1,4 +1,4 @@
-package com.rep.util;
+package com.rep.bean;
 
 import com.alibaba.fastjson.JSON;
 import com.lidroid.xutils.db.annotation.Column;

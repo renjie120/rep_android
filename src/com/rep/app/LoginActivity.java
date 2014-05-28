@@ -1,15 +1,12 @@
 package com.rep.app;
 
-import org.apache.http.impl.client.DefaultHttpClient;
+import java.security.NoSuchAlgorithmException;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.search.MKAddrInfo;
@@ -39,12 +37,20 @@ import com.baidu.mapapi.search.MKTransitRouteResult;
 import com.baidu.mapapi.search.MKWalkingRouteResult;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.example.jpushdemo.ExampleApplication;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
-import com.rep.util.Constant;
 import com.rep.util.HttpRequire;
-import com.rep.util.ServerResult;
 
 /**
  * 首页登录界面.
@@ -53,12 +59,15 @@ import com.rep.util.ServerResult;
  * 
  */
 public class LoginActivity extends BaseActivity {
-	private String name;
-	private String pass;
+	private static final String url = HOST + "/services/userService!login.do";
 	private Button buttonLogin;
 	private ImageView remeberPassword;
 	private static final int DIALOG_KEY = 0;
 	private EditText nameText;
+	@ViewInject(R.id.clean_name)
+	private ImageView cleanName;
+	@ViewInject(R.id.clean_pass)
+	private ImageView cleanPass;
 	private EditText passwordText;
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog dialog;
@@ -169,8 +178,6 @@ public class LoginActivity extends BaseActivity {
 		lp23.topMargin = (int) (checkboxMesTM * screenHeight);
 		mess_title.setLayoutParams(lp23);
 		passwordText.setText("123");
-		// nameText.setText("taobaotmall");
-		// passwordText.setText("123123");
 	}
 
 	private ActionBar head;
@@ -190,7 +197,7 @@ public class LoginActivity extends BaseActivity {
 				if (res.type == MKAddrInfo.MK_REVERSEGEOCODE) {
 					// 反地理编码：通过坐标点检索详细地址及周边poi
 					String strInfo = res.strAddr;
-					System.out.println("当前城市是:"+res.addressComponents.city);
+					System.out.println("当前城市是:" + res.addressComponents.city);
 					System.out.println(strInfo + "---查询结果" + ",,"
 							+ JSON.toJSONString(res));
 					Toast.makeText(LoginActivity.this, strInfo,
@@ -290,7 +297,7 @@ public class LoginActivity extends BaseActivity {
 				passwordText.setText(mSharedPreferences.getString("pass", ""));
 				remeberPassword.setSelected(true);
 				remeberPassword.setTag("true");
-				new MyListLoader(false).execute("");
+				// new MyListLoader(false).execute("");
 			} else {
 				remeberPassword.setSelected(false);
 				remeberPassword.setTag("false");
@@ -321,11 +328,23 @@ public class LoginActivity extends BaseActivity {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.login);
+		ViewUtils.inject(this);
 		init();
 
 		prepareListener();
 
 		autoLogin();
+	}
+
+	@OnClick({ R.id.clean_name })
+	public void cleanName(View v) {
+		nameText.setText("");
+
+	}
+
+	@OnClick({ R.id.clean_pass })
+	public void cleanPass(View v) {
+		passwordText.setText("");
 	}
 
 	/**
@@ -353,46 +372,68 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 
-	/**
-	 * 开启异步任务登陆.
-	 */
-	private class MyListLoader extends AsyncTask<String, String, String> {
+	private void login(String uid, String pass) {
+		try {
+			HttpUtils http = new HttpUtils();
+			RequestParams p = new RequestParams();
+			p.addBodyParameter("userId", uid);
+			p.addBodyParameter("password", pass);
+			String tk = HttpRequire.getMD5(HttpRequire.getBase64(uid));
+			p.addBodyParameter("token", tk);
+			System.out.println("token----" + tk);
+			http.send(HttpRequest.HttpMethod.POST, url, p,
+					new RequestCallBack<String>() {
+						@Override
+						public void onStart() {
+							showDialog(DIALOG_KEY);
+						}
 
-		private boolean showDialog;
+						@Override
+						public void onLoading(long total, long current,
+								boolean isUploading) {
+							// resultText.setText(current + "/" + total);
+						}
 
-		public MyListLoader(boolean showDialog) {
-			this.showDialog = showDialog;
-		}
+						@Override
+						public void onSuccess(ResponseInfo<String> responseInfo) {
+							removeDialog(DIALOG_KEY);
+							System.out.println(responseInfo.result);
+							Result r = (Result) JSON.parseObject(
+									responseInfo.result, Result.class);
+							if (r.getErrorCode() == 0) {
+								String _res = r.getData().toString();
+								JSONObject obj = JSON.parseObject(_res);
+								Intent intent2 = new Intent(LoginActivity.this,
+										NewHomePage.class);
+								intent2.putExtra("phone",
+										obj.getString("phone"));
+								intent2.putExtra("userId",
+										obj.getString("userId"));
+								intent2.putExtra("brandName",
+										obj.getString("brandName"));
+								intent2.putExtra("brandType",
+										obj.getString("brandType"));
+								intent2.putExtra("token",
+										obj.getString("token"));
+								intent2.putExtra("location",
+										obj.getString("location"));
+								intent2.putExtra("worktime",
+										obj.getString("worktime"));
+								intent2.putExtra("weekendNum",
+										obj.getString("weekendNum"));
+								startActivity(intent2);
+							} else {
+								alert(r.getErrorMessage());
+							}
+						}
 
-		@Override
-		protected void onPreExecute() {
-			if (showDialog) {
-				showDialog(DIALOG_KEY);
-			}
-			buttonLogin.setEnabled(false);
-		}
-
-		public String doInBackground(String... p) {
-			name = nameText.getText().toString();
-			pass = passwordText.getText().toString();
-			login(name, pass);
-			return "";
-		}
-
-		@Override
-		public void onPostExecute(String Re) {
-			if (showDialog) {
-				removeDialog(DIALOG_KEY);
-			}
-			buttonLogin.setEnabled(true);
-		}
-
-		@Override
-		protected void onCancelled() {
-			if (showDialog) {
-				removeDialog(DIALOG_KEY);
-			}
-			buttonLogin.setEnabled(true);
+						@Override
+						public void onFailure(HttpException error, String msg) {
+							removeDialog(DIALOG_KEY);
+						}
+					});
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -402,18 +443,9 @@ public class LoginActivity extends BaseActivity {
 	 * @param arg0
 	 */
 	public void login(View arg0) {
-		// new MyListLoader(false).execute("");
-		String serviceString = Context.LOCATION_SERVICE;
-		LocationManager locationManager = (LocationManager) getSystemService(serviceString);
-		String provider = locationManager.GPS_PROVIDER;
-		Location location = locationManager.getLastKnownLocation(provider);
-		if (location != null) {
-			getLocationInfo(location);
-		} else {
-		}
-
-		Intent intent2 = new Intent(LoginActivity.this, HomepageMenuActivity.class);
-		startActivity(intent2);
+		String name = nameText.getText().toString();
+		String pass = passwordText.getText().toString();
+		login(name, pass);
 	}
 
 	// 地图相关
@@ -470,7 +502,7 @@ public class LoginActivity extends BaseActivity {
 			dialog = new ProgressDialog(this);
 			dialog.setMessage("正在登陆,请稍候");
 			dialog.setIndeterminate(true);
-			dialog.setCancelable(true);
+			dialog.setCancelable(false);
 			return dialog;
 		}
 		}
@@ -490,20 +522,10 @@ public class LoginActivity extends BaseActivity {
 				break;
 			// 跳转到活动列表页面.
 			case 3:
-
 				break;
 			case 6:
 				mess_title.setVisibility(View.VISIBLE);
 				mess_title.setText("您输入的账号或密码有误,请重新输入!");
-				break;
-			case 9:
-				// mess_title.setVisibility(View.GONE);
-				// Intent intent2 = new Intent(LoginActivity.this,
-				// ActivitesList.class);
-				// intent2.putExtra("name", "debug");
-				// intent2.putExtra("uid", "debug");
-				// intent2.putExtra("token", "debug");
-				// startActivity(intent2);
 				break;
 			default:
 				super.hasMessages(msg.what);
@@ -512,37 +534,4 @@ public class LoginActivity extends BaseActivity {
 		}
 	};
 
-	/**
-	 * 登陆请求服务器数据
-	 * 
-	 * @param userName
-	 * @param password
-	 */
-	public void login(final String userName, final String password) {
-		// 得到url请求.
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		System.out.println("是否调试：" + Constant.debug);
-		if (Constant.debug) {
-			Message mes = new Message();
-			mes.what = 9;
-			myHandler.sendMessage(mes);
-		} else {
-			try {
-				ServerResult result = HttpRequire.login(userName, password);
-				if (result != null && 1 != result.getErrorcode()) {
-					myHandler.sendEmptyMessage(1);
-				}
-				// 成功了就跳转到活动列表页面.
-				else {
-					Message mes = new Message();
-					mes.obj = result.getData();
-					mes.what = 3;
-					myHandler.sendMessage(mes);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				myHandler.sendEmptyMessage(6);
-			}
-		}
-	}
 }

@@ -67,8 +67,7 @@
 
         <Button
             android:id="@+id/getcode"
-            style="@style/getCodeBtn"
-            android:onClick="getCode" />
+            style="@style/getCodeBtn" />
 
         <LinearLayout
             android:id="@+id/r4"

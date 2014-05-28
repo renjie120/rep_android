@@ -5,10 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import kankan.wheel.widget.ScreenInfo;
 import kankan.wheel.widget.WheelMain;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,9 +24,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.rep.bean.DataSaved;
+import com.rep.bean.Reminder;
+import com.rep.bean.Result;
 import com.rep.util.ActionBar;
-import com.rep.util.ActivityMeg;
 import com.rep.util.ActionBar.Action;
+import com.rep.util.ActivityMeg;
 
 /**
  * 保存基础数据.
@@ -32,6 +48,7 @@ import com.rep.util.ActionBar.Action;
  * 
  */
 public class SaveDataActivity extends BaseActivity {
+	private static final String url = HOST + "/services/dataService!addData.do";
 	private ActionBar head;
 	private LinearLayout indateBtn, curentTime, comeinBtn, intrestBtn, tryBtn,
 			buyBtn, oldBtn;
@@ -41,6 +58,8 @@ public class SaveDataActivity extends BaseActivity {
 			"星期三", "星期四", "星期五", "星期六" };
 	private WheelMain wheelMain;
 	private AlertDialog dialog;
+	private ProgressDialog dialog2;
+	private Date inDate = new Date();
 
 	/***
 	 * 
@@ -74,11 +93,11 @@ public class SaveDataActivity extends BaseActivity {
 		btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				dialog.dismiss();
-				Date d = getDate(
+				inDate = getDate(
 						wheelMain.getYear() + "-" + wheelMain.getMonth() + "-"
 								+ wheelMain.getDay(), "yyyy-MM-dd");
-				indate.setText(toDString(d));
-				indate_day.setText(getDayOfWeek(d));
+				indate.setText(toDString(inDate, "yyyy年MM月dd日"));
+				indate_day.setText(getDayOfWeek(inDate));
 
 			}
 		});
@@ -140,10 +159,10 @@ public class SaveDataActivity extends BaseActivity {
 		btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				dialog.dismiss();
-				Date nDate = getDayInThisWeek(yearAndWeek[0], yearAndWeek[1],
+				inDate = getDayInThisWeek(yearAndWeek[0], yearAndWeek[1],
 						wheelMain.getDay());
-				indate.setText(toDString(nDate));
-				indate_day.setText(getDayOfWeek(nDate));
+				indate.setText(toDString(inDate, "yyyy年MM月dd日"));
+				indate_day.setText(getDayOfWeek(inDate));
 			}
 		});
 
@@ -252,6 +271,8 @@ public class SaveDataActivity extends BaseActivity {
 
 	}
 
+	private Bundle bund;
+
 	/**
 	 * 界面初始化函数.
 	 */
@@ -260,14 +281,15 @@ public class SaveDataActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.savedata);
+		bund = getIntent().getExtras();
 		init();
 		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	private float screenHeight, screenWidth;
 
-	public static String toDString(Date date) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+	public static String toDString(Date date, String str) {
+		SimpleDateFormat sdf = new SimpleDateFormat(str);
 		return sdf.format(date);
 	}
 
@@ -289,6 +311,133 @@ public class SaveDataActivity extends BaseActivity {
 		return weeks[i - 1];
 	}
 
+	private static final int DIALOG_KEY = 0;
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_KEY: {
+			dialog2 = new ProgressDialog(this);
+			dialog2.setMessage("正在保存数据,请稍候");
+			dialog2.setIndeterminate(true);
+			dialog2.setCancelable(false);
+			return dialog2;
+		}
+		}
+		return null;
+	}
+
+	private void saveDataSaved(String userId, String indate, String timeSpan) {
+		DbUtils db = DbUtils.create(SaveDataActivity.this);
+		db.configAllowTransaction(true);
+		DataSaved r = new DataSaved();
+		r.setUserId(userId);
+		r.setInDate(indate);
+		r.setTimeSpan(timeSpan);
+		try {
+			db.save(r);
+		} catch (DbException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private long countDataSaved(String userId, String indate, String timeSpan) {
+		DbUtils db = DbUtils.create(SaveDataActivity.this);
+		db.configAllowTransaction(true);
+		DataSaved r = new DataSaved();
+		r.setUserId(userId);
+		r.setInDate(indate);
+		r.setTimeSpan(timeSpan);
+		try {
+			return db.count(Selector.from(DataSaved.class)
+					.where("userId", "=", userId).and("indate", "=", indate)
+					.and("timeSpan", "=", timeSpan));
+		} catch (DbException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+
+	private void saveData(final String uid, String tk) {
+		final String stimeSpan = timeSpan.getText().toString();
+		String icomeNum = comeInNum.getText().toString();
+		String intrestNum = intreNum.getText().toString();
+		String itryNum = tryNum.getText().toString();
+		String ibuyNum = buyNum.getText().toString();
+		String ioldNum = oldNum.getText().toString();
+		HttpUtils http = new HttpUtils();
+		RequestParams p = new RequestParams();
+		final String in_date = toDString(inDate, "yyyy-MM-dd");
+		p.addBodyParameter("indate", in_date);
+		p.addBodyParameter("userId", uid);
+		p.addBodyParameter("token", tk); 
+		p.addBodyParameter("dataType", "1");
+		p.addBodyParameter("comeNum", icomeNum);
+		p.addBodyParameter("timeSpan", stimeSpan);
+		p.addBodyParameter("intrestNum", intrestNum);
+		p.addBodyParameter("tryNum", itryNum);
+		p.addBodyParameter("buyNum", ibuyNum);
+		p.addBodyParameter("oldNum", ioldNum);
+		if (countDataSaved(uid, in_date, stimeSpan) == 0) {
+			http.send(HttpRequest.HttpMethod.POST, url, p,
+					new RequestCallBack<String>() {
+						@Override
+						public void onStart() {
+							showDialog(DIALOG_KEY);
+						}
+
+						@Override
+						public void onLoading(long total, long current,
+								boolean isUploading) {
+							// resultText.setText(current + "/" + total);
+						}
+
+						@Override
+						public void onSuccess(ResponseInfo<String> responseInfo) {
+							removeDialog(DIALOG_KEY);
+							Result r = (Result) JSON.parseObject(
+									responseInfo.result, Result.class);
+							if (r.getErrorCode() == 0) {
+								alert("添加成功");
+								saveDataSaved(uid, in_date, stimeSpan);
+								initData();
+							} else {
+								alert(r.getErrorMessage());
+							}
+						}
+
+						@Override
+						public void onFailure(HttpException error, String msg) {
+							removeDialog(DIALOG_KEY);
+						}
+					});
+		} else {
+			alert("已经保存过当天时间端的数据.");
+		}
+	}
+
+	private void initData() {
+		Date t = new Date();
+		indate.setText(toDString(t, "yyyy年MM月dd日"));
+		indate_day.setText(getDayOfWeek(t));
+
+		String nowHour = WheelMain.toHour(new Date());
+		Integer nh = Integer.parseInt(nowHour);
+
+		int _index = nh - 8;
+		if (_index < 0)
+			_index = 0;
+		if (_index >= SaveDataActivity.TIMESPANS.length)
+			_index = SaveDataActivity.TIMESPANS.length - 1;
+		timeSpan.setText(SaveDataActivity.TIMESPANS[_index]);
+		comeInNum.setText("0");
+		intreNum.setText("0");
+		tryNum.setText("0");
+		buyNum.setText("0");
+		oldNum.setText("0");
+
+	}
+
 	/**
 	 * 初始化控件.
 	 */
@@ -298,16 +447,14 @@ public class SaveDataActivity extends BaseActivity {
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init(R.string.titile_savadata, true, true, false, true,
+		head.init(R.string.titile_savadata, false, true, false, true,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));
 		head.setRightSize((int) (screenWidth * rgtBtnW),
 				(int) (screenHeight * rgtBtnH));
 		head.setRightText(R.string.finish);
-		head.setLeftAction(new ActionBar.BackAction(this));
 		head.setRightActionWithText(new Action() {
-
 			@Override
 			public int getDrawable() {
 				return R.string.finish;
@@ -315,9 +462,9 @@ public class SaveDataActivity extends BaseActivity {
 
 			@Override
 			public void performAction(View view) {
-				// Intent intent2 = new Intent(SaveDataActivity.this,
-				// AddMoreDataActivity.class);
-				// startActivity(intent2);
+				String userId = bund.getString("userId");
+				String token = bund.getString("token");
+				saveData(userId, token);
 			}
 		});
 		indateBtn = (LinearLayout) findViewById(R.id.indateBtn);
@@ -335,19 +482,6 @@ public class SaveDataActivity extends BaseActivity {
 		timeSpan = (TextView) findViewById(R.id.timespan_v);
 		indate = (TextView) findViewById(R.id.indate);
 		indate_day = (TextView) findViewById(R.id.indate_day);
-		Date t = new Date();
-		indate.setText(toDString(t));
-		indate_day.setText(getDayOfWeek(t));
-
-		String nowHour = WheelMain.toHour(new Date());
-		Integer nh = Integer.parseInt(nowHour);
-
-		int _index = nh - 8;
-		if (_index < 0)
-			_index = 0;
-		if (_index >= SaveDataActivity.TIMESPANS.length)
-			_index = SaveDataActivity.TIMESPANS.length - 1;
-		timeSpan.setText(SaveDataActivity.TIMESPANS[_index]);
 		indateBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -398,5 +532,6 @@ public class SaveDataActivity extends BaseActivity {
 				showNumberPicker(5);
 			}
 		});
+		initData();
 	}
 }

@@ -37,11 +37,11 @@ public class ItimeActivity extends BaseActivity {
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init(R.string.app_name, true, false, false, false,
+		head.init(R.string.app_name, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));
-		head.setLeftAction(new ActionBar.BackAction(this));
+//		head.setLeftAction(new ActionBar.BackAction(this));
 
 		webView = (WebView) findViewById(R.id.ichart);
 

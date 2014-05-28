@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.rep.util;
+package com.rep.bean;
 
 /**
  * Author: wyouflf

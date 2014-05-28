@@ -1,78 +1,11 @@
 package com.rep.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.alibaba.fastjson.JSON;
+import org.apache.commons.codec.binary.Base64;
 
 public class HttpRequire {
-
-	private static ServerResult request(String url, String auth)
-			throws Exception {
-		// 得到url请求.
-		System.out.println("请求的url" + url);
-
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		try {
-			HttpPost httpost = new HttpPost(url);
-			if (auth != null)
-				httpost.addHeader("auth", auth);
-			HttpResponse response = httpclient.execute(httpost);
-			HttpEntity entity = response.getEntity();
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					entity.getContent(), "UTF-8"));
-			String str = br.readLine();
-			// 如果没有登录成功，就弹出提示信息.
-			ServerResult result = (ServerResult) JSON.parseObject(str,
-					ServerResult.class);
-			return result;
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			// 关闭连接.
-			httpclient.getConnectionManager().shutdown();
-		}
-	}
-
-	private static ServerResults requestArr(String url, String auth)
-			throws Exception {
-		System.out.println("请求的url" + url);
-		// 得到url请求.
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		try {
-			HttpPost httpost = new HttpPost(url);
-			if (auth != null)
-				httpost.addHeader("auth", auth);
-			HttpResponse response = httpclient.execute(httpost);
-			HttpEntity entity = response.getEntity();
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					entity.getContent(), "UTF-8"));
-			// 如果没有登录成功，就弹出提示信息.
-			ServerResults result = (ServerResults) JSON.parseObject(
-					br.readLine(), ServerResults.class);
-			return result;
-		} catch (Exception e) {
-			throw e;
-		} finally {
-			// 关闭连接.
-			httpclient.getConnectionManager().shutdown();
-		}
-	}
-
-	public static ServerResult login(String userName, String password)
-			throws Exception { 
-		String url = Constant.HOST + "/services/userService!login.do?userId="
-				+ userName + "&password=" + password + "&token="
-				+ getMD5(userName);
-		return request(url, null);
-	}
 
 	private static final char HEX_DIGITS[] = { '0', '1', '2', '3', '4', '5',
 			'6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
@@ -105,44 +38,12 @@ public class HttpRequire {
 	public static String getMD5(String val) throws NoSuchAlgorithmException {
 		return md5(val);
 	}
-	
+
 	public static String getBase64(String val) throws NoSuchAlgorithmException {
-		return md5(val);
+		if (val == null)
+			return null;
+		byte[] result = Base64.encodeBase64(val.getBytes());
+		return new String(result);
 	}
 
-	public static ServerResult userActities(int page, int size, String auth)
-			throws Exception {
-		return request(Constant.HOST + "?do=myevents" + "&page=" + page
-				+ "&size=" + size + "&auth=" + auth, auth);
-	}
-
-	public static ServerResult activitiDetail(String eventId, String auth)
-			throws Exception {
-		return request(Constant.HOST + "?do=eventinfo&eventid=" + eventId
-				+ "&auth=" + auth, auth);
-	}
-
-	public static ServerResults typelist(String eventId, String auth)
-			throws Exception {
-		return requestArr(Constant.HOST + "?do=listtype&eventid=" + eventId
-				+ "&auth=" + auth, auth);
-	}
-
-	public static ServerResult tickeslist(String eventId, String auth)
-			throws Exception {
-		return request(Constant.HOST + "?do=mytickets&eventid=" + eventId
-				+ "&auth=" + auth, auth);
-	}
-
-	public static boolean qiandao(String tickid, String auth) throws Exception {
-		try {
-			// 如果没有登录成功，就弹出提示信息.
-			ServerResult result = request(Constant.HOST
-					+ "?do=checkticket&ticketid=" + tickid
-					+ "&check=true&auth=" + auth, auth);
-			return "true".equals(result.getData());
-		} catch (Exception e) {
-			throw e;
-		}
-	}
 }
