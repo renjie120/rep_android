@@ -39,6 +39,7 @@
                 android:background="@null"
                 android:singleLine="true"
                 android:hint="@string/user2"
+                android:numeric="integer"
                 android:text="18616818351" />
 
             <ImageView

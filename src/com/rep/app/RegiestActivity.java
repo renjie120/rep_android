@@ -23,9 +23,9 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.rep.bean.Result;
 import com.rep.util.ActionBar;
+import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
 import com.rep.util.HttpRequire;
-import com.rep.util.ActionBar.Action;
 
 /**
  * 忘记密码.
@@ -34,7 +34,10 @@ import com.rep.util.ActionBar.Action;
  * 
  */
 public class RegiestActivity extends BaseActivity {
-	private static final String url = HOST + "/services/userService!regiest.do";
+	private static final String url = HOST
+			+ "/services/userService!fastRegiest.do";
+	private static final String generateCode = HOST
+			+ "/services/userService!generateACode.do";
 	@ViewInject(R.id.regiest_head)
 	private ActionBar head;
 	@ViewInject(R.id.pass)
@@ -44,7 +47,7 @@ public class RegiestActivity extends BaseActivity {
 	@ViewInject(R.id.code)
 	private EditText code;
 	@ViewInject(R.id.phone_v)
-	private EditText phone; 
+	private EditText phone;
 
 	/**
 	 * 界面初始化函数.
@@ -77,57 +80,66 @@ public class RegiestActivity extends BaseActivity {
 		return null;
 	}
 
-	private void regiest(String phone, String valicode, String ps) {
-		try {
-			HttpUtils http = new HttpUtils();
-			RequestParams p = new RequestParams();
-			p.addBodyParameter("userId", phone);
-			p.addBodyParameter("password", ps);
-			p.addBodyParameter("validCode", valicode);
-			String tk = HttpRequire.getMD5(HttpRequire.getBase64(phone));
-			p.addBodyParameter("token", tk);
-			System.out.println("token----" + tk);
-			http.send(HttpRequest.HttpMethod.POST, url, p,
-					new RequestCallBack<String>() {
-						@Override
-						public void onStart() {
-							showDialog(DIALOG_KEY);
-						}
-
-						@Override
-						public void onLoading(long total, long current,
-								boolean isUploading) { 
-						}
-
-						@Override
-						public void onSuccess(ResponseInfo<String> responseInfo) {
-							removeDialog(DIALOG_KEY);
-							System.out.println(responseInfo.result);
-							Result r = (Result) JSON.parseObject(
-									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) {
-								String _res = r.getData().toString();
-								JSONObject obj = JSON.parseObject(_res);
-								Intent intent2 = new Intent(RegiestActivity.this,
-										AddMoreDataActivity.class);
-								intent2.putExtra("phone",
-										obj.getString("phone"));
-								intent2.putExtra("userId",
-										obj.getString("userId")); 
-								startActivity(intent2);
-							} else {
-								alert(r.getErrorMessage());
-							}
-						}
-
-						@Override
-						public void onFailure(HttpException error, String msg) {
-							removeDialog(DIALOG_KEY);
-						}
-					});
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+	private void regiest(final String ph, final String valicode,final String ps) {
+//		try {
+//			HttpUtils http = new HttpUtils();
+//			RequestParams p = new RequestParams();
+//			p.addBodyParameter("phone", ph);
+//			p.addBodyParameter("password", ps);
+//			p.addBodyParameter("validCode", valicode);
+//			String tk = HttpRequire.getMD5(HttpRequire.getBase64(ph));
+//			p.addBodyParameter("token", tk);
+//			System.out.println("token----" + tk);
+			
+			Intent intent2 = new Intent(
+					RegiestActivity.this,
+					AddMoreDataActivity.class);
+			intent2.putExtra("phone", ph);
+			intent2.putExtra("password", ps);
+			intent2.putExtra("validCode", valicode);
+			startActivity(intent2);
+			
+//			http.send(HttpRequest.HttpMethod.POST, url, p,
+//					new RequestCallBack<String>() {
+//						@Override
+//						public void onStart() {
+//							showDialog(DIALOG_KEY);
+//						}
+//
+//						@Override
+//						public void onLoading(long total, long current,
+//								boolean isUploading) {
+//						}
+//
+//						@Override
+//						public void onSuccess(ResponseInfo<String> responseInfo) {
+//							removeDialog(DIALOG_KEY);
+//							System.out.println(responseInfo.result);
+//							Result r = (Result) JSON.parseObject(
+//									responseInfo.result, Result.class);
+//							if (r.getErrorCode() == 0) {
+//								String _res = r.getData().toString();
+//								JSONObject obj = JSON.parseObject(_res);
+//								Intent intent2 = new Intent(
+//										RegiestActivity.this,
+//										AddMoreDataActivity.class);
+//								intent2.putExtra("phone", ph);
+//								intent2.putExtra("password", ps);
+//								intent2.putExtra("validCode", valicode);
+//								startActivity(intent2);
+//							} else {
+//								alert(r.getErrorMessage());
+//							}
+//						}
+//
+//						@Override
+//						public void onFailure(HttpException error, String msg) {
+//							removeDialog(DIALOG_KEY);
+//						}
+//					});
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/**
@@ -155,9 +167,6 @@ public class RegiestActivity extends BaseActivity {
 
 			@Override
 			public void performAction(View view) {
-				// Intent intent2 = new Intent(RegiestActivity.this,
-				// AddMoreDataActivity.class);
-				// startActivity(intent2);
 				String _p = pass.getText().toString();
 				String _p2 = pass_confirm.getText().toString();
 				String ph = phone.getText().toString();
@@ -165,8 +174,8 @@ public class RegiestActivity extends BaseActivity {
 				if (!_p.equals(_p2)) {
 					alert("确认密码和密码不一致,请重新输入");
 				} else {
-					//注册
-					regiest(ph,validCode,_p);
+					// 注册
+					regiest(ph, validCode, _p);
 				}
 			}
 		});
@@ -175,6 +184,48 @@ public class RegiestActivity extends BaseActivity {
 
 	@OnClick({ R.id.getcode })
 	public void getCode(View arg0) {
+		HttpUtils http = new HttpUtils();
+		RequestParams p = new RequestParams();
+		String _p = phone.getText().toString();
+		p.addBodyParameter("phone", _p);
+		String tk;
+		try {
+			tk = HttpRequire.getMD5(HttpRequire.getBase64(_p));
+			p.addBodyParameter("token", tk);
+			http.send(HttpRequest.HttpMethod.POST, generateCode, p,
+					new RequestCallBack<String>() {
+						@Override
+						public void onStart() {
+							showDialog(DIALOG_KEY);
+						}
+
+						@Override
+						public void onLoading(long total, long current,
+								boolean isUploading) {
+						}
+
+						@Override
+						public void onSuccess(ResponseInfo<String> responseInfo) {
+							removeDialog(DIALOG_KEY);
+							System.out.println(responseInfo.result);
+							Result r = (Result) JSON.parseObject(
+									responseInfo.result, Result.class);
+							if (r.getErrorCode() == 0) {
+								alert("返回验证码：" + r.getData().toString());
+							} else {
+								alert(r.getErrorMessage());
+							}
+						}
+
+						@Override
+						public void onFailure(HttpException error, String msg) {
+							removeDialog(DIALOG_KEY);
+						}
+					});
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }
