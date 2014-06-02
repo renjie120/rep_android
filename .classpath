@@ -10,8 +10,8 @@
 	<classpathentry kind="lib" path="src/libs/jpush-sdk-release1.6.1.jar"/>
 	<classpathentry kind="lib" path="libs/achartengine-1.1.0.jar"/>
 	<classpathentry kind="lib" path="libs/baidumapapi_v2_4_2.jar"/>
-	<classpathentry kind="lib" path="libs/locSDK_3.1.jar"/>
 	<classpathentry kind="lib" path="libs/xUtils-2.6.2.jar"/>
 	<classpathentry kind="lib" path="libs/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="libs/locSDK_4.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

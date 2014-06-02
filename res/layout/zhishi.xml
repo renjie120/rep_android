@@ -6,16 +6,17 @@
     android:orientation="vertical" >
 
     <com.rep.util.ActionBar
-        android:id="@+id/history_head"
+        android:id="@+id/zhishi_head"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <ListView
-        android:id="@+id/historyList"
+        android:id="@+id/zhishiList"
         android:layout_width="fill_parent"
         android:layout_height="0px"
         android:layout_weight="1"
         android:cacheColorHint="#00000000" >
-    </ListView> 
+    </ListView>
+ 
 
 </LinearLayout>

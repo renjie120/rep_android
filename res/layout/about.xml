@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <com.rep.util.ActionBar
+        android:id="@+id/about_head"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/center_table"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/r1"
+            style="@style/about_line"
+            android:layout_marginTop="@dimen/line_margin_top3" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/tubiao1" />
+
+            <TextView
+                style="@style/about_text"
+                android:text="@string/about1" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/you" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r2"
+            style="@style/about_line"
+            android:layout_marginTop="@dimen/line_margin_top3" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/tubiao1" />
+
+            <TextView
+                style="@style/about_text"
+                android:text="@string/about2" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/you" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r3"
+            style="@style/about_line"
+            android:layout_marginTop="@dimen/line_margin_top3" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/tubiao1" />
+
+            <TextView
+                style="@style/about_text"
+                android:text="@string/about3" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/you" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r4"
+            style="@style/about_line"
+            android:layout_marginTop="@dimen/line_margin_top3" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/tubiao1" />
+
+            <TextView
+                style="@style/about_text"
+                android:text="@string/about4" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                android:src="@drawable/you" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

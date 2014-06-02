@@ -15,12 +15,12 @@ import com.rep.util.ActivityMeg;
 import com.rep.util.HistoryAdapter;
 
 /**
- * 历史数据
+ * 本周数据收集记录.
  * 
  * @author Administrator
  * 
  */
-public class HistoryActivity extends BaseActivity {
+public class BenzhouActivity extends BaseActivity {
 	private ActionBar head;
 	private float screenHeight, screenWidth;
 	private ListView historyList;
@@ -48,7 +48,7 @@ public class HistoryActivity extends BaseActivity {
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init(R.string.history_title, false, false, false, false,
+		head.init(R.string.benzhou_title, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));
@@ -69,7 +69,7 @@ public class HistoryActivity extends BaseActivity {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						{
-							Intent tent = new Intent(HistoryActivity.this,
+							Intent tent = new Intent(BenzhouActivity.this,
 									IchartActivity.class);
 							startActivity(tent);
 						}

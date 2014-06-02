@@ -34,6 +34,10 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
+    <!-- 允许应用读取低级别的系统日志文件 -->
+    <uses-permission android:name="android.permission.READ_LOGS" >
+    </uses-permission>
+
     <application
         android:name="com.example.jpushdemo.ExampleApplication"
         android:icon="@drawable/ic_launcher"
@@ -42,6 +46,12 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="VHhLSxfU3solXGb7XGWcqq0g" >
         </meta-data>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
         <activity
             android:name=".ScrollLayoutActivity"
@@ -58,6 +68,12 @@
         <activity android:name=".HomepageMenuActivity" >
         </activity>
         <activity android:name=".ChartDemo" >
+        </activity>
+        <activity android:name=".MyViewPagerActivity" >
+        </activity>
+        <activity android:name=".ZhishiActivity" >
+        </activity>
+        <activity android:name=".AboutActivity" >
         </activity>
         <activity android:name=".NewHomePage" >
         </activity>

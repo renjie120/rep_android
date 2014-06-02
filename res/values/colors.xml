@@ -13,6 +13,7 @@
     <color name="result_points">#c000ff00</color>
     <color name="background">#eaeaea</color>
     <color name="result_text">#ffffffff</color>
+     <color name="blue">#0000CC</color>
     <color name="result_view">#b0000000</color>
     <color name="sbc_header_text">#ff808080</color>
     <color name="sbc_header_view">#ffffffff</color>
@@ -38,5 +39,7 @@
     <color name="homepagebk">#F0EFF4</color>
 
     <dimen name="line_margin_top">6dp</dimen>
-
+    <dimen name="line_margin_top2">10dp</dimen>
+ <dimen name="line_margin_top3">20dp</dimen>
+    
 </resources>

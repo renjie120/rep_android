@@ -118,16 +118,16 @@ public class IchartActivity extends BaseActivity {
 	}
 
 	private final class Java2JS {
-		private double g1=123;
-		private double g2=38;
-		private double g3=58;
-		private double g4=28;
-		private double g5=35;
-		private double g6=12;
-		private double rpi=53;
-		private double per=23;
-		private String indate="234";
-		private String option="3u899reuirieurie";
+		private double g1 = 123;
+		private double g2 = 38;
+		private double g3 = 58;
+		private double g4 = 28;
+		private double g5 = 35;
+		private double g6 = 12;
+		private double rpi = 53;
+		private double per = 23;
+		private String indate = "234";
+		private String option = "3u899reuirieurie";
 
 		public double getG1() {
 			return g1;
@@ -209,7 +209,7 @@ public class IchartActivity extends BaseActivity {
 			String result = " { 'G1':" + g1 + ", 'G2' :" + g2 + ",'G3' :" + g3
 					+ ",'G4' :" + g4 + ", 'G5' :" + g5 + ", 'G6' :" + g6
 					+ ",'rpi':" + rpi + ",'percent':'" + per + "%','indate':'"
-					+ indate + "','option':'"+option+"'}";
+					+ indate + "','option':'" + option + "'}";
 			return result; // 在JS中typeof value结果为string
 		}
 

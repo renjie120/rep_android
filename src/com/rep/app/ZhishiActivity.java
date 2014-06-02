@@ -1,18 +1,19 @@
 package com.rep.app;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.rep.bean.ZhishiBean;
 import com.rep.util.ActionBar;
 import com.rep.util.ActivityMeg;
-import com.rep.util.HistoryAdapter;
+import com.rep.util.ZhishiAdapter;
 
 /**
  * 历史数据
@@ -20,10 +21,13 @@ import com.rep.util.HistoryAdapter;
  * @author Administrator
  * 
  */
-public class HistoryActivity extends BaseActivity {
+public class ZhishiActivity extends BaseActivity {
+	@ViewInject(R.id.zhishi_head)
 	private ActionBar head;
 	private float screenHeight, screenWidth;
-	private ListView historyList;
+	@ViewInject(R.id.zhishiList)
+	private ListView zhishi_list;
+
 	private long exitTime = 0;
 
 	/**
@@ -33,7 +37,8 @@ public class HistoryActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.history);
+		setContentView(R.layout.zhishi);
+		ViewUtils.inject(this);
 		init();
 		ActivityMeg.getInstance().addActivity(this);
 	}
@@ -42,36 +47,35 @@ public class HistoryActivity extends BaseActivity {
 	 * 初始化控件.
 	 */
 	private void init() {
-		head = (ActionBar) findViewById(R.id.history_head);
-		historyList = (ListView) findViewById(R.id.historyList);
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init(R.string.history_title, false, false, false, false,
+		head.init(R.string.zhishi_title, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));
 
-		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
+		ArrayList<ZhishiBean> listItem = new ArrayList<ZhishiBean>();
 		String[] names = { "2014-5-1", "2014-5-7", "2014-5-14", "2014-5-21" };
 		for (String s : names) {
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("indate", s);
+			ZhishiBean m = new ZhishiBean();
+			m.setTime(s);
+			m.setContent("testtesttesttesttesttesttesttesttestt" +
+					"esttesttesttesttesttesttesttesttesttesttesttesttest" +
+					"testtesttesttesttesttesttesttesttesttesttesttest");
 			listItem.add(m);
 		}
-		HistoryAdapter adapter = new HistoryAdapter(listItem, this);
-		historyList.setAdapter(adapter);
+		ZhishiAdapter adapter = new ZhishiAdapter(listItem, this);
+		zhishi_list.setAdapter(adapter);
 		// 去掉分割线。。
-		historyList.setDivider(null);
-		historyList
+		zhishi_list.setDivider(null);
+		zhishi_list
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						{
-							Intent tent = new Intent(HistoryActivity.this,
-									IchartActivity.class);
-							startActivity(tent);
+							alert("未开发");
 						}
 					}
 				});

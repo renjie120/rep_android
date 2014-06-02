@@ -1,47 +1,27 @@
 package com.rep.app;
 
-import java.security.NoSuchAlgorithmException;
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.baidu.mapapi.BMapManager;
-import com.baidu.mapapi.search.MKAddrInfo;
-import com.baidu.mapapi.search.MKBusLineResult;
-import com.baidu.mapapi.search.MKDrivingRouteResult;
-import com.baidu.mapapi.search.MKPoiResult;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.search.MKSearch;
-import com.baidu.mapapi.search.MKSearchListener;
-import com.baidu.mapapi.search.MKShareUrlResult;
-import com.baidu.mapapi.search.MKSuggestionResult;
-import com.baidu.mapapi.search.MKTransitRouteResult;
-import com.baidu.mapapi.search.MKWalkingRouteResult;
-import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.example.jpushdemo.ExampleApplication;
-import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.exception.HttpException;
-import com.lidroid.xutils.http.RequestParams;
-import com.lidroid.xutils.http.ResponseInfo;
-import com.lidroid.xutils.http.callback.RequestCallBack;
-import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
-import com.rep.util.HttpRequire;
 
 /**
  * 完善信息.
@@ -50,11 +30,15 @@ import com.rep.util.HttpRequire;
  * 
  */
 public class AddMoreDataActivity extends BaseActivity {
+	public LocationClient mLocationClient = null;
+	public BDLocationListener myListener = new MyLocationListener();
 	private static final String url = HOST + "/services/userService!regiest.do";
 	@ViewInject(R.id.addmore_head)
 	private ActionBar head;
 	@ViewInject(R.id.price_v)
 	private EditText price;
+	@ViewInject(R.id.city_v)
+	private TextView city_v;
 	@ViewInject(R.id.worktime_v)
 	private EditText worktime;
 	@ViewInject(R.id.weekend_v)
@@ -65,8 +49,71 @@ public class AddMoreDataActivity extends BaseActivity {
 	private EditText brandtype;
 	@ViewInject(R.id.brandname_v)
 	private EditText brandname;
-	private String phone,validCode,pass;
+	private String phone, validCode, pass;
 	private ExampleApplication app;
+
+	private void logMsg(String str) {
+		System.out.println("输出日志：" + str);
+	}
+
+	public class MyLocationListener implements BDLocationListener {
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			if (location == null)
+				return;
+			StringBuffer sb = new StringBuffer(256);
+			sb.append("time : ");
+			sb.append(location.getTime());
+			sb.append("\nerror code : ");
+			sb.append(location.getLocType());
+			sb.append("\nlatitude : ");
+			sb.append(location.getLatitude());
+			sb.append("\nlontitude : ");
+			sb.append(location.getLongitude());
+			sb.append("\nradius : ");
+			sb.append(location.getRadius());
+			if (location.getLocType() == BDLocation.TypeGpsLocation) {
+				sb.append("\nspeed : ");
+				sb.append(location.getSpeed());
+				sb.append("\nsatellite : ");
+				sb.append(location.getSatelliteNumber());
+			} else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
+				sb.append("\naddr : ");
+				sb.append(location.getAddrStr());
+			}
+
+			logMsg(sb.toString());
+		}
+
+		public void onReceivePoi(BDLocation poiLocation) {
+			// 将在下个版本中去除poi功能
+			if (poiLocation == null) {
+				return;
+			}
+			StringBuffer sb = new StringBuffer(256);
+			sb.append("Poi time : ");
+			sb.append(poiLocation.getTime());
+			sb.append("\nerror code : ");
+			sb.append(poiLocation.getLocType());
+			sb.append("\nlatitude : ");
+			sb.append(poiLocation.getLatitude());
+			sb.append("\nlontitude : ");
+			sb.append(poiLocation.getLongitude());
+			sb.append("\nradius : ");
+			sb.append(poiLocation.getRadius());
+			if (poiLocation.getLocType() == BDLocation.TypeNetWorkLocation) {
+				sb.append("\naddr : ");
+				sb.append(poiLocation.getAddrStr());
+			}
+			if (poiLocation.hasPoi()) {
+				sb.append("\nPoi:");
+				sb.append(poiLocation.getPoi());
+			} else {
+				sb.append("noPoi information");
+			}
+			logMsg(sb.toString());
+		}
+	}
 
 	/**
 	 * 界面初始化函数.
@@ -80,21 +127,60 @@ public class AddMoreDataActivity extends BaseActivity {
 		phone = getIntent().getStringExtra("phone");
 		validCode = getIntent().getStringExtra("validCode");
 		pass = getIntent().getStringExtra("password");
-		/**
-		 * 使用地图sdk前需先初始化BMapManager. BMapManager是全局的，可为多个MapView共用，它需要地图模块创建前创建，
-		 * 并在地图地图模块销毁后销毁，只要还有地图模块在使用，BMapManager就不应该销毁
-		 */
-		app = (ExampleApplication) this.getApplication();
-		if (app.mBMapManager == null) {
-			app.mBMapManager = new BMapManager(getApplicationContext());
-			/**
-			 * 如果BMapManager没有初始化则初始化BMapManager
-			 */
-			app.mBMapManager.init(new ExampleApplication.MyGeneralListener());
-		}
+
+		mLocationClient = new LocationClient(getApplicationContext()); // 声明LocationClient类
+		mLocationClient.registerLocationListener(myListener); // 注册监听函数
+
+		LocationClientOption option = new LocationClientOption();
+		option.setOpenGps(true); // 打开gps
+		option.setCoorType("bd09ll"); // 设置坐标类型为bd09ll
+		option.setPriority(LocationClientOption.NetWorkFirst); // 设置网络优先
+		option.setProdName("rep"); // 设置产品线名称
+		option.setIsNeedAddress(true);
+		option.setScanSpan(1000 * 60 * 60); // 定时定位，每隔5秒钟定位一次。
+		mLocationClient.setLocOption(option);
+		mLocationClient.registerLocationListener(new BDLocationListener() {
+			@Override
+			public void onReceiveLocation(BDLocation location) {
+				if (location == null)
+					return;
+				city_v.setText(location.getCity());
+			}
+
+			public void onReceivePoi(BDLocation location) {
+				// return ;
+			}
+		});
 
 		init();
+		if (mLocationClient != null) {
+			if (mLocationClient.isStarted()) {
+				mLocationClient.stop();
+			} else {
+				mLocationClient.start();
+			}
+		}else{
+			initGPS();
+		}
 		ActivityMeg.getInstance().addActivity(this);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (mLocationClient != null && mLocationClient.isStarted()) {
+			mLocationClient.stop();
+			mLocationClient = null;
+		}
+		super.onDestroy();
+	}
+
+	@Override
+	public void onPause() {
+		if (mLocationClient != null && mLocationClient.isStarted()) {
+			mLocationClient.stop();
+			mLocationClient = null;
+		}
+		super.onPause();
 	}
 
 	private float screenHeight, screenWidth;
@@ -103,7 +189,7 @@ public class AddMoreDataActivity extends BaseActivity {
 	 * 初始化控件.
 	 */
 	private void init() {
-		initMap();
+		// initMap();
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
@@ -139,30 +225,9 @@ public class AddMoreDataActivity extends BaseActivity {
 			}
 		});
 	}
-
-	private double lat, lng;
-	private String city;
+ 
 	// 搜索相关
 	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
-
-	public void getLocationInfo(Location location) {
-		// TODO Auto-generated method stub
-		String latLongInfo;
-
-		if (location == null) {
-			latLongInfo = "定位失败";
-		} else {
-			lat = location.getLatitude(); // 维度
-			lng = location.getLongitude(); // 精度
-			int longitude = (int) (1000000 * lat);
-			int latitude = (int) (1000000 * lng);
-			System.out.println("经度" + longitude + ",," + latitude);
-			System.out.println("经度" + (int) (39.915 * 1E6) + ",,"
-					+ (int) (116.404 * 1E6));
-			mSearch.reverseGeocode(new GeoPoint(longitude, latitude));
-		}
-		// HandlerThread thread = new HandlerThread(location);
-	}
 
 	private static final int DIALOG_KEY = 0;
 	private ProgressDialog dialog;
@@ -181,67 +246,15 @@ public class AddMoreDataActivity extends BaseActivity {
 		return null;
 	}
 
-	private void initMap() {
+	private void initGPS() {
+		LocationManager locationManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
 
-		mSearch = new MKSearch();
-		mSearch.init(app.mBMapManager, new MKSearchListener() {
-			@Override
-			public void onGetPoiDetailSearchResult(int type, int error) {
-			}
-
-			public void onGetAddrResult(MKAddrInfo res, int error) {
-				if (res == null) {
-					return;
-				}
-				if (res.type == MKAddrInfo.MK_REVERSEGEOCODE) {
-					// 反地理编码：通过坐标点检索详细地址及周边poi
-					String strInfo = res.strAddr;
-					city = res.addressComponents.city;
-					System.out.println("当前城市是:" + city);
-					System.out.println(strInfo + "---查询结果" + ",,"
-							+ JSON.toJSONString(res));
-					Toast.makeText(AddMoreDataActivity.this, strInfo,
-							Toast.LENGTH_LONG).show();
-				}
-			}
-
-			public void onGetPoiResult(MKPoiResult res, int type, int error) {
-
-			}
-
-			public void onGetDrivingRouteResult(MKDrivingRouteResult res,
-					int error) {
-			}
-
-			public void onGetTransitRouteResult(MKTransitRouteResult res,
-					int error) {
-			}
-
-			public void onGetWalkingRouteResult(MKWalkingRouteResult res,
-					int error) {
-			}
-
-			public void onGetBusDetailResult(MKBusLineResult result, int iError) {
-			}
-
-			@Override
-			public void onGetSuggestionResult(MKSuggestionResult res, int arg1) {
-			}
-
-			@Override
-			public void onGetShareUrlResult(MKShareUrlResult result, int type,
-					int error) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		String provider = locationManager.GPS_PROVIDER;
-		Location location = locationManager.getLastKnownLocation(provider);
-		if (location != null) {
-			getLocationInfo(location);
-		} else {
+		// 判断GPS模块是否开启，如果没有则开启
+		if (!locationManager
+				.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+			Toast.makeText(AddMoreDataActivity.this, "请打开GPS自动获取城市名!",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -249,55 +262,55 @@ public class AddMoreDataActivity extends BaseActivity {
 			String _weekend, String _worknum, String _brandtype,
 			String _brandname, String phone) {
 
-		try {
-			HttpUtils http = new HttpUtils();
-			RequestParams p = new RequestParams();
-			p.addBodyParameter("masterPrice", _price);
-			p.addBodyParameter("brandName", _brandname);
-			p.addBodyParameter("brandType", _brandtype);
-			p.addBodyParameter("lng_north", lat + "");
-			p.addBodyParameter("lat_east", lng + "");
-			p.addBodyParameter("worktime", _worktime);
-			p.addBodyParameter("workNum", _worknum);
-			p.addBodyParameter("weekendNum", _weekend);
-			p.addBodyParameter("location", city);
-			p.addBodyParameter("phone", phone);
-			p.addBodyParameter("validCode", validCode);
-			p.addBodyParameter("password", pass);  
-			String tk = HttpRequire.getMD5(HttpRequire.getBase64(phone));
-			p.addBodyParameter("token", tk); 
-			http.send(HttpRequest.HttpMethod.POST, url, p,
-					new RequestCallBack<String>() {
-						@Override
-						public void onStart() {
-							showDialog(DIALOG_KEY);
-						}
-
-						@Override
-						public void onLoading(long total, long current,
-								boolean isUploading) {
-						}
-
-						@Override
-						public void onSuccess(ResponseInfo<String> responseInfo) {
-							removeDialog(DIALOG_KEY);
-							System.out.println(responseInfo.result);
-							Result r = (Result) JSON.parseObject(
-									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) {
-								alert("注册成功,请登录");
-							} else {
-								alert(r.getErrorMessage());
-							}
-						}
-
-						@Override
-						public void onFailure(HttpException error, String msg) {
-							removeDialog(DIALOG_KEY);
-						}
-					});
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// HttpUtils http = new HttpUtils();
+		// RequestParams p = new RequestParams();
+		// p.addBodyParameter("masterPrice", _price);
+		// p.addBodyParameter("brandName", _brandname);
+		// p.addBodyParameter("brandType", _brandtype);
+		// p.addBodyParameter("lng_north", lat + "");
+		// p.addBodyParameter("lat_east", lng + "");
+		// p.addBodyParameter("worktime", _worktime);
+		// p.addBodyParameter("workNum", _worknum);
+		// p.addBodyParameter("weekendNum", _weekend);
+		// p.addBodyParameter("location", city);
+		// p.addBodyParameter("phone", phone);
+		// p.addBodyParameter("validCode", validCode);
+		// p.addBodyParameter("password", pass);
+		// String tk = HttpRequire.getMD5(HttpRequire.getBase64(phone));
+		// p.addBodyParameter("token", tk);
+		// http.send(HttpRequest.HttpMethod.POST, url, p,
+		// new RequestCallBack<String>() {
+		// @Override
+		// public void onStart() {
+		// showDialog(DIALOG_KEY);
+		// }
+		//
+		// @Override
+		// public void onLoading(long total, long current,
+		// boolean isUploading) {
+		// }
+		//
+		// @Override
+		// public void onSuccess(ResponseInfo<String> responseInfo) {
+		// removeDialog(DIALOG_KEY);
+		// System.out.println(responseInfo.result);
+		// Result r = (Result) JSON.parseObject(
+		// responseInfo.result, Result.class);
+		// if (r.getErrorCode() == 0) {
+		// alert("注册成功,请登录");
+		// } else {
+		// alert(r.getErrorMessage());
+		// }
+		// }
+		//
+		// @Override
+		// public void onFailure(HttpException error, String msg) {
+		// removeDialog(DIALOG_KEY);
+		// }
+		// });
+		// } catch (NoSuchAlgorithmException e) {
+		// e.printStackTrace();
+		// }
 	}
 }

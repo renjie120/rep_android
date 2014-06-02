@@ -62,16 +62,13 @@ public class LoginActivity extends BaseActivity {
 	private TextView remember_mess;
 	private float screenHeight = 0;
 	private float screenWidth = 0;
-	// private LinearLayout titile_gre_ym;
-	// 登陆框的高度
-	private float tabH = 0.38f;
+	// private LinearLayout titile_gre_ym; 
 	// 登陆框的宽度
 	private float tabW = 0.86f;
 	// 图标的上下空白
 	private float imgMrg = 0.05f;
 	private TextView name_title, mess_title;
-	private TextView pass_title;
-	private LinearLayout buttonWrap;
+	private TextView pass_title; 
 	// 登陆框提示文本的宽度.
 	private float textViewW = 57 / 265f;
 	private float textEditW = 150 / 265f;
@@ -80,10 +77,7 @@ public class LoginActivity extends BaseActivity {
 	private float checkboxTM = 10 / 471f;
 	private float checkboxMesTM = 4 / 471f;
 	private float checkboxLM = 8 / 170f;
-	private float mestitleLM = 4 / 170f;
-	private float btnW = 75 / 268f;
-	private float wrapH = 30 / 471f;
-	private float rowH = 32 / 469f;
+	private float mestitleLM = 4 / 170f; 
 
 	/**
 	 * 屏幕适配.
@@ -177,8 +171,7 @@ public class LoginActivity extends BaseActivity {
 	 */
 	private void init() {
 		ActivityMeg.getInstance().addActivity(this);
-		head = (ActionBar) findViewById(R.id.login_head);
-		buttonWrap = (LinearLayout) findViewById(R.id.row4);
+		head = (ActionBar) findViewById(R.id.login_head); 
 		name_title = (TextView) findViewById(R.id.name_title);
 		pass_title = (TextView) findViewById(R.id.pass_title);
 		buttonLogin = (Button) findViewById(R.id.buttonLogin);

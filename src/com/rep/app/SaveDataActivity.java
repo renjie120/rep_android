@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import kankan.wheel.widget.ScreenInfo;
 import kankan.wheel.widget.WheelMain;
@@ -23,10 +22,12 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.db.sqlite.Selector;
 import com.lidroid.xutils.exception.DbException;
 import com.lidroid.xutils.exception.HttpException;
@@ -34,8 +35,9 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.rep.bean.DataSaved;
-import com.rep.bean.Reminder;
 import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
@@ -273,6 +275,16 @@ public class SaveDataActivity extends BaseActivity {
 
 	private Bundle bund;
 
+	@ViewInject(R.id.goon)
+	private Button goon;
+
+	@OnClick({ R.id.goon })
+	public void goSaveData(View v) {
+		setContentView(R.layout.savedata);
+		bund = getIntent().getExtras();
+		init();
+	}
+
 	/**
 	 * 界面初始化函数.
 	 */
@@ -280,10 +292,18 @@ public class SaveDataActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.savedata);
-		bund = getIntent().getExtras();
-		init();
-		ActivityMeg.getInstance().addActivity(this);
+		setContentView(R.layout.tip);
+		ViewUtils.inject(this);
+		head = (ActionBar) findViewById(R.id.tip_head);
+		// 得到屏幕大小.
+		float[] screen2 = getScreen2();
+		screenHeight = screen2[1];
+		screenWidth = screen2[0];
+		head.init(R.string.tip_title, false, false, false, false,
+				(int) (screenHeight * barH));
+		head.setTitleSize((int) (screenWidth * 1),
+				(int) (screenHeight * titleH)); 
+		ActivityMeg.getInstance().addActivity(this); 
 	}
 
 	private float screenHeight, screenWidth;
@@ -370,7 +390,7 @@ public class SaveDataActivity extends BaseActivity {
 		final String in_date = toDString(inDate, "yyyy-MM-dd");
 		p.addBodyParameter("indate", in_date);
 		p.addBodyParameter("userId", uid);
-		p.addBodyParameter("token", tk); 
+		p.addBodyParameter("token", tk);
 		p.addBodyParameter("dataType", "1");
 		p.addBodyParameter("comeNum", icomeNum);
 		p.addBodyParameter("timeSpan", stimeSpan);

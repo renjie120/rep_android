@@ -28,7 +28,7 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 	public static final String TAB_ITEM_3 = "report";
 	public static final String TAB_ITEM_4 = "config";
 	private boolean isSuper;
-	private RadioGroup group;
+	private RadioGroup group; 
 	private TabHost tabHost;
 	private String userId;
 
@@ -53,14 +53,15 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		tab1.setIndicator(TAB_ITEM_1).setContent(
 				new Intent(NewHomePage.this, SaveDataActivity.class)
 						.putExtras(b));
-		tab2.setIndicator(TAB_ITEM_3).setContent(
-				new Intent(NewHomePage.this, ItimeActivity.class).putExtras(b));
-		tab3.setIndicator(TAB_ITEM_2)
+		//HistoryActivity
+		tab2.setIndicator(TAB_ITEM_2).setContent(
+				new Intent(NewHomePage.this, MyViewPagerActivity.class).putExtras(b));
+		tab3.setIndicator(TAB_ITEM_3)
 				.setContent(
-						new Intent(NewHomePage.this, IchartActivity.class)
+						new Intent(NewHomePage.this, ZhishiActivity.class)
 								.putExtras(b));
-		tab4.setIndicator(TAB_ITEM_2).setContent(
-				new Intent(NewHomePage.this, HistoryActivity.class)
+		tab4.setIndicator(TAB_ITEM_4).setContent(
+				new Intent(NewHomePage.this, AboutActivity.class)
 						.putExtras(b));
 		tabHost.addTab(tab1);
 		tabHost.addTab(tab2);

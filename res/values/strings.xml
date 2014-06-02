@@ -57,5 +57,25 @@
     <string name="item2">基本体检</string>
     <string name="item3">知识分享</string>
     <string name="item4">更多</string>
+    <string name="city">所在城市：</string>
+    <string name="city2">请手动输入所在城市名</string>
+    <string name="tip1">进店人数：</string>
+    <string name="tip2">感兴趣人数：</string>
+    <string name="tip3">试穿、试戴人数</string>
+    <string name="tip4">购买人数</string>
+    <string name="tip5">老顾客购买人数</string>
+    <string name="tip1_2">进店所有顾客数</string>
+    <string name="tip2_2">摸过商品连续3秒以上或者询问过商品的顾客</string>
+    <string name="tip6">以上数据每次仅限15分钟内</string>
+    <string name="tip7">我已知晓，跳过</string>
+    <string name="about1">设备简介</string>
+    <string name="about2">在线诊断</string>
+    <string name="about3">专家会诊</string>
+    <string name="about4">我的资料</string>
+    <string name="tip_title">数据收集五项指标</string>
+    <string name="history_title">基本体检</string>
+    <string name="zhishi_title">知识分享</string>
+    <string name="about_title">关于</string>
+    <string name="benzhou_title">本周数据收集记录</string>
 
 </resources>
