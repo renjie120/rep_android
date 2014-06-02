@@ -1,82 +1,138 @@
 package com.rep.app;
- 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.rep.util.ActionBar;
+import com.rep.util.TimeSpanTipAdapter;
 
 /**
  * 仿优酷Android客户端图片左右滑动
  * 
  */
-public class MyViewPagerActivity extends Activity {
+public class MyViewPagerActivity extends BaseActivity {
 	private ViewPager viewPager; // android-support-v4中的滑动组件
-	private List<ImageView> imageViews; // 滑动的图片集合
-
+	private float screenHeight, screenWidth;
+	// private List<ImageView> imageViews; // 滑动的图片集合
+	private List<View> viewList;// 正文
 	private String[] titles; // 图片标题
-	private int[] imageResId; // 图片ID
 	private List<View> dots; // 图片标题正文的那些点
-
 	private TextView tv_title;
 	private int currentItem = 0; // 当前图片的索引号
-
-	// An ExecutorService that can schedule commands to run after a given delay,
-	// or to execute periodically.
-	private ScheduledExecutorService scheduledExecutorService;
-
+	// 要进行提醒的时间端的索引
+	private String[] tips = new String[] { ",0,5,", ",0,6,", ",2,6,", ",4,5,",
+			",3,6,", ",2,7,", ",2,8," };
 	// 切换当前显示的图片
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			viewPager.setCurrentItem(currentItem);// 切换当前显示的图片
 		};
 	};
+	@ViewInject(R.id.everyday_tip_head)
+	private ActionBar head;
+
+	@ViewInject(R.id.goon)
+	private Button goon;
+
+	@OnClick({ R.id.goon })
+	public void clickMethod(View v) {
+		Intent t = new Intent(MyViewPagerActivity.this, ConfigTipActivity.class);
+		startActivity(t);
+	}
+
+	/**
+	 * 设置显示的listView的内容
+	 * 
+	 * @param view1
+	 * @param j
+	 */
+	private void setListAdapter(View view1, int j) {
+		ListView listview1 = (ListView) view1.findViewById(R.id.tip_dataes);
+		ArrayList<Map<String, String>> herolist_wu2 = new ArrayList<Map<String, String>>();
+		for (int i = 0; i < SaveDataActivity.TIMESPANS.length; i++) {
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("timeSpan", SaveDataActivity.TIMESPANS[i]);
+			m.put("tixing", tips[j].indexOf("" + i) != -1 ? "true" : "false");
+			m.put("haveAdded", i % 2 == 0 ? "true" : "false");
+			herolist_wu2.add(m);
+		}
+		TimeSpanTipAdapter simpleAdapter_Wu = new TimeSpanTipAdapter(
+				herolist_wu2, this);
+		listview1.setAdapter(simpleAdapter_Wu);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewpage);
+		ViewUtils.inject(this);
+		float[] screen2 = getScreen2();
+		screenHeight = screen2[1];
+		screenWidth = screen2[0];
+		head.init(R.string.benzhou_title, false, false, false, true,
+				(int) (screenHeight * barH));
+		head.setTitleSize((int) (screenWidth * 1),
+				(int) (screenHeight * titleH));
+		titles = new String[7];
+		titles[0] = "星期一";
+		titles[1] = "星期二";
+		titles[2] = "星期三";
+		titles[3] = "星期四";
+		titles[4] = "星期五";
+		titles[5] = "星期六";
+		titles[6] = "星期天";
+		viewList = new ArrayList<View>();
+		LayoutInflater inflater = getLayoutInflater();
+		View view1 = inflater.inflate(R.layout.everyday_tips, null);
+		View view2 = inflater.inflate(R.layout.everyday_tips, null);
+		View view3 = inflater.inflate(R.layout.everyday_tips, null);
+		View view4 = inflater.inflate(R.layout.everyday_tips, null);
+		View view5 = inflater.inflate(R.layout.everyday_tips, null);
+		View view6 = inflater.inflate(R.layout.everyday_tips, null);
+		View view7 = inflater.inflate(R.layout.everyday_tips, null);
+		viewList.add(view1);
+		viewList.add(view2);
+		viewList.add(view3);
+		viewList.add(view4);
+		viewList.add(view5);
+		viewList.add(view6);
+		viewList.add(view7);
+		setListAdapter(view1, 0);
+		setListAdapter(view2, 1);
+		setListAdapter(view3, 2);
+		setListAdapter(view4, 3);
+		setListAdapter(view5, 4);
+		setListAdapter(view6, 5);
+		setListAdapter(view7, 6);
 
-		imageResId = new int[] { R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d, R.drawable.e };
-		titles = new String[imageResId.length];
-		titles[0] = "巩俐不低俗，我就不能低俗";
-		titles[1] = "扑树又回来啦！再唱经典老歌引万人大合唱";
-		titles[2] = "揭秘北京电影如何升级";
-		titles[3] = "乐视网TV版大派送";
-		titles[4] = "热血屌丝的反杀";
-
-		imageViews = new ArrayList<ImageView>();
-
-		// 初始化图片资源
-		for (int i = 0; i < imageResId.length; i++) {
-			ImageView imageView = new ImageView(this);
-			imageView.setImageResource(imageResId[i]);
-			imageView.setScaleType(ScaleType.CENTER_CROP);
-			imageViews.add(imageView);
-		}
-
-		
 		dots = new ArrayList<View>();
 		dots.add(findViewById(R.id.v_dot0));
 		dots.add(findViewById(R.id.v_dot1));
 		dots.add(findViewById(R.id.v_dot2));
 		dots.add(findViewById(R.id.v_dot3));
 		dots.add(findViewById(R.id.v_dot4));
+		dots.add(findViewById(R.id.v_dot5));
+		dots.add(findViewById(R.id.v_dot6));
 
-		tv_title = (TextView) findViewById(R.id.tv_title);
+		tv_title = (TextView) findViewById(R.id.day_title);
 		tv_title.setText(titles[0]);//
 
 		viewPager = (ViewPager) findViewById(R.id.vp);
@@ -88,35 +144,12 @@ public class MyViewPagerActivity extends Activity {
 
 	@Override
 	protected void onStart() {
-		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		// 当Activity显示出来后，每两秒钟切换一次图片显示
-		scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 1, 2, TimeUnit.SECONDS);
 		super.onStart();
 	}
 
 	@Override
 	protected void onStop() {
-		// 当Activity不可见的时候停止切换
-		scheduledExecutorService.shutdown();
 		super.onStop();
-	}
-
-	/**
-	 * 换行切换任务
-	 * 
-	 * @author Administrator
-	 * 
-	 */
-	private class ScrollTask implements Runnable {
-
-		public void run() {
-			synchronized (viewPager) {
-				System.out.println("currentItem: " + currentItem);
-				currentItem = (currentItem + 1) % imageViews.size();
-				handler.obtainMessage().sendToTarget(); // 通过Handler切换图片
-			}
-		}
-
 	}
 
 	/**
@@ -159,13 +192,13 @@ public class MyViewPagerActivity extends Activity {
 
 		@Override
 		public int getCount() {
-			return imageResId.length;
+			return 7;
 		}
 
 		@Override
 		public Object instantiateItem(View arg0, int arg1) {
-			((ViewPager) arg0).addView(imageViews.get(arg1));
-			return imageViews.get(arg1);
+			((ViewPager) arg0).addView(viewList.get(arg1));
+			return viewList.get(arg1);
 		}
 
 		@Override
@@ -198,4 +231,4 @@ public class MyViewPagerActivity extends Activity {
 
 		}
 	}
-} 
+}

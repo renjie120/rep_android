@@ -77,5 +77,8 @@
     <string name="zhishi_title">知识分享</string>
     <string name="about_title">关于</string>
     <string name="benzhou_title">本周数据收集记录</string>
+    <string name="config_tip">设置提醒时间</string>
+    <string name="config_tip2">一周指标检测提醒</string>
+    <string name="tip_way">设置提醒方式</string>
 
 </resources>

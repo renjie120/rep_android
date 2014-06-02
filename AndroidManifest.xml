@@ -69,6 +69,8 @@
         </activity>
         <activity android:name=".ChartDemo" >
         </activity>
+        <activity android:name=".ConfigTipActivity" >
+        </activity>
         <activity android:name=".MyViewPagerActivity" >
         </activity>
         <activity android:name=".ZhishiActivity" >
