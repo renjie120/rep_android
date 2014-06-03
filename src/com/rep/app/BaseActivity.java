@@ -20,7 +20,8 @@ import android.widget.TextView;
  * Activity基类，包含一些常用函数.
  */
 public class BaseActivity extends Activity {
-	public final static String HOST="http://192.168.1.101:9999";
+	//public final static String HOST="http://192.168.1.101:9999";
+	public final static String HOST="http://www.thinksafari.com";
 	// 上下标题栏的高度比例
 	public static float barH = 0.07f;
 	// 标题文字的宽度

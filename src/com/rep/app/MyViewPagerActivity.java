@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -29,32 +31,78 @@ import com.rep.util.TimeSpanTipAdapter;
  * 
  */
 public class MyViewPagerActivity extends BaseActivity {
-	private ViewPager viewPager; // android-support-v4中的滑动组件
 	private float screenHeight, screenWidth;
 	// private List<ImageView> imageViews; // 滑动的图片集合
 	private List<View> viewList;// 正文
 	private String[] titles; // 图片标题
-	private List<View> dots; // 图片标题正文的那些点
-	private TextView tv_title;
 	private int currentItem = 0; // 当前图片的索引号
 	// 要进行提醒的时间端的索引
 	private String[] tips = new String[] { ",0,5,", ",0,6,", ",2,6,", ",4,5,",
 			",3,6,", ",2,7,", ",2,8," };
-	// 切换当前显示的图片
-	private Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			viewPager.setCurrentItem(currentItem);// 切换当前显示的图片
-		};
-	};
+
+	@ViewInject(R.id.vp)
+	private ViewPager viewPager; // android-support-v4中的滑动组件
+	@ViewInject(R.id.day_title)
+	private TextView tv_title;
+
 	@ViewInject(R.id.everyday_tip_head)
 	private ActionBar head;
 
 	@ViewInject(R.id.goon)
 	private Button goon;
+	@ViewInject(R.id.leftBtn)
+	private ImageView leftBtn1;
+	@ViewInject(R.id.rightBtn)
+	private ImageView rightBtn1;
+
+	public Handler myHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				leftBtn1.setVisibility(View.GONE);
+				break;
+			case 2:
+				leftBtn1.setVisibility(View.VISIBLE);
+				break;
+			case 3:
+				rightBtn1.setVisibility(View.GONE);
+				break;
+			case 4:
+				rightBtn1.setVisibility(View.VISIBLE);
+				break;
+			default:
+				super.hasMessages(msg.what);
+				break;
+			}
+		}
+	};
+
+	@OnClick({ R.id.leftBtn })
+	public void leftBtnClick(View v) {
+		if (--currentItem < 0)
+			currentItem = 0;
+		if (currentItem == 0)
+			myHandler.sendEmptyMessage(1);
+		else
+			myHandler.sendEmptyMessage(4);
+		viewPager.setCurrentItem(currentItem);
+	}
+
+	@OnClick({ R.id.rightBtn })
+	public void rightBtnClick(View v) {
+		if (++currentItem > 6)
+			currentItem = 6;
+		if (currentItem == 6)
+			myHandler.sendEmptyMessage(3);
+		else
+			myHandler.sendEmptyMessage(2);
+		viewPager.setCurrentItem(currentItem);
+	}
 
 	@OnClick({ R.id.goon })
 	public void clickMethod(View v) {
 		Intent t = new Intent(MyViewPagerActivity.this, ConfigTipActivity.class);
+		t.putExtras(b);
 		startActivity(t);
 	}
 
@@ -79,6 +127,8 @@ public class MyViewPagerActivity extends BaseActivity {
 		listview1.setAdapter(simpleAdapter_Wu);
 	}
 
+	private Bundle b;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,6 +137,7 @@ public class MyViewPagerActivity extends BaseActivity {
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
+		b = getIntent().getExtras();
 		head.init(R.string.benzhou_title, false, false, false, true,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * 1),
@@ -123,23 +174,13 @@ public class MyViewPagerActivity extends BaseActivity {
 		setListAdapter(view6, 5);
 		setListAdapter(view7, 6);
 
-		dots = new ArrayList<View>();
-		dots.add(findViewById(R.id.v_dot0));
-		dots.add(findViewById(R.id.v_dot1));
-		dots.add(findViewById(R.id.v_dot2));
-		dots.add(findViewById(R.id.v_dot3));
-		dots.add(findViewById(R.id.v_dot4));
-		dots.add(findViewById(R.id.v_dot5));
-		dots.add(findViewById(R.id.v_dot6));
-
-		tv_title = (TextView) findViewById(R.id.day_title);
 		tv_title.setText(titles[0]);//
 
-		viewPager = (ViewPager) findViewById(R.id.vp);
 		viewPager.setAdapter(new MyAdapter());// 设置填充ViewPager页面的适配器
 		// 设置一个监听器，当ViewPager中的页面改变时调用
 		viewPager.setOnPageChangeListener(new MyPageChangeListener());
-
+		// 初始化左右按钮
+		// initImageButtonView();
 	}
 
 	@Override
@@ -159,7 +200,7 @@ public class MyViewPagerActivity extends BaseActivity {
 	 * 
 	 */
 	private class MyPageChangeListener implements OnPageChangeListener {
-		private int oldPosition = 0;
+		// private int oldPosition = 0;
 
 		/**
 		 * This method will be invoked when a new page becomes selected.
@@ -168,9 +209,17 @@ public class MyViewPagerActivity extends BaseActivity {
 		public void onPageSelected(int position) {
 			currentItem = position;
 			tv_title.setText(titles[position]);
-			dots.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
-			dots.get(position).setBackgroundResource(R.drawable.dot_focused);
-			oldPosition = position;
+			if (currentItem == 6)
+				myHandler.sendEmptyMessage(3);
+			else
+				myHandler.sendEmptyMessage(2);
+			if (currentItem == 0)
+				myHandler.sendEmptyMessage(1);
+			else
+				myHandler.sendEmptyMessage(4);
+			// dots.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
+			// dots.get(position).setBackgroundResource(R.drawable.dot_focused);
+			// oldPosition = position;
 		}
 
 		public void onPageScrollStateChanged(int arg0) {

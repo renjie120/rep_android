@@ -62,13 +62,13 @@ public class LoginActivity extends BaseActivity {
 	private TextView remember_mess;
 	private float screenHeight = 0;
 	private float screenWidth = 0;
-	// private LinearLayout titile_gre_ym; 
+	// private LinearLayout titile_gre_ym;
 	// 登陆框的宽度
 	private float tabW = 0.86f;
 	// 图标的上下空白
 	private float imgMrg = 0.05f;
 	private TextView name_title, mess_title;
-	private TextView pass_title; 
+	private TextView pass_title;
 	// 登陆框提示文本的宽度.
 	private float textViewW = 57 / 265f;
 	private float textEditW = 150 / 265f;
@@ -77,7 +77,7 @@ public class LoginActivity extends BaseActivity {
 	private float checkboxTM = 10 / 471f;
 	private float checkboxMesTM = 4 / 471f;
 	private float checkboxLM = 8 / 170f;
-	private float mestitleLM = 4 / 170f; 
+	private float mestitleLM = 4 / 170f;
 
 	/**
 	 * 屏幕适配.
@@ -164,14 +164,12 @@ public class LoginActivity extends BaseActivity {
 
 	private ActionBar head;
 
-	
-
 	/**
 	 * 初始化控件.
 	 */
 	private void init() {
 		ActivityMeg.getInstance().addActivity(this);
-		head = (ActionBar) findViewById(R.id.login_head); 
+		head = (ActionBar) findViewById(R.id.login_head);
 		name_title = (TextView) findViewById(R.id.name_title);
 		pass_title = (TextView) findViewById(R.id.pass_title);
 		buttonLogin = (Button) findViewById(R.id.buttonLogin);
@@ -231,7 +229,6 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 
-	
 	/**
 	 * 界面初始化函数.
 	 */
@@ -292,7 +289,6 @@ public class LoginActivity extends BaseActivity {
 			p.addBodyParameter("password", pass);
 			String tk = HttpRequire.getMD5(HttpRequire.getBase64(uid));
 			p.addBodyParameter("token", tk);
-			System.out.println("token----" + tk);
 			http.send(HttpRequest.HttpMethod.POST, url, p,
 					new RequestCallBack<String>() {
 						@Override
@@ -333,6 +329,18 @@ public class LoginActivity extends BaseActivity {
 										obj.getString("worktime"));
 								intent2.putExtra("weekendNum",
 										obj.getString("weekendNum"));
+
+								//如果选择了记住密码
+								if ("true".equals(remeberPassword.getTag())) {
+									SharedPreferences.Editor mEditor = mSharedPreferences
+											.edit();
+									mEditor.putString("remeber", "true");
+									mEditor.putString("pass", passwordText
+											.getText().toString());
+									mEditor.putString("userId", nameText
+											.getText().toString());
+									mEditor.commit();
+								}
 								startActivity(intent2);
 							} else {
 								alert(r.getErrorMessage());
@@ -342,6 +350,7 @@ public class LoginActivity extends BaseActivity {
 						@Override
 						public void onFailure(HttpException error, String msg) {
 							removeDialog(DIALOG_KEY);
+							alert("服务端异常,请稍候重试!");
 						}
 					});
 		} catch (NoSuchAlgorithmException e) {

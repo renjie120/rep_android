@@ -13,73 +13,57 @@
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp" >
+        android:layout_weight="1" >
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
+
+        <ImageView
+            android:id="@+id/rightBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/right" />
+
+        <ImageView
+            android:id="@+id/leftBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/left" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="35dip"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/day_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:textColor="#ff0000"
-                android:textSize="15dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dip"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal" >
-
-                <View
-                    android:id="@+id/v_dot0"
-                    style="@style/dot_style"
-                    android:background="@drawable/dot_focused" />
-
-                <View
-                    android:id="@+id/v_dot1"
-                    style="@style/dot_style" />
-
-                <View
-                    android:id="@+id/v_dot2"
-                    style="@style/dot_style" />
-
-                <View
-                    android:id="@+id/v_dot3"
-                    style="@style/dot_style" />
-
-                <View
-                    android:id="@+id/v_dot4"
-                    style="@style/dot_style" />
-
-                <View
-                    android:id="@+id/v_dot5"
-                    style="@style/dot_style" />
-
-                <View
-                    android:id="@+id/v_dot6"
-                    style="@style/dot_style" />
-            </LinearLayout>
+                android:textSize="18dp" />
         </LinearLayout>
     </FrameLayout>
 
     <Button
         android:id="@+id/goon"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/corners_bg"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"

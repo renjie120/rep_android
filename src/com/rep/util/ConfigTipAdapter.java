@@ -65,8 +65,10 @@ public class ConfigTipAdapter extends BaseAdapter {
 			viewHolder.way.setText("" + markerItem.get("way"));
 			if ("true".equals(markerItem.get("checked"))) {
 				viewHolder.checkbox.setVisibility(View.VISIBLE);
+				viewHolder.checkbox.setTag("true");
 			} else {
 				viewHolder.checkbox.setVisibility(View.GONE);
+				viewHolder.checkbox.setTag("false");
 			}
 		}
 		return convertView;
