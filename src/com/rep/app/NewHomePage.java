@@ -53,9 +53,9 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		tab1.setIndicator(TAB_ITEM_1).setContent(
 				new Intent(NewHomePage.this, SaveDataActivity.class)
 						.putExtras(b));
-		//HistoryActivity
+		//HistoryActivity,MyViewPagerActivity
 		tab2.setIndicator(TAB_ITEM_2).setContent(
-				new Intent(NewHomePage.this, MyViewPagerActivity.class).putExtras(b));
+				new Intent(NewHomePage.this, HistoryActivity.class).putExtras(b));
 		tab3.setIndicator(TAB_ITEM_3)
 				.setContent(
 						new Intent(NewHomePage.this, ZhishiActivity.class)

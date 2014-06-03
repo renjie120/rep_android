@@ -28,6 +28,7 @@
     <string name="zero">0</string>
     <string name="pass">密码：</string>
     <string name="pass2">请输入密码</string>
+    <string name="new_pass2">请输入新密码</string>
     <string name="user">用户名：</string>
     <string name="user2">请输入手机号码</string>
     <string name="pass_confirm">确认密码：</string>

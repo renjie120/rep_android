@@ -1,10 +1,13 @@
 package com.rep.app;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -38,6 +41,9 @@ public class HistoryActivity extends BaseActivity {
 		ActivityMeg.getInstance().addActivity(this);
 	}
 
+	private String userId;
+	private SharedPreferences mSharedPreferences;
+
 	/**
 	 * 初始化控件.
 	 */
@@ -48,6 +54,8 @@ public class HistoryActivity extends BaseActivity {
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
+		Bundle b = getIntent().getExtras();
+		userId = b.getString("userId");
 		head.init(R.string.history_title, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
@@ -75,5 +83,19 @@ public class HistoryActivity extends BaseActivity {
 						}
 					}
 				});
+		
+		Date d = new Date();
+		String today = SaveDataActivity.toDString(d, "yyyy-MM-dd");
+		mSharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		if ("false".equals(mSharedPreferences.getString(today + "," + userId
+				+ "_firstOpen", "false"))) {
+			mSharedPreferences.edit().putString(
+					today + "," + userId + "_firstOpen", "true");
+			Intent t = new Intent(HistoryActivity.this,
+					MyViewPagerActivity.class);
+			t.putExtras(b);
+			startActivity(t);
+		} 
 	}
 }

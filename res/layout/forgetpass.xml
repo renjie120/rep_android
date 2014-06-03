@@ -19,8 +19,24 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/r2"
+            android:id="@+id/r1"
             style="@style/line_style" >
+
+            <TextView
+                android:id="@+id/userId"
+                style="@style/textstyle2"
+                android:text="@string/pass" />
+
+            <EditText
+                android:id="@+id/userId_v"
+                style="@style/editstyle"
+                android:hint="@string/user2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/r2"
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/line_margin_top" >
 
             <TextView
                 android:id="@+id/newpass"
@@ -30,6 +46,7 @@
             <EditText
                 android:id="@+id/pass"
                 style="@style/editstyle"
+                android:hint="@string/new_pass2"
                 android:password="true" />
         </LinearLayout>
 
@@ -46,12 +63,14 @@
             <EditText
                 android:id="@+id/confirm_pass_v"
                 style="@style/editstyle"
+                android:hint="@string/pass_confirm"
                 android:password="true" />
         </LinearLayout>
 
         <Button
             android:id="@+id/getcode"
             style="@style/getCodeBtn"
+            android:layout_marginLeft="10dp"
             android:onClick="getCode" />
 
         <LinearLayout

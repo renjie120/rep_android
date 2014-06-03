@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -58,17 +59,19 @@ public class MyViewPagerActivity extends BaseActivity {
 	public Handler myHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
+			// 第一天
 			case 1:
 				leftBtn1.setVisibility(View.GONE);
+				rightBtn1.setVisibility(View.VISIBLE);
 				break;
 			case 2:
 				leftBtn1.setVisibility(View.VISIBLE);
-				break;
-			case 3:
-				rightBtn1.setVisibility(View.GONE);
-				break;
-			case 4:
 				rightBtn1.setVisibility(View.VISIBLE);
+				break;
+			// 最后一天
+			case 3:
+				leftBtn1.setVisibility(View.VISIBLE);
+				rightBtn1.setVisibility(View.GONE);
 				break;
 			default:
 				super.hasMessages(msg.what);
@@ -81,10 +84,11 @@ public class MyViewPagerActivity extends BaseActivity {
 	public void leftBtnClick(View v) {
 		if (--currentItem < 0)
 			currentItem = 0;
+		System.out.println("currentItem==" + currentItem);
 		if (currentItem == 0)
 			myHandler.sendEmptyMessage(1);
 		else
-			myHandler.sendEmptyMessage(4);
+			myHandler.sendEmptyMessage(2);
 		viewPager.setCurrentItem(currentItem);
 	}
 
@@ -92,6 +96,7 @@ public class MyViewPagerActivity extends BaseActivity {
 	public void rightBtnClick(View v) {
 		if (++currentItem > 6)
 			currentItem = 6;
+		System.out.println("currentItem==" + currentItem);
 		if (currentItem == 6)
 			myHandler.sendEmptyMessage(3);
 		else
@@ -132,15 +137,17 @@ public class MyViewPagerActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
 		setContentView(R.layout.viewpage);
 		ViewUtils.inject(this);
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
 		b = getIntent().getExtras();
-		head.init(R.string.benzhou_title, false, false, false, true,
+		head.init(R.string.benzhou_title, true, false, false, false,
 				(int) (screenHeight * barH));
-		head.setTitleSize((int) (screenWidth * 1),
+		head.setLeftAction(new ActionBar.BackAction(this));
+		head.setTitleSize((int) (screenWidth * 0.6),
 				(int) (screenHeight * titleH));
 		titles = new String[7];
 		titles[0] = "星期一";
@@ -209,17 +216,13 @@ public class MyViewPagerActivity extends BaseActivity {
 		public void onPageSelected(int position) {
 			currentItem = position;
 			tv_title.setText(titles[position]);
-			if (currentItem == 6)
+			System.out.println(currentItem + "---" + currentItem);
+			if (currentItem >= 6) {
 				myHandler.sendEmptyMessage(3);
-			else
-				myHandler.sendEmptyMessage(2);
-			if (currentItem == 0)
+			} else if (currentItem <= 0)
 				myHandler.sendEmptyMessage(1);
 			else
-				myHandler.sendEmptyMessage(4);
-			// dots.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
-			// dots.get(position).setBackgroundResource(R.drawable.dot_focused);
-			// oldPosition = position;
+				myHandler.sendEmptyMessage(2);
 		}
 
 		public void onPageScrollStateChanged(int arg0) {
