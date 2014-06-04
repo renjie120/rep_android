@@ -6,7 +6,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,9 +23,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.search.MKSearch;
-import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -32,13 +30,13 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
-import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
 import com.rep.util.HttpRequire;
+import com.rep.util.TextCleanTouch;
+import com.rep.util.TextCleanWatcher;
 
 /**
  * 首页登录界面.
@@ -52,10 +50,6 @@ public class LoginActivity extends BaseActivity {
 	private ImageView remeberPassword;
 	private static final int DIALOG_KEY = 0;
 	private EditText nameText;
-	@ViewInject(R.id.clean_name)
-	private ImageView cleanName;
-	@ViewInject(R.id.clean_pass)
-	private ImageView cleanPass;
 	private EditText passwordText;
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog dialog;
@@ -137,13 +131,6 @@ public class LoginActivity extends BaseActivity {
 		lp.setMargins(0, (int) (screenHeight * imgMrg), 0,
 				(int) (screenHeight * imgMrg));
 
-		// LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
-		// LinearLayout.LayoutParams.WRAP_CONTENT,
-		// LinearLayout.LayoutParams.WRAP_CONTENT);
-		// lp2.width = (int) (btnW * screenWidth);
-		// lp2.height = (int) (wrapH * screenHeight);
-		// buttonWrap.setLayoutParams(lp2);
-
 		LinearLayout.LayoutParams lp22 = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.WRAP_CONTENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -181,6 +168,9 @@ public class LoginActivity extends BaseActivity {
 				.getDefaultSharedPreferences(this);
 		remember_mess = (TextView) findViewById(R.id.remember_mess);
 		mess_title = (TextView) findViewById(R.id.mess_title);
+
+		addCleanBtn(passwordText);
+		addCleanBtn(nameText); 
 		adjustScreen();
 	}
 
@@ -245,17 +235,6 @@ public class LoginActivity extends BaseActivity {
 		autoLogin();
 	}
 
-	@OnClick({ R.id.clean_name })
-	public void cleanName(View v) {
-		nameText.setText("");
-
-	}
-
-	@OnClick({ R.id.clean_pass })
-	public void cleanPass(View v) {
-		passwordText.setText("");
-	}
-
 	/**
 	 * 勾选了记住密码的处理.
 	 * 
@@ -299,7 +278,6 @@ public class LoginActivity extends BaseActivity {
 						@Override
 						public void onLoading(long total, long current,
 								boolean isUploading) {
-							// resultText.setText(current + "/" + total);
 						}
 
 						@Override
@@ -330,7 +308,7 @@ public class LoginActivity extends BaseActivity {
 								intent2.putExtra("weekendNum",
 										obj.getString("weekendNum"));
 
-								//如果选择了记住密码
+								// 如果选择了记住密码
 								if ("true".equals(remeberPassword.getTag())) {
 									SharedPreferences.Editor mEditor = mSharedPreferences
 											.edit();
@@ -367,31 +345,6 @@ public class LoginActivity extends BaseActivity {
 		String name = nameText.getText().toString();
 		String pass = passwordText.getText().toString();
 		login(name, pass);
-	}
-
-	// 地图相关
-	MapView mMapView = null; // 地图View
-	// 搜索相关
-	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
-
-	public void getLocationInfo(Location location) {
-		// TODO Auto-generated method stub
-		String latLongInfo;
-
-		if (location == null) {
-
-			latLongInfo = "No Location Found";
-		} else {
-			double lat = location.getLatitude(); // 维度
-			double lng = location.getLongitude(); // 精度
-			int longitude = (int) (1000000 * lat);
-			int latitude = (int) (1000000 * lng);
-			System.out.println("经度" + longitude + ",," + latitude);
-			System.out.println("经度" + (int) (39.915 * 1E6) + ",,"
-					+ (int) (116.404 * 1E6));
-			mSearch.reverseGeocode(new GeoPoint(longitude, latitude));
-		}
-		// HandlerThread thread = new HandlerThread(location);
 	}
 
 	/**

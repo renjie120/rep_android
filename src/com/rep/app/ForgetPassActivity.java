@@ -106,6 +106,10 @@ public class ForgetPassActivity extends BaseActivity {
 				}
 			}
 		});
+		addCleanBtn(pass);
+		addCleanBtn(pass_confirm); 
+		addCleanBtn(code);
+		addCleanBtn(userIdV);   
 	}
 
 	private void updatePass(final String ph, final String valicode,

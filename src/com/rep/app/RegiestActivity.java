@@ -177,8 +177,12 @@ public class RegiestActivity extends BaseActivity {
 					regiest(ph, validCode, _p);
 				}
 			}
-		});
+		}); 
 		head.setLeftAction(new ActionBar.BackAction(this));
+		addCleanBtn(pass);
+		addCleanBtn(pass_confirm); 
+		addCleanBtn(code);
+		addCleanBtn(phone);  
 	}
 
 	@OnClick({ R.id.getcode })

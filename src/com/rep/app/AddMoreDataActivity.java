@@ -224,6 +224,13 @@ public class AddMoreDataActivity extends BaseActivity {
 						_brandname, phone);
 			}
 		});
+		
+		addCleanBtn(price);
+		addCleanBtn(worktime); 
+		addCleanBtn(weekend);
+		addCleanBtn(worknum);  
+		addCleanBtn(brandtype);
+		addCleanBtn(brandname);  
 	}
  
 	// 搜索相关

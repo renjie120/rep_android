@@ -4,13 +4,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.rep.util.TextCleanTouch;
+import com.rep.util.TextCleanWatcher;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,8 +26,8 @@ import android.widget.TextView;
  * Activity基类，包含一些常用函数.
  */
 public class BaseActivity extends Activity {
-	//public final static String HOST="http://192.168.1.101:9999";
-	public final static String HOST="http://www.thinksafari.com";
+	// public final static String HOST="http://192.168.1.101:9999";
+	public final static String HOST = "http://www.thinksafari.com";
 	// 上下标题栏的高度比例
 	public static float barH = 0.07f;
 	// 标题文字的宽度
@@ -57,6 +63,14 @@ public class BaseActivity extends Activity {
 			e.printStackTrace();
 		}
 		return date;
+	}
+
+	public void addCleanBtn(EditText et) {
+		final Resources res = getResources();
+		Drawable mIconSearchClear = res
+				.getDrawable(R.drawable.txt_search_clear);
+		et.addTextChangedListener(new TextCleanWatcher(et, mIconSearchClear,null));
+		et.setOnTouchListener(new TextCleanTouch(et));
 	}
 
 	public void setWidthHeight(LinearLayout l, final float width,

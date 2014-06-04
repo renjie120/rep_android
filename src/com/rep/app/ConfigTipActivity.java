@@ -45,48 +45,6 @@ public class ConfigTipActivity extends BaseActivity {
 			false, false, false };
 	private ListView areaCheckListView;
 
- 
-	class CheckBoxClickListener implements OnClickListener {
-		@Override
-		public void onClick(View v) {
-			AlertDialog ad = new AlertDialog.Builder(ConfigTipActivity.this)
-					.setTitle("选择区域")
-					.setMultiChoiceItems(allDays, status,
-							new DialogInterface.OnMultiChoiceClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton, boolean isChecked) {
-									// 点击某个区域
-								}
-							})
-					.setPositiveButton("确定",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									String s = "您选择了:";
-									for (int i = 0; i < allDays.length; i++) {
-										if (areaCheckListView
-												.getCheckedItemPositions().get(
-														i)) {
-											s += i
-													+ ":"
-													+ areaCheckListView
-															.getAdapter()
-															.getItem(i) + "  ";
-										} else {
-											areaCheckListView
-													.getCheckedItemPositions()
-													.get(i, false);
-										}
-									}
-									Toast.makeText(ConfigTipActivity.this, s, Toast.LENGTH_LONG).show();
-									dialog.dismiss();
-								}
-							}).setNegativeButton("取消", null).create();
-			areaCheckListView = ad.getListView();
-			ad.show();
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -149,9 +107,52 @@ public class ConfigTipActivity extends BaseActivity {
 						ConfigTipActivity.this);
 				// 重新设置数据
 				tip_way.setAdapter(adapter);
-				
-				if("指定日期定时提醒".equals(currentWay)){
-					
+
+				if ("指定日期定时提醒".equals(currentWay)) {
+					AlertDialog ad = new AlertDialog.Builder(
+							ConfigTipActivity.this)
+							.setTitle("选择提醒的星期")
+							.setMultiChoiceItems(
+									allDays,
+									status,
+									new DialogInterface.OnMultiChoiceClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton,
+												boolean isChecked) {
+											// 点击某个区域
+										}
+									})
+							.setPositiveButton("确定",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton) {
+											String s = "您选择了:";
+											for (int i = 0; i < allDays.length; i++) {
+												if (areaCheckListView
+														.getCheckedItemPositions()
+														.get(i)) {
+													s += i
+															+ ":"
+															+ areaCheckListView
+																	.getAdapter()
+																	.getItem(i)
+															+ "  ";
+												} else {
+													areaCheckListView
+															.getCheckedItemPositions()
+															.get(i, false);
+												}
+											}
+											Toast.makeText(
+													ConfigTipActivity.this, s,
+													Toast.LENGTH_LONG).show();
+											dialog.dismiss();
+										}
+									}).setNegativeButton("取消", null).create();
+					areaCheckListView = ad.getListView();
+					ad.show();
 				}
 			}
 		});
