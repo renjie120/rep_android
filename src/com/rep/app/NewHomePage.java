@@ -50,6 +50,7 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		TabSpec tab2 = tabHost.newTabSpec(TAB_ITEM_2);
 		TabSpec tab3 = tabHost.newTabSpec(TAB_ITEM_3);
 		TabSpec tab4 = tabHost.newTabSpec(TAB_ITEM_4);
+		//FragemntMainActivity
 		tab1.setIndicator(TAB_ITEM_1).setContent(
 				new Intent(NewHomePage.this, SaveDataActivity.class)
 						.putExtras(b));

@@ -6,8 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,8 +33,6 @@ import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
 import com.rep.util.HttpRequire;
-import com.rep.util.TextCleanTouch;
-import com.rep.util.TextCleanWatcher;
 
 /**
  * 首页登录界面.

@@ -25,21 +25,23 @@ public class IchartActivity extends BaseActivity {
 	private String data;
 	private String dataLabels;
 	private Handler mHandler = new Handler();
-
+	private String inDate;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.ichart);
-		ActivityMeg.getInstance().addActivity(this);
+		inDate = getIntent().getStringExtra("inDate");
+		ActivityMeg.getInstance().addActivity(this);		
 		head = (ActionBar) findViewById(R.id.ichart_head);
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init(R.string.app_name, true, false, false, false,
+		head.init2(inDate+"统计数据", true, false, false, false,
 				(int) (screenHeight * barH));
-		head.setTitleSize((int) (screenWidth * titleW4),
+		head.setTitleSize((int) (screenWidth * 0.8),
 				(int) (screenHeight * titleH));
 		head.setLeftAction(new ActionBar.BackAction(this));
 

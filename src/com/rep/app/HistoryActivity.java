@@ -1,17 +1,15 @@
 package com.rep.app;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.rep.util.ActionBar;
 import com.rep.util.ActivityMeg;
@@ -41,8 +39,8 @@ public class HistoryActivity extends BaseActivity {
 		ActivityMeg.getInstance().addActivity(this);
 	}
 
-	private String userId;
-	private SharedPreferences mSharedPreferences;
+	// private String userId;
+	// private SharedPreferences mSharedPreferences;
 
 	/**
 	 * 初始化控件.
@@ -55,7 +53,7 @@ public class HistoryActivity extends BaseActivity {
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
 		Bundle b = getIntent().getExtras();
-		userId = b.getString("userId");
+		// userId = b.getString("userId");
 		head.init(R.string.history_title, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
@@ -77,25 +75,27 @@ public class HistoryActivity extends BaseActivity {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						{
+							TextView txt = (TextView) arg1.findViewById(R.id.indate);
 							Intent tent = new Intent(HistoryActivity.this,
 									IchartActivity.class);
+							tent.putExtra("inDate", txt.getText().toString());
 							startActivity(tent);
 						}
 					}
 				});
-		
-		Date d = new Date();
-		String today = SaveDataActivity.toDString(d, "yyyy-MM-dd");
-		mSharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		if ("false".equals(mSharedPreferences.getString(today + "," + userId
-				+ "_firstOpen", "false"))) {
-			mSharedPreferences.edit().putString(
-					today + "," + userId + "_firstOpen", "true");
-			Intent t = new Intent(HistoryActivity.this,
-					MyViewPagerActivity.class);
-			t.putExtras(b);
-			startActivity(t);
-		} 
+
+		// Date d = new Date();
+		// String today = SaveDataActivity.toDString(d, "yyyy-MM-dd");
+		// mSharedPreferences = PreferenceManager
+		// .getDefaultSharedPreferences(this);
+		// if ("false".equals(mSharedPreferences.getString(today + "," + userId
+		// + "_firstOpen", "false"))) {
+		// mSharedPreferences.edit().putString(
+		// today + "," + userId + "_firstOpen", "true");
+		// Intent t = new Intent(HistoryActivity.this,
+		// MyViewPagerActivity.class);
+		// t.putExtras(b);
+		// startActivity(t);
+		// }
 	}
 }

@@ -30,6 +30,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
         android:background="#ffffff"
         android:gravity="top|left"
         android:textColor="@color/blue"

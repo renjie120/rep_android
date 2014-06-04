@@ -11,6 +11,7 @@ import kankan.wheel.widget.WheelMain;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +23,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.lidroid.xutils.DbUtils;
@@ -417,10 +417,14 @@ public class SaveDataActivity extends BaseActivity {
 							removeDialog(DIALOG_KEY);
 							Result r = (Result) JSON.parseObject(
 									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) {
-								alert("添加成功");
+							if (r.getErrorCode() == 0) { 
 								saveDataSaved(uid, in_date, stimeSpan);
 								initData();
+								
+								Intent t = new Intent(SaveDataActivity.this,
+										MyViewPagerActivity.class);
+								t.putExtras(bund);
+								startActivity(t);
 							} else {
 								alert(r.getErrorMessage());
 							}

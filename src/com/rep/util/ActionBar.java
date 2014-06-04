@@ -175,6 +175,18 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 		// setTitleSize(titleSize);
 	}
 
+	public void init2(String title, boolean left, boolean right,
+			boolean leftText, boolean rightText, int height) {
+		setTitle(title);
+		setLeftVisible(left);
+		setLeftTextVisible(leftText);
+		setRightTextVisible(rightText);
+		setRightVisible(right);
+		setWidthHeight(LayoutParams.FILL_PARENT, height);
+		// if (titleSize > 0)
+		// setTitleSize(titleSize);
+	}
+
 	private void initViews(final Context context) {
 		this.mContext = context;
 		this.mInflater = LayoutInflater.from(this.mContext);
@@ -321,6 +333,10 @@ public class ActionBar extends LinearLayout implements OnClickListener {
 	}
 
 	public void setTitle(final int resId) {
+		this.mTitle.setText(resId);
+	}
+
+	public void setTitle(final String resId) {
 		this.mTitle.setText(resId);
 	}
 

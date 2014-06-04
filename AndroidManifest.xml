@@ -66,14 +66,18 @@
         <activity android:name="org.achartengine.chartdemo.demo.chart.PieChartBuilder" />
         <activity android:name="org.achartengine.GraphicalActivity" />
         <activity android:name=".HomepageMenuActivity" >
-        </activity>
+        </activity> 
         <activity android:name=".ChartDemo" >
+        </activity>
+        <activity android:name=".FragemntMainActivity" >
         </activity>
         <activity android:name=".ConfigTipActivity" >
         </activity>
         <activity android:name=".MyViewPagerActivity" >
         </activity>
         <activity android:name=".ZhishiActivity" >
+        </activity>
+        <activity android:name=".MyDataActivity" >
         </activity>
         <activity android:name=".AboutActivity" >
         </activity>
@@ -160,7 +164,8 @@
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true" >
             <intent-filter android:priority="1000" >
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required  显示通知栏 -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <!-- Required  显示通知栏 -->
                 <category android:name="com.rep.app" />
             </intent-filter>
             <intent-filter>
@@ -185,12 +190,17 @@
             android:name="com.example.jpushdemo.MyReceiver"
             android:enabled="true" >
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!-- Required  用户注册SDK的intent -->
                 <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+                <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
                 <category android:name="com.rep.app" />
             </intent-filter>
         </receiver>
@@ -201,7 +211,8 @@
             android:value="developer-default" />
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="2cc62e71cd2a37f616705396" /> <!-- </>值来自开发者平台取得的AppKey -->
+            android:value="2cc62e71cd2a37f616705396" />
+        <!-- </>值来自开发者平台取得的AppKey -->
 
     </application>
 

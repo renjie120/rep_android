@@ -20,7 +20,9 @@
         <LinearLayout
             android:id="@+id/r1"
             style="@style/about_line"
-            android:layout_marginTop="@dimen/line_margin_top3" >
+            android:layout_marginTop="@dimen/line_margin_top3"
+            android:background="@drawable/layout_selecter"
+            android:clickable="true" >
 
             <ImageView
                 android:layout_width="30dp"
@@ -37,15 +39,17 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="20dp"
                 android:src="@drawable/you" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/r2"
             style="@style/about_line"
-            android:layout_marginTop="@dimen/line_margin_top3" >
+            android:layout_marginTop="@dimen/line_margin_top3"
+            android:background="@drawable/layout_selecter"
+            android:clickable="true" >
 
             <ImageView
                 android:layout_width="30dp"
@@ -69,7 +73,9 @@
         <LinearLayout
             android:id="@+id/r3"
             style="@style/about_line"
-            android:layout_marginTop="@dimen/line_margin_top3" >
+            android:layout_marginTop="@dimen/line_margin_top3"
+            android:background="@drawable/layout_selecter"
+            android:clickable="true" >
 
             <ImageView
                 android:layout_width="30dp"
@@ -93,7 +99,9 @@
         <LinearLayout
             android:id="@+id/r4"
             style="@style/about_line"
-            android:layout_marginTop="@dimen/line_margin_top3" >
+            android:layout_marginTop="@dimen/line_margin_top3"
+            android:background="@drawable/layout_selecter"
+            android:clickable="true" >
 
             <ImageView
                 android:layout_width="30dp"
