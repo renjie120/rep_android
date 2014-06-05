@@ -25,12 +25,13 @@
             <TextView
                 android:id="@+id/userId"
                 style="@style/textstyle2"
-                android:text="@string/pass" />
+                android:text="@string/user" />
 
             <EditText
                 android:id="@+id/userId_v"
                 style="@style/editstyle"
-                android:hint="@string/user2" />
+                android:hint="@string/user2"
+                android:numeric="integer" />
         </LinearLayout>
 
         <LinearLayout

@@ -40,7 +40,7 @@
     <string name="price">主力产品单价：</string>
     <string name="price2">请输入主力产品单价</string>
     <string name="worktime">营业时间：</string>
-    <string name="worktime2">请输入营业时间</string>
+    <string name="worktime2">请输入营业时间(非时间段)</string>
     <string name="weekend">假日人流量*：</string>
     <string name="weekend2">请输入假日人流量</string>
     <string name="worknum">工作日人流量*：</string>

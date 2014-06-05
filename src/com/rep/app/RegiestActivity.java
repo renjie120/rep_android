@@ -97,6 +97,7 @@ public class RegiestActivity extends BaseActivity {
 			intent2.putExtra("password", ps);
 			intent2.putExtra("validCode", valicode);
 			startActivity(intent2);
+			RegiestActivity.this.finish();
 			
 //			http.send(HttpRequest.HttpMethod.POST, url, p,
 //					new RequestCallBack<String>() {

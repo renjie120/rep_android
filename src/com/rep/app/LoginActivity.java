@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -166,7 +167,7 @@ public class LoginActivity extends BaseActivity {
 		mess_title = (TextView) findViewById(R.id.mess_title);
 
 		addCleanBtn(passwordText);
-		addCleanBtn(nameText); 
+		addCleanBtn(nameText);
 		adjustScreen();
 	}
 
@@ -203,10 +204,12 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			// 如果选择了记住密码，就自动登陆.
 			if ("true".equals(mSharedPreferences.getString("remeber", "false"))) {
-				nameText.setText(mSharedPreferences.getString("userId", ""));
-				passwordText.setText(mSharedPreferences.getString("pass", ""));
+				String _u = mSharedPreferences.getString("userId", "");
+				String _p = mSharedPreferences.getString("pass", "");
+				nameText.setText(_u);
+				passwordText.setText(_p);
 				remeberPassword.setSelected(true);
-				remeberPassword.setTag("true");
+				remeberPassword.setTag("true"); 
 				// new MyListLoader(false).execute("");
 			} else {
 				remeberPassword.setSelected(false);
@@ -229,6 +232,18 @@ public class LoginActivity extends BaseActivity {
 		prepareListener();
 
 		autoLogin();
+		
+		Drawable mIconSearchClear = getResources()
+				.getDrawable(R.drawable.txt_search_clear);
+		// 如果有用户名，就显示出来清除按钮.
+		if (!"".equals(nameText.getText().toString())) {
+			nameText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					mIconSearchClear, null);
+		}
+		if (!"".equals(passwordText.getText().toString())) {
+			passwordText.setCompoundDrawablesWithIntrinsicBounds(null, null,
+					mIconSearchClear, null);
+		}
 	}
 
 	/**

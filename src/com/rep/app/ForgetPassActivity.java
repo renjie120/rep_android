@@ -107,9 +107,9 @@ public class ForgetPassActivity extends BaseActivity {
 			}
 		});
 		addCleanBtn(pass);
-		addCleanBtn(pass_confirm); 
+		addCleanBtn(pass_confirm);
 		addCleanBtn(code);
-		addCleanBtn(userIdV);   
+		addCleanBtn(userIdV);
 	}
 
 	private void updatePass(final String ph, final String valicode,
@@ -186,42 +186,53 @@ public class ForgetPassActivity extends BaseActivity {
 		RequestParams p = new RequestParams();
 		p.addBodyParameter("phone", userId);
 		String tk;
-		try {
-			tk = HttpRequire.getMD5(HttpRequire.getBase64(userId));
-			p.addBodyParameter("token", tk);
-			http.send(HttpRequest.HttpMethod.POST, generateCode, p,
-					new RequestCallBack<String>() {
-						@Override
-						public void onStart() {
-							showDialog(DIALOG_KEY);
-						}
-
-						@Override
-						public void onLoading(long total, long current,
-								boolean isUploading) {
-						}
-
-						@Override
-						public void onSuccess(ResponseInfo<String> responseInfo) {
-							removeDialog(DIALOG_KEY);
-							System.out.println(responseInfo.result);
-							Result r = (Result) JSON.parseObject(
-									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) {
-								alert("返回验证码：" + r.getData().toString());
-							} else {
-								alert(r.getErrorMessage());
+		userId = userIdV.getText().toString();
+		if (userId == null || "".equals(userId)) {
+			alert("请输入手机号码");
+			return;
+		} else if (userId.length() != 11) {
+			alert("请输入正确的11位手机号码");
+			return;
+		} else {
+			try {
+				tk = HttpRequire.getMD5(HttpRequire.getBase64(userId));
+				p.addBodyParameter("token", tk);
+				http.send(HttpRequest.HttpMethod.POST, generateCode, p,
+						new RequestCallBack<String>() {
+							@Override
+							public void onStart() {
+								showDialog(DIALOG_KEY);
 							}
-						}
 
-						@Override
-						public void onFailure(HttpException error, String msg) {
-							removeDialog(DIALOG_KEY);
-						}
-					});
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+							@Override
+							public void onLoading(long total, long current,
+									boolean isUploading) {
+							}
+
+							@Override
+							public void onSuccess(
+									ResponseInfo<String> responseInfo) {
+								removeDialog(DIALOG_KEY);
+								System.out.println(responseInfo.result);
+								Result r = (Result) JSON.parseObject(
+										responseInfo.result, Result.class);
+								if (r.getErrorCode() == 0) {
+									alert("返回验证码：" + r.getData().toString());
+								} else {
+									alert(r.getErrorMessage());
+								}
+							}
+
+							@Override
+							public void onFailure(HttpException error,
+									String msg) {
+								removeDialog(DIALOG_KEY);
+							}
+						});
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

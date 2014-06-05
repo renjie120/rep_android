@@ -1,5 +1,7 @@
 package com.rep.app;
 
+import java.security.NoSuchAlgorithmException;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,17 +13,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.search.MKSearch;
 import com.example.jpushdemo.ExampleApplication;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
 import com.rep.util.ActivityMeg;
+import com.rep.util.HttpRequire;
 
 /**
  * 完善信息.
@@ -144,6 +155,11 @@ public class AddMoreDataActivity extends BaseActivity {
 			public void onReceiveLocation(BDLocation location) {
 				if (location == null)
 					return;
+				// 纬度
+				lat = location.getLatitude();
+				// 经度
+				lng = location.getLongitude();
+				city = location.getCity();
 				city_v.setText(location.getCity());
 			}
 
@@ -159,7 +175,7 @@ public class AddMoreDataActivity extends BaseActivity {
 			} else {
 				mLocationClient.start();
 			}
-		}else{
+		} else {
 			initGPS();
 		}
 		ActivityMeg.getInstance().addActivity(this);
@@ -218,21 +234,26 @@ public class AddMoreDataActivity extends BaseActivity {
 				String _worknum = worknum.getText().toString();
 				String _brandtype = brandtype.getText().toString();
 				String _brandname = brandname.getText().toString();
-
+				if(_worktime!=null&&!"".equals(_worktime)){
+					if(Double.parseDouble(_worktime)>=24){
+						alert("【营业时间】请输入小于24的数字");
+						return ;
+					}
+				}
 				// 注册
 				addMore(_price, _worktime, _weekend, _worknum, _brandtype,
-						_brandname, phone);
+						_brandname, phone, validCode, pass);
 			}
 		});
-		
+
 		addCleanBtn(price);
-		addCleanBtn(worktime); 
+		addCleanBtn(worktime);
 		addCleanBtn(weekend);
-		addCleanBtn(worknum);  
+		addCleanBtn(worknum);
 		addCleanBtn(brandtype);
-		addCleanBtn(brandname);  
+		addCleanBtn(brandname);
 	}
- 
+
 	// 搜索相关
 	MKSearch mSearch = null; // 搜索模块，也可去掉地图模块独立使用
 
@@ -265,59 +286,65 @@ public class AddMoreDataActivity extends BaseActivity {
 		}
 	}
 
+	// 纬度
+	private double lat = 0.0;
+	// 经度
+	private double lng = 0.0;
+	private String city = "其他";
+
 	private void addMore(final String _price, String _worktime,
 			String _weekend, String _worknum, String _brandtype,
-			String _brandname, String phone) {
+			String _brandname, String phone, String v, String pas) {
 
-		// try {
-		// HttpUtils http = new HttpUtils();
-		// RequestParams p = new RequestParams();
-		// p.addBodyParameter("masterPrice", _price);
-		// p.addBodyParameter("brandName", _brandname);
-		// p.addBodyParameter("brandType", _brandtype);
-		// p.addBodyParameter("lng_north", lat + "");
-		// p.addBodyParameter("lat_east", lng + "");
-		// p.addBodyParameter("worktime", _worktime);
-		// p.addBodyParameter("workNum", _worknum);
-		// p.addBodyParameter("weekendNum", _weekend);
-		// p.addBodyParameter("location", city);
-		// p.addBodyParameter("phone", phone);
-		// p.addBodyParameter("validCode", validCode);
-		// p.addBodyParameter("password", pass);
-		// String tk = HttpRequire.getMD5(HttpRequire.getBase64(phone));
-		// p.addBodyParameter("token", tk);
-		// http.send(HttpRequest.HttpMethod.POST, url, p,
-		// new RequestCallBack<String>() {
-		// @Override
-		// public void onStart() {
-		// showDialog(DIALOG_KEY);
-		// }
-		//
-		// @Override
-		// public void onLoading(long total, long current,
-		// boolean isUploading) {
-		// }
-		//
-		// @Override
-		// public void onSuccess(ResponseInfo<String> responseInfo) {
-		// removeDialog(DIALOG_KEY);
-		// System.out.println(responseInfo.result);
-		// Result r = (Result) JSON.parseObject(
-		// responseInfo.result, Result.class);
-		// if (r.getErrorCode() == 0) {
-		// alert("注册成功,请登录");
-		// } else {
-		// alert(r.getErrorMessage());
-		// }
-		// }
-		//
-		// @Override
-		// public void onFailure(HttpException error, String msg) {
-		// removeDialog(DIALOG_KEY);
-		// }
-		// });
-		// } catch (NoSuchAlgorithmException e) {
-		// e.printStackTrace();
-		// }
+		try {
+			HttpUtils http = new HttpUtils();
+			RequestParams p = new RequestParams();
+			p.addBodyParameter("masterPrice", _price);
+			p.addBodyParameter("brandName", _brandname);
+			p.addBodyParameter("brandType", _brandtype);
+			p.addBodyParameter("lng_north", lat + "");
+			p.addBodyParameter("lat_east", lng + "");
+			p.addBodyParameter("worktime", _worktime);
+			p.addBodyParameter("workNum", _worknum);
+			p.addBodyParameter("weekendNum", _weekend);
+			p.addBodyParameter("location", city);
+			p.addBodyParameter("phone", phone);
+			p.addBodyParameter("validCode", v);
+			p.addBodyParameter("password", pas);
+			String tk = HttpRequire.getMD5(HttpRequire.getBase64(phone));
+			p.addBodyParameter("token", tk);
+			http.send(HttpRequest.HttpMethod.POST, url, p,
+					new RequestCallBack<String>() {
+						@Override
+						public void onStart() {
+							showDialog(DIALOG_KEY);
+						}
+
+						@Override
+						public void onLoading(long total, long current,
+								boolean isUploading) {
+						}
+
+						@Override
+						public void onSuccess(ResponseInfo<String> responseInfo) {
+							removeDialog(DIALOG_KEY);
+							System.out.println(responseInfo.result);
+							Result r = (Result) JSON.parseObject(
+									responseInfo.result, Result.class);
+							if (r.getErrorCode() == 0) {
+								Toast.makeText(AddMoreDataActivity.this, "注册成功,请返回首页登录", Toast.LENGTH_LONG).show();
+							} else {
+								alert(r.getErrorMessage());
+							}
+						}
+
+						@Override
+						public void onFailure(HttpException error, String msg) {
+							removeDialog(DIALOG_KEY);
+						}
+					});
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 }
