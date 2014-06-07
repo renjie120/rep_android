@@ -29,6 +29,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.Action;
@@ -46,7 +47,9 @@ public class LoginActivity extends BaseActivity {
 	private Button buttonLogin;
 	private ImageView remeberPassword;
 	private static final int DIALOG_KEY = 0;
-	private EditText nameText;
+	private EditText nameText;  
+	@ViewInject(R.id.debug)
+	private TextView debug; 
 	private EditText passwordText;
 	private SharedPreferences mSharedPreferences;
 	private ProgressDialog dialog;
@@ -169,6 +172,11 @@ public class LoginActivity extends BaseActivity {
 		addCleanBtn(passwordText);
 		addCleanBtn(nameText);
 		adjustScreen();
+
+		if (DEBUG) {
+			debug.setVisibility(View.VISIBLE);
+			debug.setText("当前版本是演示版本.");
+		}
 	}
 
 	/**
@@ -271,79 +279,92 @@ public class LoginActivity extends BaseActivity {
 		}
 	}
 
-	private void login(String uid, String pass) {
-		try {
-			HttpUtils http = new HttpUtils();
-			RequestParams p = new RequestParams();
-			p.addBodyParameter("userId", uid);
-			p.addBodyParameter("password", pass);
-			String tk = HttpRequire.getMD5(HttpRequire.getBase64(uid));
-			p.addBodyParameter("token", tk);
-			http.send(HttpRequest.HttpMethod.POST, url, p,
-					new RequestCallBack<String>() {
-						@Override
-						public void onStart() {
-							showDialog(DIALOG_KEY);
-						}
+	private void login(String uid, String pass) { 
+		if (DEBUG) {
+			Intent intent2 = new Intent(LoginActivity.this, NewHomePage.class);
+			intent2.putExtra("phone", "18616818351");
+			intent2.putExtra("userId", "123");
+			String tk;
+			try {
+				tk = HttpRequire.getMD5(HttpRequire.getBase64("123"));
+				intent2.putExtra("brandName", "李宁");
+				intent2.putExtra("brandType", "运动鞋");
+				intent2.putExtra("token", tk);
+				intent2.putExtra("location", "12.23");
+				intent2.putExtra("worktime", "10");
+				intent2.putExtra("weekendNum", "50");
+				startActivity(intent2);
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-						@Override
-						public void onLoading(long total, long current,
-								boolean isUploading) {
-						}
-
-						@Override
-						public void onSuccess(ResponseInfo<String> responseInfo) {
-							removeDialog(DIALOG_KEY);
-							System.out.println(responseInfo.result);
-							Result r = (Result) JSON.parseObject(
-									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) {
-								String _res = r.getData().toString();
-								JSONObject obj = JSON.parseObject(_res);
-								Intent intent2 = new Intent(LoginActivity.this,
-										NewHomePage.class);
-								intent2.putExtra("phone",
-										obj.getString("phone"));
-								intent2.putExtra("userId",
-										obj.getString("userId"));
-								intent2.putExtra("brandName",
-										obj.getString("brandName"));
-								intent2.putExtra("brandType",
-										obj.getString("brandType"));
-								intent2.putExtra("token",
-										obj.getString("token"));
-								intent2.putExtra("location",
-										obj.getString("location"));
-								intent2.putExtra("worktime",
-										obj.getString("worktime"));
-								intent2.putExtra("weekendNum",
-										obj.getString("weekendNum"));
-
-								// 如果选择了记住密码
-								if ("true".equals(remeberPassword.getTag())) {
-									SharedPreferences.Editor mEditor = mSharedPreferences
-											.edit();
-									mEditor.putString("remeber", "true");
-									mEditor.putString("pass", passwordText
-											.getText().toString());
-									mEditor.putString("userId", nameText
-											.getText().toString());
-									mEditor.commit();
-								}
-								startActivity(intent2);
-							} else {
-								alert(r.getErrorMessage());
+		} else {
+			try {
+				HttpUtils http = new HttpUtils();
+				RequestParams p = new RequestParams();
+				p.addBodyParameter("userId", uid);
+				p.addBodyParameter("password", pass);
+				String tk = HttpRequire.getMD5(HttpRequire.getBase64(uid));
+				p.addBodyParameter("token", tk);
+				System.out.println("token----" + tk);
+				http.send(HttpRequest.HttpMethod.POST, url, p,
+						new RequestCallBack<String>() {
+							@Override
+							public void onStart() {
+								showDialog(DIALOG_KEY);
 							}
-						}
 
-						@Override
-						public void onFailure(HttpException error, String msg) {
-							removeDialog(DIALOG_KEY);
-							alert("服务端异常,请稍候重试!");
-						}
-					});
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+							@Override
+							public void onLoading(long total, long current,
+									boolean isUploading) {
+								// resultText.setText(current + "/" + total);
+							}
+
+							@Override
+							public void onSuccess(
+									ResponseInfo<String> responseInfo) {
+								removeDialog(DIALOG_KEY);
+								System.out.println(responseInfo.result);
+								Result r = (Result) JSON.parseObject(
+										responseInfo.result, Result.class);
+								if (r.getErrorCode() == 0) {
+									String _res = r.getData().toString();
+									JSONObject obj = JSON.parseObject(_res);
+									Intent intent2 = new Intent(
+											LoginActivity.this,
+											NewHomePage.class);
+									intent2.putExtra("phone",
+											obj.getString("phone"));
+									intent2.putExtra("userId",
+											obj.getString("userId"));
+									intent2.putExtra("brandName",
+											obj.getString("brandName"));
+									intent2.putExtra("brandType",
+											obj.getString("brandType"));
+									intent2.putExtra("token",
+											obj.getString("token"));
+									intent2.putExtra("location",
+											obj.getString("location"));
+									intent2.putExtra("worktime",
+											obj.getString("worktime"));
+									intent2.putExtra("weekendNum",
+											obj.getString("weekendNum"));
+									startActivity(intent2);
+								} else {
+									alert(r.getErrorMessage());
+								}
+							}
+
+							@Override
+							public void onFailure(HttpException error,
+									String msg) {
+								removeDialog(DIALOG_KEY);
+							}
+						});
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} 
 		}
 	}
 

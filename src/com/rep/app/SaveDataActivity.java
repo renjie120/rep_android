@@ -302,8 +302,8 @@ public class SaveDataActivity extends BaseActivity {
 		head.init(R.string.tip_title, false, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * 1),
-				(int) (screenHeight * titleH)); 
-		ActivityMeg.getInstance().addActivity(this); 
+				(int) (screenHeight * titleH));
+		ActivityMeg.getInstance().addActivity(this);
 	}
 
 	private float screenHeight, screenWidth;
@@ -378,65 +378,68 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	}
 
-	private void saveData(final String uid, String tk) {
-		final String stimeSpan = timeSpan.getText().toString();
-		String icomeNum = comeInNum.getText().toString();
-		String intrestNum = intreNum.getText().toString();
-		String itryNum = tryNum.getText().toString();
-		String ibuyNum = buyNum.getText().toString();
-		String ioldNum = oldNum.getText().toString();
-		HttpUtils http = new HttpUtils();
-		RequestParams p = new RequestParams();
-		final String in_date = toDString(inDate, "yyyy-MM-dd");
-		p.addBodyParameter("indate", in_date);
-		p.addBodyParameter("userId", uid);
-		p.addBodyParameter("token", tk);
-		p.addBodyParameter("dataType", "1");
-		p.addBodyParameter("comeNum", icomeNum);
-		p.addBodyParameter("timeSpan", stimeSpan);
-		p.addBodyParameter("intrestNum", intrestNum);
-		p.addBodyParameter("tryNum", itryNum);
-		p.addBodyParameter("buyNum", ibuyNum);
-		p.addBodyParameter("oldNum", ioldNum);
-		if (countDataSaved(uid, in_date, stimeSpan) == 0) {
-			http.send(HttpRequest.HttpMethod.POST, url, p,
-					new RequestCallBack<String>() {
-						@Override
-						public void onStart() {
-							showDialog(DIALOG_KEY);
-						}
-
-						@Override
-						public void onLoading(long total, long current,
-								boolean isUploading) {
-							// resultText.setText(current + "/" + total);
-						}
-
-						@Override
-						public void onSuccess(ResponseInfo<String> responseInfo) {
-							removeDialog(DIALOG_KEY);
-							Result r = (Result) JSON.parseObject(
-									responseInfo.result, Result.class);
-							if (r.getErrorCode() == 0) { 
-								saveDataSaved(uid, in_date, stimeSpan);
-								initData();
-								
-								Intent t = new Intent(SaveDataActivity.this,
-										MyViewPagerActivity.class);
-								t.putExtras(bund);
-								startActivity(t);
-							} else {
-								alert(r.getErrorMessage());
-							}
-						}
-
-						@Override
-						public void onFailure(HttpException error, String msg) {
-							removeDialog(DIALOG_KEY);
-						}
-					});
+	private void saveData(final String uid, String tk) { 
+		if (DEBUG) {
+			alert("添加成功"); 
+			initData();
 		} else {
-			alert("已经保存过当天时间端的数据.");
+			final String stimeSpan = timeSpan.getText().toString();
+			String icomeNum = comeInNum.getText().toString();
+			String intrestNum = intreNum.getText().toString();
+			String itryNum = tryNum.getText().toString();
+			String ibuyNum = buyNum.getText().toString();
+			String ioldNum = oldNum.getText().toString();
+			HttpUtils http = new HttpUtils();
+			RequestParams p = new RequestParams();
+			final String in_date = toDString(inDate, "yyyy-MM-dd");
+			p.addBodyParameter("indate", in_date);
+			p.addBodyParameter("userId", uid);
+			p.addBodyParameter("token", tk);
+			p.addBodyParameter("dataType", "1");
+			p.addBodyParameter("comeNum", icomeNum);
+			p.addBodyParameter("timeSpan", stimeSpan);
+			p.addBodyParameter("intrestNum", intrestNum);
+			p.addBodyParameter("tryNum", itryNum);
+			p.addBodyParameter("buyNum", ibuyNum);
+			p.addBodyParameter("oldNum", ioldNum);
+			if (countDataSaved(uid, in_date, stimeSpan) == 0) {
+				http.send(HttpRequest.HttpMethod.POST, url, p,
+						new RequestCallBack<String>() {
+							@Override
+							public void onStart() {
+								showDialog(DIALOG_KEY); 
+							}
+
+							@Override
+							public void onLoading(long total, long current,
+									boolean isUploading) {
+								// resultText.setText(current + "/" + total);
+							}
+
+							@Override
+							public void onSuccess(
+									ResponseInfo<String> responseInfo) {
+								removeDialog(DIALOG_KEY);
+								Result r = (Result) JSON.parseObject(
+										responseInfo.result, Result.class);
+								if (r.getErrorCode() == 0) {
+									alert("添加成功");
+									saveDataSaved(uid, in_date, stimeSpan);
+									initData();
+								} else {
+									alert(r.getErrorMessage());
+								}
+							}
+
+							@Override
+							public void onFailure(HttpException error,
+									String msg) {
+								removeDialog(DIALOG_KEY);
+							}
+						});
+			} else {
+				alert("已经保存过当天时间端的数据.");
+			}
 		}
 	}
 

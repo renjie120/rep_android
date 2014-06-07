@@ -4,13 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.rep.util.TextCleanTouch;
-import com.rep.util.TextCleanWatcher;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface.OnClickListener;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -23,12 +19,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.rep.util.TextCleanTouch;
+import com.rep.util.TextCleanWatcher;
+
 /**
  * Activity基类，包含一些常用函数.
  */
-public class BaseActivity extends Activity {
-	// public final static String HOST="http://192.168.1.101:9999";
-	public final static String HOST = "http://10.224.70.132:8083";
+public class BaseActivity extends Activity { 
+	public final static boolean DEBUG = true;
+	public final static String HOST="http://www.thinksafari.com"; 
 	// 上下标题栏的高度比例
 	public static float barH = 0.07f;
 	// 标题文字的宽度
