@@ -285,6 +285,7 @@ public class SaveDataActivity extends BaseActivity {
 		init();
 	}
 
+	private Bundle b ;
 	/**
 	 * 界面初始化函数.
 	 */
@@ -294,6 +295,7 @@ public class SaveDataActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.tip);
 		ViewUtils.inject(this);
+		b = getIntent().getExtras();
 		head = (ActionBar) findViewById(R.id.tip_head);
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
@@ -378,10 +380,14 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	}
 
-	private void saveData(final String uid, String tk) { 
+	private void saveData(final String uid, String tk) {
 		if (DEBUG) {
-			alert("添加成功"); 
+			alert("添加成功");
 			initData();
+			Intent t = new Intent(SaveDataActivity.this,
+					MyViewPagerActivity.class);
+			t.putExtras(b);
+			startActivity(t);
 		} else {
 			final String stimeSpan = timeSpan.getText().toString();
 			String icomeNum = comeInNum.getText().toString();
@@ -407,7 +413,7 @@ public class SaveDataActivity extends BaseActivity {
 						new RequestCallBack<String>() {
 							@Override
 							public void onStart() {
-								showDialog(DIALOG_KEY); 
+								showDialog(DIALOG_KEY);
 							}
 
 							@Override
@@ -463,6 +469,10 @@ public class SaveDataActivity extends BaseActivity {
 		buyNum.setText("0");
 		oldNum.setText("0");
 
+		Intent tt = new Intent(SaveDataActivity.this,
+				MyViewPagerActivity.class);
+		tt.putExtras(b);
+		startActivity(tt);
 	}
 
 	/**

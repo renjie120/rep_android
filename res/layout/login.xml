@@ -38,10 +38,10 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@null" 
-                android:hint="测试用户:18616818351" 
+                android:hint="测试用户:45645645645" 
                 android:numeric="integer"
                 android:singleLine="true"
-                android:text="18616818351" />
+                android:text="45645645645" />
         </LinearLayout>
 
         <View
@@ -70,10 +70,9 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="测试密码:123456"
+                android:hint="测试密码:456"
                 android:password="true"
-                android:singleLine="true"
-                android:text="123456" />
+                android:singleLine="true" />
         </LinearLayout>
     </LinearLayout>
 
