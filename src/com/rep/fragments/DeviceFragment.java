@@ -12,16 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.rep.app.R;
-import com.rep.app.R.drawable;
-import com.rep.app.R.id;
-import com.rep.app.R.layout;
-import com.rep.app.R.string;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.AbstractAction;
 import com.rep.util.BaseFragment;
@@ -34,13 +28,8 @@ import com.rep.util.BaseFragment;
  */
 public class DeviceFragment extends BaseFragment {
 	private ActionBar head;
-	private LinearLayout r1;
-	private LinearLayout r2;
-	private LinearLayout r3;
-	private LinearLayout r4;
 	private float screenHeight, screenWidth;
 	private ListView deviceList;
-	private TextView deviceDetail;
 
 	private OnDeviceSelectedListener listener;
 
@@ -132,7 +121,6 @@ public class DeviceFragment extends BaseFragment {
 							int arg2, long arg3) {
 						{
 							listener.openDeviceDetail("test");
-							// openDetail("红外线的特征：红外传输是一种点对点的传输方式，无线，不能离的太远，要对准方向，且中间不能有障碍物也就是不能穿墙而过，几乎无法控制信息传输的进度；IrDA已经是一套标准，IR收/发的组件也是标准化产品。");
 						}
 					}
 				});

@@ -7,13 +7,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.rep.app.R;
-import com.rep.app.R.id;
-import com.rep.app.R.layout;
-import com.rep.app.R.string;
 import com.rep.util.ActionBar;
 import com.rep.util.BaseFragment;
 
@@ -29,9 +24,7 @@ public class AboutFragment extends BaseFragment {
 	private LinearLayout r2;
 	private LinearLayout r3;
 	private LinearLayout r4;
-	private float screenHeight, screenWidth;
-	private ListView deviceList;
-	private TextView deviceDetail;
+	private float screenHeight, screenWidth; 
 
 	private OnAboutSelectedListener listener;
 

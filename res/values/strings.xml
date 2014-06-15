@@ -18,6 +18,8 @@
     <string name="error_network">网络连接异常,初始化失败 请检查网络！</string>
     <string name="logining">程序在后台执行, 请查看日志！</string>
     <string name="setting_su">设置成功</string>
+    <string name="parse">分析</string>
+    <string name="lishi2">历史</string>
     <string name="regiest">注册</string>
     <string name="current_time">当前时间段：</string>
     <string name="comein_num">进出顾客数：</string>
@@ -70,6 +72,7 @@
     <string name="tip2_2">摸过商品连续3秒以上或者询问过商品的顾客</string>
     <string name="tip6">以上数据每次仅限15分钟内</string>
     <string name="tip7">我已知晓，跳过</string>
+    <string name="update_mydata">修改我的资料</string>
     <string name="about1">设备简介</string>
     <string name="about2">在线诊断</string>
     <string name="about3">专家会诊</string>

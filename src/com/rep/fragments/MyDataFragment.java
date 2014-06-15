@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.jpushdemo.ExampleApplication;
 import com.rep.app.R;
-import com.rep.app.R.drawable;
-import com.rep.app.R.id;
-import com.rep.app.R.layout;
-import com.rep.app.R.string;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.AbstractAction;
 import com.rep.util.BaseFragment;
@@ -74,7 +71,7 @@ public class MyDataFragment extends BaseFragment {
 
 	private float screenHeight, screenWidth;
 	private Bundle b;
-
+	private Button updateMydata;
 	/**
 	 * 初始化控件.
 	 */
@@ -103,7 +100,8 @@ public class MyDataFragment extends BaseFragment {
 		brandname.setText(b.getString("brandName"));
 		score_v = (TextView) findViewById(R.id.score_v);
 		score_v.setText("待计算");
-		head.init(R.string.titile_adddata, true, false, false, false,
+		updateMydata = (Button) findViewById(R.id.updateMydata);
+		head.init(R.string.about4, true, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));

@@ -27,10 +27,7 @@ public class AboutActivity extends FragmentActivity implements
 		DeviceFragment.OnDeviceSelectedListener,
 		DeviceDetailFragment.OnDeviceDetailListener,
 		MyDataFragment.OnMydataListener {
-
-	private float screenHeight, screenWidth;
-	private ListView deviceList;
-	private TextView deviceDetail;
+ 
 	/**
 	 * 手势对象
 	 */

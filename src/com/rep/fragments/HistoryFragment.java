@@ -6,6 +6,7 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,12 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rep.app.R;
-import com.rep.app.R.id;
-import com.rep.app.R.layout;
-import com.rep.app.R.string;
 import com.rep.util.ActionBar;
 import com.rep.util.BaseFragment;
 import com.rep.util.HistoryAdapter;
+import com.rep.util.ActionBar.AbstractAction;
 
 /**
  * 历史数据
@@ -30,19 +29,25 @@ public class HistoryFragment extends BaseFragment {
 	private ActionBar head;
 	private float screenHeight, screenWidth;
 	private ListView historyList;
-	private long exitTime = 0;
 
 	public interface OnHistorySelectedListener {
 		public void onHistorySelected(String indate);
 
+		/**
+		 * 页面的向右滑动进行页面的退回.
+		 * 
+		 * @param event
+		 */
+		public void leftBack(MotionEvent event);
+
 		public void back();
 	}
+
 	private OnHistorySelectedListener listener;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		System.out.println("HomeGridviewFragement____onCreateView");
 		return inflater.inflate(R.layout.history, container, false);
 	}
 
@@ -57,31 +62,19 @@ public class HistoryFragment extends BaseFragment {
 					+ " must implement OnHistorySelectedListener");
 		}
 	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		init();
 	}
 
-	/**
-	 * 界面初始化函数.
-	 */
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		setContentView(R.layout.history);
-//		
-//		ActivityMeg.getInstance().addActivity(this);
-//	}
-
-	// private String userId;
-	// private SharedPreferences mSharedPreferences;
-
 	public void goHistory(String r) {
 		listener.onHistorySelected(r);
 	}
-	
+
+	private String userId;
+
 	/**
 	 * 初始化控件.
 	 */
@@ -93,12 +86,19 @@ public class HistoryFragment extends BaseFragment {
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
 		Bundle b = getArguments();
-		// userId = b.getString("userId");
-		head.init(R.string.history_title, false, false, false, false,
+		userId = b.getString("userId");
+		System.out.println("当前查看的用户是：" + userId);
+		head.init(R.string.history_title, true, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * titleW4),
 				(int) (screenHeight * titleH));
-
+		head.setLeftAction(new AbstractAction(R.drawable.back) {
+			@Override
+			public void performAction(View view) {
+				// 调用父亲acitivty中的回退操作.
+				listener.back();
+			}
+		});
 		ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
 		String[] names = { "2014-5-1", "2014-5-7", "2014-5-14", "2014-5-21" };
 		for (String s : names) {
@@ -110,6 +110,12 @@ public class HistoryFragment extends BaseFragment {
 		historyList.setAdapter(adapter);
 		// 去掉分割线。。
 		historyList.setDivider(null);
+		historyList.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				listener.leftBack(event);
+				return false;
+			}
+		});
 		historyList
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -117,27 +123,9 @@ public class HistoryFragment extends BaseFragment {
 						{
 							TextView txt = (TextView) arg1
 									.findViewById(R.id.indate);
-							goHistory( txt.getText().toString());
-//							Intent tent = new Intent(HistoryFragment.this,
-//									IchartActivity.class);
-//							tent.putExtra("inDate", txt.getText().toString());
-//							startActivity(tent);
+							goHistory(txt.getText().toString());
 						}
 					}
 				});
-
-		// Date d = new Date();
-		// String today = SaveDataActivity.toDString(d, "yyyy-MM-dd");
-		// mSharedPreferences = PreferenceManager
-		// .getDefaultSharedPreferences(this);
-		// if ("false".equals(mSharedPreferences.getString(today + "," + userId
-		// + "_firstOpen", "false"))) {
-		// mSharedPreferences.edit().putString(
-		// today + "," + userId + "_firstOpen", "true");
-		// Intent t = new Intent(HistoryActivity.this,
-		// MyViewPagerActivity.class);
-		// t.putExtras(b);
-		// startActivity(t);
-		// }
 	}
 }

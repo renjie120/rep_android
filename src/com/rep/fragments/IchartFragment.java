@@ -15,12 +15,8 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 
 import com.rep.app.R;
-import com.rep.app.R.drawable;
-import com.rep.app.R.id;
-import com.rep.app.R.layout;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.AbstractAction;
 import com.rep.util.BaseFragment;
@@ -28,7 +24,7 @@ import com.rep.util.BaseFragment;
 public class IchartFragment extends BaseFragment {
 	private WebView webView;
 	private float screenHeight, screenWidth;
-	private ActionBar head; 
+	private ActionBar head;
 	private WebSettings settings;
 	private Vector<Item> chart = new Vector<Item>();
 	private String data;
@@ -74,9 +70,8 @@ public class IchartFragment extends BaseFragment {
 
 	public void init() {
 		inDate = getArguments().getString("inDate");
-		// ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.ichart_head);
-		 
+
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];

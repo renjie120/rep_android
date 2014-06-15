@@ -336,7 +336,7 @@ public class LoginActivity extends BaseActivity {
 									intent2.putExtra("phone",
 											obj.getString("phone"));
 									intent2.putExtra("city",
-											obj.getString("city"));
+											obj.getString("location"));
 									intent2.putExtra("price",
 											obj.getString("price"));
 									intent2.putExtra("userId",

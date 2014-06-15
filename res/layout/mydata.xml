@@ -45,7 +45,8 @@
 
                 <LinearLayout
                     android:id="@+id/r1"
-                    style="@style/line_style" >
+                    style="@style/line_style"
+                    android:layout_marginTop="@dimen/line_margin_top" >
 
                     <TextView
                         android:id="@+id/brandname"
@@ -156,15 +157,10 @@
 
                     <EditText
                         android:id="@+id/city_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="left|center_vertical"
-                        android:inputType="none"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
+                        style="@style/editstyle" />
                 </LinearLayout>
-                  <LinearLayout
+
+                <LinearLayout
                     android:id="@+id/r8"
                     style="@style/line_style"
                     android:layout_marginTop="@dimen/line_margin_top" >
@@ -186,21 +182,16 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="30dp"
-                android:gravity="left"
-                android:text="@string/message1"
-                android:textColor="@color/orange" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="left"
-                android:text="@string/message2" />
+            <Button
+                android:id="@+id/updateMydata"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/corners_bg"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:text="@string/update_mydata" />
         </LinearLayout>
     </ScrollView>
 

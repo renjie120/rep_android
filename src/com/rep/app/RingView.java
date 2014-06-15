@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Typeface;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,10 +15,38 @@ public class RingView extends View {
 	private final Context context;
 	private int ringWidth = 30;
 	private float score = 40.0f;
+
+	public float getScore() {
+		return score;
+	}
+
+	public void setScore(float score) {
+		this.score = score;
+	}
+
 	private int textSize1 = 30, textSize2 = 50;
 
 	public RingView(Context context) {
 		this(context, null);
+	}
+
+	public void reset() {
+		final Handler handler = new Handler();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// delay some minutes you desire.
+				/*
+				 * try { Thread.sleep(3000); } catch (InterruptedException e) {
+				 * }
+				 */
+				handler.post(new Runnable() {
+					public void run() {
+						invalidate();
+					}
+				});
+			}
+		}).start();
 	}
 
 	public RingView(Context context, AttributeSet attrs) {
@@ -34,7 +62,8 @@ public class RingView extends View {
 		textSize2 = a.getInteger(R.styleable.MyRing_textSize2, 50);
 		this.paint = new Paint();
 		this.paint.setAntiAlias(true); // 消除锯齿
-		this.paint.setStyle(Paint.Style.STROKE); // 绘制空心圆
+		// this.paint.setStyle(Paint.Style.STROKE); //
+		// 绘制空心圆(在画环形的时候要空心，写文字的时候，不需要！)
 		a.recycle();
 	}
 
@@ -44,23 +73,20 @@ public class RingView extends View {
 		int center = getWidth() / 2;
 		int centerH = getHeight() / 2;
 		int rw = dip2px(context, ringWidth); // 设置圆环宽度
-
-		// 绘制圆环
-		this.paint.setARGB(255, 255, 0, 0);
-
-		String familyName = "宋体";
-		Typeface font = Typeface.create(familyName, Typeface.BOLD);
+		// 写两行文字
 		paint.setColor(Color.BLACK);
-		paint.setTypeface(font);
-		paint.setTextSize(textSize1);
+		paint.setTextSize(20);
+		// 这里画文字的时候，要设置为填充！！
+		this.paint.setStyle(Paint.Style.FILL);
 		canvas.drawText("得分", center - textSize1, centerH - textSize1, paint);
 		paint.setColor(Color.RED);
-		paint.setTextSize(textSize2);
-		canvas.drawText(score + "分", center - (int)(textSize2 * 1.5), centerH+10, paint);
-
+		canvas.drawText(score + "分", center - (int) (textSize2), centerH + 10,
+				paint);
+		// 绘制圆环
+		this.paint.setARGB(255, 255, 0, 0);
+		this.paint.setStyle(Paint.Style.STROKE); // 绘制空心圆
 		this.paint.setARGB(255, 255, 0, 0);
 		this.paint.setStrokeWidth(rw);
-
 		RectF oval1 = new RectF(ringWidth, ringWidth, getWidth() - ringWidth,
 				getHeight() - ringWidth);
 		int end = (int) (score / 100.0 * 360.0);

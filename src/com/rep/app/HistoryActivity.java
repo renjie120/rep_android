@@ -8,11 +8,10 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.rep.fragments.HistoryFragment;
 import com.rep.fragments.IchartFragment;
-import com.rep.util.ActionBar;
+import com.rep.fragments.LastWeekFragment;
 import com.rep.util.ActivityMeg;
 import com.rep.util.MyGestureDetector;
 
@@ -24,16 +23,13 @@ import com.rep.util.MyGestureDetector;
  */
 public class HistoryActivity extends FragmentActivity implements
 		HistoryFragment.OnHistorySelectedListener,
-		IchartFragment.OnIchartListener {
-	private ActionBar head;
-	private float screenHeight, screenWidth;
-	private ListView historyList;
-	private long exitTime = 0;
+		LastWeekFragment.OnLastweekListener, IchartFragment.OnIchartListener {
 	private LinearLayout all;
 	/**
 	 * 手势对象
 	 */
 	private MyGestureDetector detector;
+	private Bundle b;
 
 	/**
 	 * 界面初始化函数.
@@ -44,6 +40,7 @@ public class HistoryActivity extends FragmentActivity implements
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.fragment_frame);
 		all = (LinearLayout) findViewById(R.id.all);
+		b = getIntent().getExtras();
 		// 设置手势动作.
 		detector = new MyGestureDetector(HistoryActivity.this, all);
 		detector.setRightFling();// init();
@@ -52,15 +49,14 @@ public class HistoryActivity extends FragmentActivity implements
 			if (savedInstanceState != null) {
 				return;
 			}
-			HistoryFragment historyFragment = new HistoryFragment();
+			LastWeekFragment firstFragment = new LastWeekFragment();
+			firstFragment.setArguments(b);
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.tab_content, historyFragment).commit();
+					.add(R.id.tab_content, firstFragment).commit();
 		}
 		ActivityMeg.getInstance().addActivity(this);
 	}
 
-	// private String userId;
-	// private SharedPreferences mSharedPreferences;
 	/**
 	 * 第二种返回屏幕大小的方式.
 	 * 
@@ -70,7 +66,9 @@ public class HistoryActivity extends FragmentActivity implements
 		DisplayMetrics dm = new DisplayMetrics();
 		dm = getResources().getDisplayMetrics();
 		return new float[] { dm.widthPixels, dm.heightPixels };
-	}// 上下标题栏的高度比例
+	}
+
+	// 上下标题栏的高度比例
 
 	public static float barH = 0.07f;
 	// 首页标题的高度比例
@@ -80,66 +78,6 @@ public class HistoryActivity extends FragmentActivity implements
 	// 首页4字标题的宽度
 	public static float titleW4 = 70 / 267f;
 	public static float titleW6 = 123 / 264f;
-
-	/**
-	 * 初始化控件.
-	 */
-	private void init() {
-		// head = (ActionBar) findViewById(R.id.history_head);
-		// historyList = (ListView) findViewById(R.id.historyList);
-		// // 得到屏幕大小.
-		// float[] screen2 = getScreen2();
-		// screenHeight = screen2[1];
-		// screenWidth = screen2[0];
-		// Bundle b = getIntent().getExtras();
-		// // userId = b.getString("userId");
-		// head.init(R.string.history_title, false, false, false, false,
-		// (int) (screenHeight * barH));
-		// head.setTitleSize((int) (screenWidth * titleW4),
-		// (int) (screenHeight * titleH));
-		//
-		// ArrayList<HashMap<String, Object>> listItem = new
-		// ArrayList<HashMap<String, Object>>();
-		// String[] names = { "2014-5-1", "2014-5-7", "2014-5-14", "2014-5-21"
-		// };
-		// for (String s : names) {
-		// HashMap<String, Object> m = new HashMap<String, Object>();
-		// m.put("indate", s);
-		// listItem.add(m);
-		// }
-		// HistoryAdapter adapter = new HistoryAdapter(listItem, this);
-		// historyList.setAdapter(adapter);
-		// // 去掉分割线。。
-		// historyList.setDivider(null);
-		// historyList
-		// .setOnItemClickListener(new AdapterView.OnItemClickListener() {
-		// public void onItemClick(AdapterView<?> arg0, View arg1,
-		// int arg2, long arg3) {
-		// {
-		// TextView txt = (TextView) arg1
-		// .findViewById(R.id.indate);
-		// Intent tent = new Intent(HistoryActivity.this,
-		// IchartActivity.class);
-		// tent.putExtra("inDate", txt.getText().toString());
-		// startActivity(tent);
-		// }
-		// }
-		// });
-
-		// Date d = new Date();
-		// String today = SaveDataActivity.toDString(d, "yyyy-MM-dd");
-		// mSharedPreferences = PreferenceManager
-		// .getDefaultSharedPreferences(this);
-		// if ("false".equals(mSharedPreferences.getString(today + "," + userId
-		// + "_firstOpen", "false"))) {
-		// mSharedPreferences.edit().putString(
-		// today + "," + userId + "_firstOpen", "true");
-		// Intent t = new Intent(HistoryActivity.this,
-		// MyViewPagerActivity.class);
-		// t.putExtras(b);
-		// startActivity(t);
-		// }
-	}
 
 	@Override
 	public void onHistorySelected(String indate) {
@@ -167,5 +105,22 @@ public class HistoryActivity extends FragmentActivity implements
 	@Override
 	public void leftBack(MotionEvent event) {
 		detector.onTouchEvent(event);
+	}
+
+	@Override
+	public void goHistory(String userId) {
+		Bundle args = new Bundle();
+		args.putString("userId", userId);
+		HistoryFragment historyFragment = new HistoryFragment();
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
+		// 打开页面设置动画.
+		transaction.setCustomAnimations(R.anim.slide_left_in,
+				R.anim.slide_left_out);
+		historyFragment.setArguments(args);
+		// 进行碎片替换
+		transaction.replace(R.id.tab_content, historyFragment);
+		transaction.addToBackStack(null);
+		transaction.commit();
 	}
 }
