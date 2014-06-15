@@ -65,19 +65,11 @@
         <activity android:name="org.achartengine.chartdemo.demo.chart.XYChartBuilder" />
         <activity android:name="org.achartengine.chartdemo.demo.chart.PieChartBuilder" />
         <activity android:name="org.achartengine.GraphicalActivity" />
-        <activity android:name=".HomepageMenuActivity" >
-        </activity> 
-        <activity android:name=".ChartDemo" >
-        </activity>
-        <activity android:name=".FragemntMainActivity" >
-        </activity>
         <activity android:name=".ConfigTipActivity" >
         </activity>
         <activity android:name=".MyViewPagerActivity" >
         </activity>
         <activity android:name=".ZhishiActivity" >
-        </activity>
-        <activity android:name=".MyDataActivity" >
         </activity>
         <activity android:name=".AboutActivity" >
         </activity>
@@ -88,10 +80,6 @@
         <activity android:name=".ConfigActivity" >
         </activity>
         <activity android:name=".LoginActivity" >
-        </activity>
-        <activity android:name=".BaseMapDemo" >
-        </activity>
-        <activity android:name=".IchartActivity" >
         </activity>
         <activity android:name=".AddMoreDataActivity" >
         </activity>

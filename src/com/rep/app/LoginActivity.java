@@ -145,8 +145,7 @@ public class LoginActivity extends BaseActivity {
 		lp23.width = (int) (textEditW * screenWidth);
 		lp23.height = (int) (checkboxHeight * 2.2);
 		lp23.topMargin = (int) (checkboxMesTM * screenHeight);
-		mess_title.setLayoutParams(lp23);
-		passwordText.setText("123");
+		mess_title.setLayoutParams(lp23); 
 	}
 
 	private ActionBar head;
@@ -336,6 +335,10 @@ public class LoginActivity extends BaseActivity {
 											NewHomePage.class);
 									intent2.putExtra("phone",
 											obj.getString("phone"));
+									intent2.putExtra("city",
+											obj.getString("city"));
+									intent2.putExtra("price",
+											obj.getString("price"));
 									intent2.putExtra("userId",
 											obj.getString("userId"));
 									intent2.putExtra("brandName",
@@ -350,6 +353,8 @@ public class LoginActivity extends BaseActivity {
 											obj.getString("worktime"));
 									intent2.putExtra("weekendNum",
 											obj.getString("weekendNum"));
+									intent2.putExtra("workNum",
+											obj.getString("workNum"));
 									startActivity(intent2);
 								} else {
 									alert(r.getErrorMessage());

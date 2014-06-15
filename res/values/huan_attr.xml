@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MyRing">
+        <attr name="ringWidth" format="integer" />
+        <attr name="textSize1" format="integer" />
+        <attr name="textSize2" format="integer" />
+        <attr name="score" format="float" />
+    </declare-styleable>
+
+</resources>

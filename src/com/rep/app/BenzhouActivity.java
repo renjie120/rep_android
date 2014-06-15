@@ -3,7 +3,6 @@ package com.rep.app;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -69,9 +68,9 @@ public class BenzhouActivity extends BaseActivity {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 						{
-							Intent tent = new Intent(BenzhouActivity.this,
-									IchartActivity.class);
-							startActivity(tent);
+//							Intent tent = new Intent(BenzhouActivity.this,
+//									IchartActivity.class);
+//							startActivity(tent);
 						}
 					}
 				});

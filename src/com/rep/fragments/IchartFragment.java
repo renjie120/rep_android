@@ -1,52 +1,105 @@
-package com.rep.app;
+package com.rep.fragments;
 
 import java.util.Vector;
 
+import android.app.Activity;
 import android.content.ClipData.Item;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 
+import com.rep.app.R;
+import com.rep.app.R.drawable;
+import com.rep.app.R.id;
+import com.rep.app.R.layout;
 import com.rep.util.ActionBar;
-import com.rep.util.ActivityMeg;
+import com.rep.util.ActionBar.AbstractAction;
+import com.rep.util.BaseFragment;
 
-public class IchartActivity extends BaseActivity {
+public class IchartFragment extends BaseFragment {
 	private WebView webView;
 	private float screenHeight, screenWidth;
-	private ActionBar head;
+	private ActionBar head; 
 	private WebSettings settings;
 	private Vector<Item> chart = new Vector<Item>();
 	private String data;
 	private String dataLabels;
 	private Handler mHandler = new Handler();
 	private String inDate;
-	
+	private OnIchartListener listener;
+
+	public interface OnIchartListener {
+		/**
+		 * 页面的向右滑动进行页面的退回.
+		 * 
+		 * @param event
+		 */
+		public void leftBack(MotionEvent event);
+
+		public void back();
+	}
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.ichart);
-		inDate = getIntent().getStringExtra("inDate");
-		ActivityMeg.getInstance().addActivity(this);		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.ichart, container, false);
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		try {
+			listener = (OnIchartListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnIchartListener");
+		}
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		init();
+	}
+
+	public void init() {
+		inDate = getArguments().getString("inDate");
+		// ActivityMeg.getInstance().addActivity(this);
 		head = (ActionBar) findViewById(R.id.ichart_head);
+		 
 		// 得到屏幕大小.
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
-		head.init2(inDate+"统计数据", true, false, false, false,
+		head.init2(inDate + "统计数据", true, false, false, false,
 				(int) (screenHeight * barH));
 		head.setTitleSize((int) (screenWidth * 0.8),
 				(int) (screenHeight * titleH));
-		head.setLeftAction(new ActionBar.BackAction(this));
+		head.setLeftAction(new AbstractAction(R.drawable.back) {
+			@Override
+			public void performAction(View view) {
+				// 调用父亲acitivty中的回退操作.
+				listener.back();
+			}
+		});
 
 		webView = (WebView) findViewById(R.id.ichart);
-
+		webView.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				listener.leftBack(event);
+				return false;
+			}
+		});
 		webView.setHorizontalScrollBarEnabled(true);
 		webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
 		// webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);

@@ -59,6 +59,7 @@
     <string name="item3">知识分享</string>
     <string name="item4">更多</string>
     <string name="city">所在城市：</string>
+    <string name="score">积分：</string>
     <string name="city2">请手动输入所在城市名</string>
     <string name="tip1">进店人数：</string>
     <string name="tip2">感兴趣人数：</string>

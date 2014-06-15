@@ -1,0 +1,83 @@
+package com.rep.app;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.Typeface;
+import android.util.AttributeSet;
+import android.view.View;
+
+public class RingView extends View {
+	private final Paint paint;
+	private final Context context;
+	private int ringWidth = 30;
+	private float score = 40.0f;
+	private int textSize1 = 30, textSize2 = 50;
+
+	public RingView(Context context) {
+		this(context, null);
+	}
+
+	public RingView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		// TODO Auto-generated constructor stub
+		this.context = context;
+		TypedArray a = context
+				.obtainStyledAttributes(attrs, R.styleable.MyRing);
+		score = a.getFloat(R.styleable.MyRing_score, 40.0f);
+		ringWidth = a.getInteger(R.styleable.MyRing_ringWidth, 30);
+		System.out.println("自定义属性:" + ringWidth);
+		textSize1 = a.getInteger(R.styleable.MyRing_textSize1, 30);
+		textSize2 = a.getInteger(R.styleable.MyRing_textSize2, 50);
+		this.paint = new Paint();
+		this.paint.setAntiAlias(true); // 消除锯齿
+		this.paint.setStyle(Paint.Style.STROKE); // 绘制空心圆
+		a.recycle();
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		// TODO Auto-generated method stub
+		int center = getWidth() / 2;
+		int centerH = getHeight() / 2;
+		int rw = dip2px(context, ringWidth); // 设置圆环宽度
+
+		// 绘制圆环
+		this.paint.setARGB(255, 255, 0, 0);
+
+		String familyName = "宋体";
+		Typeface font = Typeface.create(familyName, Typeface.BOLD);
+		paint.setColor(Color.BLACK);
+		paint.setTypeface(font);
+		paint.setTextSize(textSize1);
+		canvas.drawText("得分", center - textSize1, centerH - textSize1, paint);
+		paint.setColor(Color.RED);
+		paint.setTextSize(textSize2);
+		canvas.drawText(score + "分", center - (int)(textSize2 * 1.5), centerH+10, paint);
+
+		this.paint.setARGB(255, 255, 0, 0);
+		this.paint.setStrokeWidth(rw);
+
+		RectF oval1 = new RectF(ringWidth, ringWidth, getWidth() - ringWidth,
+				getHeight() - ringWidth);
+		int end = (int) (score / 100.0 * 360.0);
+		canvas.drawArc(oval1, -90, end, false, paint);
+
+		this.paint.setARGB(155, 170, 204, 63);
+		this.paint.setStrokeWidth(rw);
+		canvas.drawArc(oval1, -90 + end, 360 - end, false, paint);
+
+		super.onDraw(canvas);
+	}
+
+	/**
+	 * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+	 */
+	public static int dip2px(Context context, float dpValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
+}
