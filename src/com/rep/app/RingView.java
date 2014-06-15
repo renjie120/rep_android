@@ -73,27 +73,30 @@ public class RingView extends View {
 		int center = getWidth() / 2;
 		int centerH = getHeight() / 2;
 		int rw = dip2px(context, ringWidth); // 设置圆环宽度
-		// 写两行文字
+		// 先写两行文字
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(20);
-		// 这里画文字的时候，要设置为填充！！
+		// 一定注意！！！这里画文字的时候，要设置为填充！！
 		this.paint.setStyle(Paint.Style.FILL);
 		canvas.drawText("得分", center - textSize1, centerH - textSize1, paint);
 		paint.setColor(Color.RED);
 		canvas.drawText(score + "分", center - (int) (textSize2), centerH + 10,
 				paint);
-		// 绘制圆环
-		this.paint.setARGB(255, 255, 0, 0);
+		// 绘制圆环，两端圆环，注意设置为空心！！
 		this.paint.setStyle(Paint.Style.STROKE); // 绘制空心圆
 		this.paint.setARGB(255, 255, 0, 0);
+		// 设置画笔的宽度
 		this.paint.setStrokeWidth(rw);
 		RectF oval1 = new RectF(ringWidth, ringWidth, getWidth() - ringWidth,
 				getHeight() - ringWidth);
+		// 计算圆弧的度数
 		int end = (int) (score / 100.0 * 360.0);
+		// 先画一段圆弧，角度从12点方向开始画起，角度为-90度
 		canvas.drawArc(oval1, -90, end, false, paint);
 
 		this.paint.setARGB(155, 170, 204, 63);
 		this.paint.setStrokeWidth(rw);
+		// 再补全另外一段圆弧
 		canvas.drawArc(oval1, -90 + end, 360 - end, false, paint);
 
 		super.onDraw(canvas);
