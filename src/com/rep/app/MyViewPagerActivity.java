@@ -1,6 +1,7 @@
 package com.rep.app;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.exception.DbException;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.rep.bean.DataSaved;
 import com.rep.util.ActionBar;
 import com.rep.util.TimeSpanTipAdapter;
 
@@ -84,7 +89,6 @@ public class MyViewPagerActivity extends BaseActivity {
 	public void leftBtnClick(View v) {
 		if (--currentItem < 0)
 			currentItem = 0;
-		System.out.println("currentItem==" + currentItem);
 		if (currentItem == 0)
 			myHandler.sendEmptyMessage(1);
 		else
@@ -96,7 +100,6 @@ public class MyViewPagerActivity extends BaseActivity {
 	public void rightBtnClick(View v) {
 		if (++currentItem > 6)
 			currentItem = 6;
-		System.out.println("currentItem==" + currentItem);
 		if (currentItem == 6)
 			myHandler.sendEmptyMessage(3);
 		else
@@ -117,14 +120,21 @@ public class MyViewPagerActivity extends BaseActivity {
 	 * @param view1
 	 * @param j
 	 */
-	private void setListAdapter(View view1, int j) {
+	private void setListAdapter(View view1, int j,List<String> added) {
 		ListView listview1 = (ListView) view1.findViewById(R.id.tip_dataes);
+		//得到日期字符串.
+		String date = getDateInThisWeek(j+1);
+		System.out.println("当前检查的日期："+date);
 		ArrayList<Map<String, String>> herolist_wu2 = new ArrayList<Map<String, String>>();
 		for (int i = 0; i < SaveDataActivity.TIMESPANS.length; i++) {
 			Map<String, String> m = new HashMap<String, String>();
 			m.put("timeSpan", SaveDataActivity.TIMESPANS[i]);
 			m.put("tixing", tips[j].indexOf("" + i) != -1 ? "true" : "false");
-			m.put("haveAdded", i % 2 == 0 ? "true" : "false");
+			System.out.println("对比："+date+"-"+SaveDataActivity.TIMESPANS[i]);
+			if(added!=null)
+				m.put("haveAdded", added.contains(date+"-"+SaveDataActivity.TIMESPANS[i]) ? "true" : "false");
+			else
+				m.put("haveAdded","false");
 			herolist_wu2.add(m);
 		}
 		TimeSpanTipAdapter simpleAdapter_Wu = new TimeSpanTipAdapter(
@@ -133,30 +143,78 @@ public class MyViewPagerActivity extends BaseActivity {
 	}
 
 	private Bundle b;
+	private String userId;
+	private String startDate, endDate;
+
+	/**
+	 * 得到当前星期里面的第几天.
+	 * @param d 从1开始.
+	 * @return
+	 */
+	private String getDateInThisWeek(int d){
+		int[] yearAndWeek = SaveDataActivity.getYearAndWeekOfYear(new Date());
+		Date _start = SaveDataActivity.getDayInThisWeek(yearAndWeek[0],
+				yearAndWeek[1], d);
+		return SaveDataActivity.toDString(_start, "yyyy-MM-dd");
+	}
+	
+	/**
+	 * 得到指定人员添加了的全部的日期和时间段信息.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	private List<String> getHadadded(String userId) { 
+		startDate = getDateInThisWeek(1);
+		endDate = getDateInThisWeek(7); 
+		DbUtils db = DbUtils.create(MyViewPagerActivity.this);
+		db.configAllowTransaction(true);
+		List<String> result = new ArrayList<String>();
+		try {
+			List<DataSaved> objs = db.findAll(Selector.from(DataSaved.class)
+					.where("phone", "=", userId)
+					.and("indate", ">=", startDate)
+					.and("indate", "<=", endDate));
+			System.out.println("查询保存了的。。。"+objs+"--userId="+userId+",,startDate="+startDate+",,endDate="+endDate);
+			if (objs != null && objs.size() > 0){
+				for(DataSaved d:objs){ 
+					result.add(d.getInDate()+"-"+d.getTimeSpan());
+				}
+			} 
+			return result;
+		} catch (DbException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.viewpage);
 		ViewUtils.inject(this);
 		float[] screen2 = getScreen2();
 		screenHeight = screen2[1];
 		screenWidth = screen2[0];
 		b = getIntent().getExtras();
+		userId = b.getString("phone");
+		List<String> added = getHadadded(userId);
+		System.out.println("已经填写的日期："+added);
 		head.init(R.string.benzhou_title, true, false, false, false,
 				(int) (screenHeight * barH));
 		head.setLeftAction(new ActionBar.BackAction(this));
 		head.setTitleSize((int) (screenWidth * 0.6),
 				(int) (screenHeight * titleH));
 		titles = new String[7];
-		titles[0] = "星期一";
-		titles[1] = "星期二";
-		titles[2] = "星期三";
-		titles[3] = "星期四";
-		titles[4] = "星期五";
-		titles[5] = "星期六";
-		titles[6] = "星期天";
+		titles[0] = "星期天";
+		titles[1] = "星期一";
+		titles[2] = "星期二";
+		titles[3] = "星期三";
+		titles[4] = "星期四";
+		titles[5] = "星期五";
+		titles[6] = "星期六";
+		
 		viewList = new ArrayList<View>();
 		LayoutInflater inflater = getLayoutInflater();
 		View view1 = inflater.inflate(R.layout.everyday_tips, null);
@@ -173,13 +231,13 @@ public class MyViewPagerActivity extends BaseActivity {
 		viewList.add(view5);
 		viewList.add(view6);
 		viewList.add(view7);
-		setListAdapter(view1, 0);
-		setListAdapter(view2, 1);
-		setListAdapter(view3, 2);
-		setListAdapter(view4, 3);
-		setListAdapter(view5, 4);
-		setListAdapter(view6, 5);
-		setListAdapter(view7, 6);
+		setListAdapter(view1, 0,added);
+		setListAdapter(view2, 1,added);
+		setListAdapter(view3, 2,added);
+		setListAdapter(view4, 3,added);
+		setListAdapter(view5, 4,added);
+		setListAdapter(view6, 5,added);
+		setListAdapter(view7, 6,added);
 
 		tv_title.setText(titles[0]);//
 
@@ -215,8 +273,7 @@ public class MyViewPagerActivity extends BaseActivity {
 		 */
 		public void onPageSelected(int position) {
 			currentItem = position;
-			tv_title.setText(titles[position]);
-			System.out.println(currentItem + "---" + currentItem);
+			tv_title.setText(titles[position]); 
 			if (currentItem >= 6) {
 				myHandler.sendEmptyMessage(3);
 			} else if (currentItem <= 0)

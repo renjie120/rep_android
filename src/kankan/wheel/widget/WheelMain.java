@@ -1,7 +1,6 @@
 package kankan.wheel.widget;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -250,9 +249,9 @@ public class WheelMain {
 		wv_mins.setVisibility(View.GONE);
 		wv_day.setAdapter(new DayAdapter(0, 6));
 		//设置已经选择的时间
-		List<String> list = new ArrayList<String>();
-		list.add("星期一");
-		wv_day.setHasChecked(list);
+//		List<String> list = new ArrayList<String>();
+//		list.add("星期一");
+//		wv_day.setHasChecked(list);
 		wv_day.setCyclic(false); 
 		wv_day.setCurrentItem(d-1);
 		wv_day.setVisibleItems(5);

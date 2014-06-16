@@ -313,11 +313,23 @@ public class SaveDataActivity extends BaseActivity {
 
 	private float screenHeight, screenWidth;
 
+	/**
+	 * 将日期格式打印出来.
+	 * @param date
+	 * @param str
+	 * @return
+	 */
 	public static String toDString(Date date, String str) {
 		SimpleDateFormat sdf = new SimpleDateFormat(str);
 		return sdf.format(date);
 	}
 
+	/**
+	 * 日期转换.
+	 * @param dateStr
+	 * @param formateStr
+	 * @return
+	 */
 	public static Date getDate(String dateStr, String formateStr) {
 		SimpleDateFormat formatter2 = new SimpleDateFormat(formateStr);
 		Date date = new Date();
@@ -329,6 +341,11 @@ public class SaveDataActivity extends BaseActivity {
 		return date;
 	}
 
+	/**
+	 * 得到指定日期对应的字符串.
+	 * @param date
+	 * @return
+	 */
 	public static String getDayOfWeek(Date date) {
 		GregorianCalendar ca = new GregorianCalendar();
 		ca.setTime(date);
@@ -352,13 +369,21 @@ public class SaveDataActivity extends BaseActivity {
 		return null;
 	}
 
-	private void saveDataSaved(String userId, String indate, String timeSpan) {
+	/**
+	 * 保存到数据库里面.
+	 * @param userId 操作人员
+	 * @param indate 日期
+	 * @param timeSpan  时间段
+	 */
+	private void saveDataSaved(String userId, String indate, String timeSpan,String phone) {
 		DbUtils db = DbUtils.create(SaveDataActivity.this);
 		db.configAllowTransaction(true);
 		DataSaved r = new DataSaved();
 		r.setUserId(userId);
+		r.setPhone(phone);
 		r.setInDate(indate);
 		r.setTimeSpan(timeSpan);
+		System.out.println("保存数据："+JSON.toJSONString(r));
 		try {
 			db.save(r);
 		} catch (DbException e) {
@@ -366,6 +391,13 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	}
 
+	/**
+	 * 计算当前时间段是否已经填写过数据.
+	 * @param userId
+	 * @param indate
+	 * @param timeSpan
+	 * @return
+	 */
 	private long countDataSaved(String userId, String indate, String timeSpan) {
 		DbUtils db = DbUtils.create(SaveDataActivity.this);
 		db.configAllowTransaction(true);
@@ -383,7 +415,12 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	}
 
-	private void saveData(final String uid, String tk) {
+	/**
+	 * 保存到远程服务端当前的填写的数据.
+	 * @param uid
+	 * @param tk
+	 */
+	private void saveData(final String uid, String tk,final String phone) {
 		if (DEBUG) {
 			alert("添加成功");
 			initData();
@@ -433,7 +470,7 @@ public class SaveDataActivity extends BaseActivity {
 										responseInfo.result, Result.class);
 								if (r.getErrorCode() == 0) {
 									alert("添加成功");
-									saveDataSaved(uid, in_date, stimeSpan);
+									saveDataSaved(uid, in_date, stimeSpan,phone);
 									initData();
 									tip();
 								} else {
@@ -454,7 +491,7 @@ public class SaveDataActivity extends BaseActivity {
 	}
 
 	/**
-	 * 定时提醒.
+	 * 模拟定时提醒.
 	 */
 	private void tip(){
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -469,6 +506,9 @@ public class SaveDataActivity extends BaseActivity {
 		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+1000*10, sender);
 	}
 	
+	/**
+	 * 将填写的数据清空.
+	 */
 	private void initData() {
 		Date t = new Date();
 		indate.setText(toDString(t, "yyyy年MM月dd日"));
@@ -489,6 +529,7 @@ public class SaveDataActivity extends BaseActivity {
 		buyNum.setText("0");
 		oldNum.setText("0");
 
+		//显示完成之后，弹出一下当前已经填写的时间.
 		Intent tt = new Intent(SaveDataActivity.this,
 				MyViewPagerActivity.class);
 		tt.putExtras(b);
@@ -520,8 +561,9 @@ public class SaveDataActivity extends BaseActivity {
 			@Override
 			public void performAction(View view) {
 				String userId = bund.getString("userId");
+				String phone = bund.getString("phone");
 				String token = bund.getString("token");
-				saveData(userId, token);
+				saveData(userId, token,phone);
 			}
 		});
 		indateBtn = (LinearLayout) findViewById(R.id.indateBtn);

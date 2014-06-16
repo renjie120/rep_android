@@ -598,8 +598,7 @@ public class WheelView extends View {
 	 *            the layout mode
 	 * @return the calculated control width
 	 */
-	private int calculateLayoutWidth(int widthSize, int mode) {
-		System.out.println("585calculateLayoutWidth");
+	private int calculateLayoutWidth(int widthSize, int mode) { 
 		// 初始化画笔各种资源。。
 		initResourcesIfNecessary();
 
@@ -621,9 +620,7 @@ public class WheelView extends View {
 		if (label != null && label.length() > 0) {
 			// 计算一个字符串的宽度.
 			labelWidth = (int) FloatMath.ceil(Layout.getDesiredWidth(label,
-					valuePaint));
-			System.out.println("计算字符串的宽度:" + label + ",,,labelWidth="
-					+ labelWidth);
+					valuePaint)); 
 
 		}
 
@@ -679,8 +676,7 @@ public class WheelView extends View {
 	 * @param widthLabel
 	 *            width of label layout
 	 */
-	private void createLayouts(int widthItems, int widthLabel) {
-		System.out.println("664createLayouts");
+	private void createLayouts(int widthItems, int widthLabel) { 
 		// staticLayout被创建以后就不能被修改了，通常被用于控制文本组件布局。
 		if (itemsLayout == null || itemsLayout.getWidth() > widthItems) {
 			/**
@@ -771,8 +767,7 @@ public class WheelView extends View {
 				createLayouts(itemsWidth, labelWidth);
 			}
 		}
-
-		System.out.println("748onDraw....itemsWidth====" + itemsWidth);
+ 
 		if (itemsWidth > 0) {
 			canvas.save();
 			// // Skip padding space and hide a part of top and bottom items
@@ -793,8 +788,7 @@ public class WheelView extends View {
 	 * @param canvas
 	 *            the canvas for drawing
 	 */
-	private void drawShadows(Canvas canvas) {
-		System.out.println("770drawShadows");
+	private void drawShadows(Canvas canvas) { 
 		topShadow.setBounds(0, 0, getWidth(), getHeight() / visibleItems);
 		topShadow.draw(canvas);
 
@@ -809,8 +803,7 @@ public class WheelView extends View {
 	 * @param canvas
 	 *            the canvas for drawing
 	 */
-	private void drawValue(Canvas canvas) {
-		System.out.println("drawValue----761");
+	private void drawValue(Canvas canvas) { 
 		valuePaint.setColor(VALUE_TEXT_COLOR);
 		valuePaint.drawableState = getDrawableState();
 
@@ -856,10 +849,8 @@ public class WheelView extends View {
 	 * @param canvas
 	 *            the canvas for drawing
 	 */
-	private void drawItems(Canvas canvas) {
-		System.out.println("drawItems...");
-		if (itemsLayout != null) {
-			System.out.println("item的值：" + itemsLayout.getText() + "---end");
+	private void drawItems(Canvas canvas) { 
+		if (itemsLayout != null) { 
 
 			if (checkedItems != null && itemsLayout.getText() != null) {
 				String _v = itemsLayout.getText().toString();
@@ -872,8 +863,7 @@ public class WheelView extends View {
 		}
 		canvas.save();
 
-		int top = itemsLayout.getLineTop(1);
-		System.out.println("top...===" + top);
+		int top = itemsLayout.getLineTop(1); 
 		canvas.translate(0, -top + scrollingOffset);
 
 		itemsPaint.setColor(ITEMS_TEXT_COLOR);
@@ -889,8 +879,7 @@ public class WheelView extends View {
 	 * @param canvas
 	 *            the canvas for drawing
 	 */
-	private void drawCenterRect(Canvas canvas) {
-		System.out.println("866drawCenterRect---");
+	private void drawCenterRect(Canvas canvas) { 
 		int center = getHeight() / 2;
 		int offset = getItemHeight() / 2;
 		centerDrawable.setBounds(0, center - offset, getWidth(), center

@@ -10,6 +10,16 @@ public class DataSaved extends EntityBase {
 	private String inDate;
 	@Column(column = "userId")
 	private String userId;
+	@Column(column = "phone")
+	private String phone;
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	@Column(column = "timeSpan")
 	private String timeSpan;
 
