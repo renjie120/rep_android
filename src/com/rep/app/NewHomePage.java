@@ -28,9 +28,10 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 	public static final String TAB_ITEM_3 = "report";
 	public static final String TAB_ITEM_4 = "config";
 	private boolean isSuper;
-	private RadioGroup group; 
+	private RadioGroup group;
 	private TabHost tabHost;
 	private String userId;
+	private String from, inDate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,15 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.homepage_tab);
 		Bundle b = getIntent().getExtras();
+
 		if (b != null) {
-			System.out.println("结果:" + b.getString("content") + ",brandName="
-					+ b.getString("brandName"));
+			from = b.getString("from");
+			if ("tip".equals(from)) {
+				inDate = b.getString("indate");
+			} else {
+				System.out.println("结果:" + b.getString("content")
+						+ ",brandName=" + b.getString("brandName"));
+			}
 		}
 		group = (RadioGroup) findViewById(R.id.main_radio);
 		group.setOnCheckedChangeListener(this);
@@ -50,25 +57,32 @@ public class NewHomePage extends TabActivity implements OnCheckedChangeListener 
 		TabSpec tab2 = tabHost.newTabSpec(TAB_ITEM_2);
 		TabSpec tab3 = tabHost.newTabSpec(TAB_ITEM_3);
 		TabSpec tab4 = tabHost.newTabSpec(TAB_ITEM_4);
-		//FragemntMainActivity
+		// FragemntMainActivity
 		tab1.setIndicator(TAB_ITEM_1).setContent(
 				new Intent(NewHomePage.this, SaveDataActivity.class)
 						.putExtras(b));
-		//HistoryActivity,MyViewPagerActivity
+		// HistoryActivity,MyViewPagerActivity
 		tab2.setIndicator(TAB_ITEM_2).setContent(
-				new Intent(NewHomePage.this, HistoryActivity.class).putExtras(b));
+				new Intent(NewHomePage.this, HistoryActivity.class)
+						.putExtras(b));
 		tab3.setIndicator(TAB_ITEM_3)
 				.setContent(
 						new Intent(NewHomePage.this, ZhishiActivity.class)
 								.putExtras(b));
 		tab4.setIndicator(TAB_ITEM_4).setContent(
-				new Intent(NewHomePage.this, AboutActivity.class)
-						.putExtras(b));
+				new Intent(NewHomePage.this, AboutActivity.class).putExtras(b));
 		tabHost.addTab(tab1);
 		tabHost.addTab(tab2);
 		tabHost.addTab(tab3);
 		tabHost.addTab(tab4);
-		tabHost.setCurrentTab(0);
+		if ("tip".equals(from)) {
+			tabHost.setCurrentTab(1);
+			tabHost.setCurrentTabByTag(TAB_ITEM_2);
+		} else {
+			tabHost.setCurrentTab(0);
+			tabHost.setCurrentTabByTag(TAB_ITEM_1);
+		}
+
 	}
 
 	public String getToday() {

@@ -47,6 +47,12 @@
             android:value="VHhLSxfU3solXGb7XGWcqq0g" >
         </meta-data>
 
+        <receiver android:name="com.rep.util.MyAlarmReceiver" >
+            <intent-filter>
+                <action android:name="com.renjie.rep" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

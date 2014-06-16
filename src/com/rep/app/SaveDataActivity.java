@@ -8,9 +8,12 @@ import java.util.GregorianCalendar;
 
 import kankan.wheel.widget.ScreenInfo;
 import kankan.wheel.widget.WheelMain;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -432,6 +435,7 @@ public class SaveDataActivity extends BaseActivity {
 									alert("添加成功");
 									saveDataSaved(uid, in_date, stimeSpan);
 									initData();
+									tip();
 								} else {
 									alert(r.getErrorMessage());
 								}
@@ -449,6 +453,22 @@ public class SaveDataActivity extends BaseActivity {
 		}
 	}
 
+	/**
+	 * 定时提醒.
+	 */
+	private void tip(){
+		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent("com.renjie.rep");
+		intent.putExtra("tipContent", "查看上周的rep数据");
+		intent.putExtra("time", "2014-6-16");   
+
+		PendingIntent sender = PendingIntent.getBroadcast(
+				SaveDataActivity.this, 0, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+		// 闹铃间隔， 这里设为1分钟闹一次，在第2步我们将每隔1分钟收到一次广播
+		am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+1000*10, sender);
+	}
+	
 	private void initData() {
 		Date t = new Date();
 		indate.setText(toDString(t, "yyyy年MM月dd日"));
