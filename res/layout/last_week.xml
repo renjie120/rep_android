@@ -22,7 +22,7 @@
             android:layout_height="100dp"
             android:layout_margin="5dp"
             test:ringWidth="10"
-            test:score="80"
+            test:score="0"
             test:textSize1="15"
             test:textSize2="20" >
         </com.rep.app.RingView>

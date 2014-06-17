@@ -1,6 +1,12 @@
 package com.rep.fragments;
 
 import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.app.Activity;
 import android.content.ClipData.Item;
@@ -16,12 +22,24 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.rep.app.BaseActivity;
 import com.rep.app.R;
+import com.rep.bean.Result;
 import com.rep.util.ActionBar;
 import com.rep.util.ActionBar.AbstractAction;
 import com.rep.util.BaseFragment;
 
 public class IchartFragment extends BaseFragment {
+	private static final String url = BaseActivity.HOST
+			+ "/services/statisService!getData.do";
 	private WebView webView;
 	private float screenHeight, screenWidth;
 	private ActionBar head;
@@ -30,7 +48,7 @@ public class IchartFragment extends BaseFragment {
 	private String data;
 	private String dataLabels;
 	private Handler mHandler = new Handler();
-	private String inDate;
+	private String inDate, userId, token;
 	private OnIchartListener listener;
 
 	public interface OnIchartListener {
@@ -68,8 +86,22 @@ public class IchartFragment extends BaseFragment {
 		init();
 	}
 
+	public void onResume() {
+		super.onResume();
+		showChart();
+	}
+
+	private void showChart() { 
+		webView.addJavascriptInterface(new Java2JS(userId, inDate, token),
+				"jsjs");
+		String url = "file:///android_asset/ichart.html";
+		webView.loadUrl(url);
+	}
+
 	public void init() {
 		inDate = getArguments().getString("inDate");
+		userId = getArguments().getString("userId");
+		token = getArguments().getString("token");
 		head = (ActionBar) findViewById(R.id.ichart_head);
 
 		// 得到屏幕大小.
@@ -110,47 +142,8 @@ public class IchartFragment extends BaseFragment {
 		mHandler = new Handler();
 
 		webView.addJavascriptInterface(this, "someThing");
-		// webView.addJavascriptInterface(new Object() {
-		//
-		// public void clickOnAndroid() {
-		//
-		// mHandler.post(new Runnable() {
-		//
-		// public void run() {
-		//
-		// webView.loadUrl("javascript:alert(12345)");
-		//
-		// }
-		//
-		// });
-		//
-		// }
-		//
-		// }, "demo");
 		webView.setWebChromeClient(new MyWebChromeClient());
-		webView.addJavascriptInterface(new Java2JS(), "jsjs");
-		// 下面的java方法，可以用于在html中通过：window.demo.clickOnAndroid(23);调用
-		// webView.addJavascriptInterface(new Object() {
-		// public void clickOnAndroid(final int i) {
-		// mHandler.post(new Runnable() {
-		// public void run() {
-		// int j = i;
-		// j++;
-		// Toast.makeText(IchartActivity.this,
-		// "测试调用java" + String.valueOf(j),
-		// Toast.LENGTH_LONG).show();
-		// }
-		//
-		// });
-		//
-		// }
-		//
-		// }, "demo");
 
-		// 加载assets目录下的文件
-		String url = "file:///android_asset/ichart.html";
-
-		webView.loadUrl(url);
 	}
 
 	public void setSmething(String some) {
@@ -167,101 +160,127 @@ public class IchartFragment extends BaseFragment {
 		}
 	}
 
+	private static final int DIALOG_KEY = 0;
+
 	private final class Java2JS {
-		private double g1 = 123;
-		private double g2 = 38;
-		private double g3 = 58;
-		private double g4 = 28;
-		private double g5 = 35;
-		private double g6 = 12;
-		private double rpi = 53;
-		private double per = 23;
-		private String indate = "234";
-		private String option = "3u899reuirieurie";
+		private double g1;
+		private double g2;
+		private double g3;
+		private double g4;
+		private double g5;
+		private double g6;
+		private double rpi;
+		private double per;
+		private String indate;
+		private String option;
+		private String userId;
+		private String inDate;
+		private String token;
 
-		public double getG1() {
-			return g1;
+		public Java2JS(String userId, String inDate, String token) {
+			this.userId = userId;
+			this.inDate = inDate;
+			this.token = token;
+
 		}
 
-		public void setG1(double g1) {
-			this.g1 = g1;
-		}
+		private class GetDate implements Callable<String> {
+			private CountDownLatch begin;
 
-		public double getG2() {
-			return g2;
-		}
+			public GetDate(CountDownLatch begin) {
+				this.begin = begin;
+			}
 
-		public void setG2(double g2) {
-			this.g2 = g2;
-		}
-
-		public double getG3() {
-			return g3;
-		}
-
-		public void setG3(double g3) {
-			this.g3 = g3;
-		}
-
-		public double getG4() {
-			return g4;
-		}
-
-		public void setG4(double g4) {
-			this.g4 = g4;
-		}
-
-		public double getG5() {
-			return g5;
-		}
-
-		public void setG5(double g5) {
-			this.g5 = g5;
-		}
-
-		public double getG6() {
-			return g6;
-		}
-
-		public void setG6(double g6) {
-			this.g6 = g6;
-		}
-
-		public double getRpi() {
-			return rpi;
-		}
-
-		public void setRpi(double rpi) {
-			this.rpi = rpi;
-		}
-
-		public double getPer() {
-			return per;
-		}
-
-		public void setPer(double per) {
-			this.per = per;
-		}
-
-		public String getIndate() {
-			return indate;
-		}
-
-		public void setIndate(String indate) {
-			this.indate = indate;
-		}
-
-		public Java2JS() {
+			@Override
+			public String call() throws Exception {
+				try {
+					begin.await();
+					return " { 'G1':" + g1 + ", 'G2' :" + g2 + ",'G3' :" + g3
+							+ ",'G4' :" + g4 + ", 'G5' :" + g5 + ", 'G6' :"
+							+ g6 + ",'rpi':" + rpi + ",'percent':'" + per
+							+ "%','indate':'" + indate + "','option':'"
+							+ option + "'}";
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				return null;
+			}
 
 		}
 
 		public String getString() {
-			String result = " { 'G1':" + g1 + ", 'G2' :" + g2 + ",'G3' :" + g3
-					+ ",'G4' :" + g4 + ", 'G5' :" + g5 + ", 'G6' :" + g6
-					+ ",'rpi':" + rpi + ",'percent':'" + per + "%','indate':'"
-					+ indate + "','option':'" + option + "'}";
-			return result; // 在JS中typeof value结果为string
-		}
+			// 开始的倒数锁.
+			ExecutorService exec = Executors.newFixedThreadPool(2);
+			final CountDownLatch begin = new CountDownLatch(1);
+			Future<String> result = exec.submit(new GetDate(begin));
+			HttpUtils http = new HttpUtils();
+			RequestParams p = new RequestParams();
+			p.addBodyParameter("userId", userId);
+			p.addBodyParameter("indate", inDate);
+			p.addBodyParameter("token", token);
+			try {
+				http.send(HttpRequest.HttpMethod.POST, url, p,
+						new RequestCallBack<String>() {
+							@Override
+							public void onStart() {
+								getActivity().showDialog(DIALOG_KEY);
+							}
 
+							@Override
+							public void onLoading(long total, long current,
+									boolean isUploading) {
+
+							}
+
+							@Override
+							public void onSuccess(
+									ResponseInfo<String> responseInfo) {
+								Result r = (Result) JSON.parseObject(
+										responseInfo.result, Result.class);
+								try {
+									System.out.println(211);
+									Thread.sleep(1000);
+									System.out.println(212);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								if (r.getErrorCode() == 0) {
+									JSONObject statis = JSON.parseObject(r
+											.getData().toString());
+									g1 = statis.getDoubleValue("statis1");
+									g2 = statis.getDoubleValue("statis2");
+									g3 = statis.getDoubleValue("statis3");
+									g4 = statis.getDoubleValue("statis4");
+									g5 = statis.getDoubleValue("statis5");
+									g6 = statis.getDoubleValue("statis6");
+									rpi = statis.getDoubleValue("rpi");
+									per = Double.parseDouble(statis.getString(
+											"rank").replace("%", ""));
+									getActivity().removeDialog(DIALOG_KEY);
+									begin.countDown();
+								}
+							}
+
+							@Override
+							public void onFailure(HttpException error,
+									String msg) {
+								getActivity().removeDialog(DIALOG_KEY);
+							}
+						});
+
+				return result.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally{
+				exec.shutdown();
+			}
+			return "";
+		}
 	}
 }

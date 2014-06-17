@@ -27,7 +27,8 @@ import com.rep.util.TextCleanWatcher;
  */
 public class BaseActivity extends Activity { 
 	public final static boolean DEBUG = false;
-	public final static String HOST="http://www.thinksafari.com"; 
+	//public final static String HOST="http://www.thinksafari.com"; 
+	public final static String HOST="http://10.224.70.132:8083"; 
 	// 上下标题栏的高度比例
 	public static float barH = 0.07f;
 	// 标题文字的宽度

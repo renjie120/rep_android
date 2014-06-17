@@ -1,5 +1,7 @@
 package com.rep.app;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,11 +27,29 @@ public class HistoryActivity extends FragmentActivity implements
 		HistoryFragment.OnHistorySelectedListener,
 		LastWeekFragment.OnLastweekListener, IchartFragment.OnIchartListener {
 	private LinearLayout all;
+	// private GestureDetector detector;
+	private static final int DIALOG_KEY = 0;
+	// 弹出框.
+	private ProgressDialog dialog;
 	/**
 	 * 手势对象
 	 */
 	private MyGestureDetector detector;
 	private Bundle b;
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_KEY: {
+			dialog = new ProgressDialog(this);
+			dialog.setMessage("正在查询...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(true);
+			return dialog;
+		}
+		}
+		return null;
+	}
 
 	/**
 	 * 界面初始化函数.
@@ -83,6 +103,8 @@ public class HistoryActivity extends FragmentActivity implements
 	public void onHistorySelected(String indate) {
 		Bundle args = new Bundle();
 		args.putString("inDate", indate);
+		args.putString("userId", b.getString("userId"));
+		args.putString("token", b.getString("token"));
 		IchartFragment newFragment = new IchartFragment();
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
@@ -110,7 +132,8 @@ public class HistoryActivity extends FragmentActivity implements
 	@Override
 	public void goHistory(String userId) {
 		Bundle args = new Bundle();
-		args.putString("userId", userId);
+		args.putString("userId", b.getString("userId"));
+		args.putString("token", b.getString("token"));
 		HistoryFragment historyFragment = new HistoryFragment();
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
